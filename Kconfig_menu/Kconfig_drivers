@@ -1,0 +1,338 @@
+#
+# IIO drivers configuration
+#
+
+menu "IIO supported sensors"
+
+config ST_HAL_TEST_SENSORS_ENABLED
+	bool "ST Test sensors"
+	default n
+	help
+	  Enable support for ST-Test sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer;
+	  - Gyroscope;
+
+config ST_HAL_LSM6DSM_ENABLED
+	bool "LSM6DSM sensor"
+	default y
+	help
+	  Enable support for LSM6DSM combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer (optional: must be connected on i2c mater);
+	  - Gyroscope;
+	  - Step Counter;
+	  - Step Detector;
+	  - Tilt;
+	  - Significant Motion;
+
+config ST_HAL_LSM6DSL_ENABLED
+	bool "LSM6DSL sensor"
+	default y
+	help
+	  Enable support for LSM6DSL combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer (optional: must be connected on i2c mater);
+	  - Gyroscope;
+	  - Step Counter;
+	  - Step Detector;
+	  - Tilt;
+	  - Significant Motion;
+
+config ST_HAL_LSM6DS3H_ENABLED
+	bool "LSM6DS3H sensor"
+	default y
+	help
+	  Enable support for LSM6DS3H combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer (optional: must be connected on i2c mater);
+	  - Gyroscope;
+	  - Step Counter;
+	  - Step Detector;
+	  - Tilt;
+	  - Significant Motion;
+
+config ST_HAL_LSM6DS33_ENABLED
+	bool "LSM6DS33 sensor"
+	default y
+	help
+	  Enable support for LSM6DS33 combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Gyroscope;
+	  - Step Counter;
+	  - Step Detector;
+	  - Tilt;
+	  - Significant Motion;
+
+config ST_HAL_LSM6DS3_ENABLED
+	bool "LSM6DS3 sensor"
+	default y
+	help
+	  Enable support for LSM6DS3 combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer (optional: must be connected on i2c mater);
+	  - Gyroscope;
+	  - Step Counter;
+	  - Step Detector;
+	  - Tilt;
+	  - Significant Motion;
+
+config ST_HAL_LIS3MDL_ENABLED
+	bool "LIS3MDL sensor"
+	default n
+	help
+	  Enable support for LIS3MDL sensor.
+
+	  Sensors supported:
+	  - Magnetometer;
+
+config ST_HAL_LSM303DLHC_ENABLED
+	bool "LSM303DLHC sensor"
+	default n
+	help
+	  Enable support for LSM303DLHC sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer;
+
+config ST_HAL_LIS3DH_ENABLED
+	bool "LIS3DH sensor"
+	default n
+	help
+	  Enable support for LIS3DH sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+
+config ST_HAL_LSM330D_ENABLED
+	bool "LSM330D sensor"
+	default n
+	help
+	  Enable support for LSM330D sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Gyroscope;
+
+config ST_HAL_LSM330DL_ENABLED
+	bool "LSM330DL sensor"
+	default n
+	help
+	  Enable support for LSM330DL sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Gyroscope;
+
+config ST_HAL_LSM330DLC_ENABLED
+	bool "LSM330DLC sensor"
+	default n
+	help
+	  Enable support for LSM330DLC sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Gyroscope;
+
+config ST_HAL_LIS331DLH_ENABLED
+	bool "LIS331DLH sensor"
+	default n
+	help
+	  Enable support for LIS331DLH sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+
+config ST_HAL_LSM303DL_ENABLED
+	bool "LSM303DL sensor"
+	default n
+	help
+	  Enable support for LSM303DL sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer;
+
+config ST_HAL_LSM303DLH_ENABLED
+	bool "LSM303DLH sensor"
+	default n
+	help
+	  Enable support for LSM303DLH sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer;
+
+config ST_HAL_LSM303DLM_ENABLED
+	bool "LSM303DLM sensor"
+	default n
+	help
+	  Enable support for LSM303DLM sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer;
+
+config ST_HAL_LSM330_ENABLED
+	bool "LSM330 sensor"
+	default n
+	help
+	  Enable support for LSM330 sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Gyroscope;
+
+config ST_HAL_LSM303AGR_ENABLED
+	bool "LSM303AGR sensor"
+	default n
+	help
+	  Enable support for LSM303AGR sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer;
+
+config ST_HAL_LSM303AH_ENABLED
+	bool "LSM303AH sensor"
+	default n
+	help
+	  Enable support for LSM303AH sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer;
+
+config ST_HAL_LIS2MDL_ENABLED
+	bool "LIS2MDL sensor"
+	default n
+	help
+	  Enable support for LIS2MDL sensor.
+
+	  Sensors supported:
+	  - Magnetometer;
+
+config ST_HAL_LIS2DS12_ENABLED
+	bool "LIS2DS12 sensor"
+	default n
+	help
+	  Enable support for LIS2DS12 sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Step Counter;
+	  - Step Detector;
+	  - Tilt;
+	  - Significant Motion;
+
+config ST_HAL_LIS2DW12_ENABLED
+	bool "LIS2DW12 sensor"
+	default n
+	help
+	  Enable support for LIS2DW12 sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+
+config ST_HAL_LIS2DG_ENABLED
+	bool "LIS2DG sensor"
+	default n
+	help
+	  Enable support for LIS2DG sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Step Counter;
+	  - Step Detector;
+	  - Tilt;
+	  - Significant Motion;
+
+config ST_HAL_L3G4200D_ENABLED
+	bool "L3G4200D sensor"
+	default n
+	help
+	  Enable support for L3G4200D sensor.
+
+	  Sensors supported:
+	  - Gyroscope;
+
+config ST_HAL_L3GD20_ENABLED
+	bool "L3GD20 sensor"
+	default n
+	help
+	  Enable support for L3GD20 sensor.
+
+	  Sensors supported:
+	  - Gyroscope;
+
+config ST_HAL_LPS331AP_ENABLED
+	bool "LPS331AP sensor"
+	default n
+	help
+	  Enable support for LPS331AP sensor.
+
+	  Sensors supported:
+	  - Pressure;
+
+config ST_HAL_LPS25H_ENABLED
+	bool "LPS25H sensor"
+	default n
+	help
+	  Enable support for LPS25H sensor.
+
+	  Sensors supported:
+	  - Pressure;
+
+config ST_HAL_LPS22HB_ENABLED
+	bool "LPS22HB sensor"
+	default n
+	help
+	  Enable support for LPS22HB sensor.
+
+	  Sensors supported:
+	  - Pressure;
+
+config ST_HAL_LIS2HH12_ENABLED
+	bool "LIS2HH12 sensor"
+	default n
+	help
+	  Enable support for LIS2HH12 sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+
+config ST_HAL_HTS221_ENABLED
+	bool "HTS221 sensor"
+	default n
+	help
+	  Enable support for HTS221 sensor.
+
+	  Sensors supported:
+	  - RHumidity;
+	  - Temperature;
+
+config ST_HAL_LSM9DS1_ENABLED
+	bool "LSM9DS1 sensor"
+	default y
+	help
+	  Enable support for LSM9DS1 9-axis sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer
+	  - Gyroscope;
+
+endmenu # IIO drivers configuration

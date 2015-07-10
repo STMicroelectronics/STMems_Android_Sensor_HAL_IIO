@@ -1,0 +1,88 @@
+#
+# For a description of the syntax of this configuration file,
+# see tools/kconfig-language.txt.
+#
+
+mainmenu "SensorHAL IIO Configuration"
+
+config ST_HAL_PATH
+	string
+	option env="ST_HAL_PATH"
+
+config ENV_ANDROID_VERSION
+	int
+	option env="ST_HAL_ANDROID_VERSION"
+
+if (ENV_ANDROID_VERSION = 0)
+config ST_HAL_ANDROID_VERSION
+	int
+	default 0
+endif
+if (ENV_ANDROID_VERSION = 1)
+config ST_HAL_ANDROID_VERSION
+	int
+	default 1
+endif
+if (ENV_ANDROID_VERSION = 2)
+config ST_HAL_ANDROID_VERSION
+	int
+	default 2
+endif
+
+
+config ST_HAL_HAS_6AX_FUSION_CHECK
+	bool
+	option env="ST_HAL_HAS_9X_6X_LIB"
+
+config ST_HAL_HAS_9AX_FUSION_CHECK
+	bool
+	option env="ST_HAL_HAS_9X_6X_LIB"
+
+config ST_HAL_HAS_GEOMAG_FUSION_CHECK
+	bool
+	option env="ST_HAL_HAS_GEOMAG_LIB"
+
+config ST_HAL_HAS_MAGN_CALIB_CHECK
+	bool
+	option env="ST_HAL_HAS_MAGN_CALIB_LIB"
+
+config ST_HAL_HAS_ACCEL_CALIB_CHECK
+	bool
+	option env="ST_HAL_HAS_ACCEL_CALIB_LIB"
+
+config ST_HAL_HAS_GYRO_GBIAS_ESTIMATION_CHECK
+	bool
+	option env="ST_HAL_HAS_GBIAS_LIB"
+
+
+config ST_HAL_HAS_6AX_FUSION
+	bool
+	default ST_HAL_HAS_6AX_FUSION_CHECK
+
+config ST_HAL_HAS_9AX_FUSION
+	bool
+	default ST_HAL_HAS_9AX_FUSION_CHECK
+
+config ST_HAL_HAS_GEOMAG_FUSION
+	bool
+	default ST_HAL_HAS_GEOMAG_FUSION_CHECK
+
+config ST_HAL_HAS_MAGN_CALIB
+	bool
+	default ST_HAL_HAS_MAGN_CALIB_CHECK
+
+config ST_HAL_HAS_ACCEL_CALIB
+	bool
+	default ST_HAL_HAS_ACCEL_CALIB_CHECK
+
+config ST_HAL_HAS_GYRO_GBIAS_ESTIMATION
+	bool
+	default ST_HAL_HAS_GYRO_GBIAS_ESTIMATION_CHECK
+
+
+source "$ST_HAL_PATH/Kconfig_menu/Kconfig_enable_sensors"
+source "$ST_HAL_PATH/Kconfig_menu/Kconfig_common"
+source "$ST_HAL_PATH/Kconfig_menu/Kconfig_fusion_config"
+source "$ST_HAL_PATH/Kconfig_menu/Kconfig_drivers"
+source "$ST_HAL_PATH/Kconfig_menu/Kconfig_calibration"
+

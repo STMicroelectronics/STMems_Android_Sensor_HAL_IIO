@@ -1,0 +1,31 @@
+#
+# SensorFusion configuration
+#
+
+if ST_HAL_HAS_6AX_FUSION || ST_HAL_HAS_9AX_FUSION || ST_HAL_HAS_GEOMAG_FUSION
+menu "SensorFusion configuration"
+
+config ST_HAL_MIN_FUSION_POLLRATE
+	int "Min SensorFusion run frequency [Hz]"
+	range 20 ST_HAL_MAX_SAMPLING_FREQUENCY
+	default 50
+
+config ST_HAL_INEMO_GBIAS_THRESOLD_ACCEL
+	string "Accelerometer Gbias thresold"
+	default "86999e-9"
+
+if ST_HAL_HAS_9AX_FUSION || ST_HAL_HAS_GEOMAG_FUSION
+config ST_HAL_INEMO_GBIAS_THRESOLD_MAGN
+	string "Magnetometer Gbias thresold"
+	default "599999e-9"
+
+endif
+
+if ST_HAL_HAS_6AX_FUSION || ST_HAL_HAS_9AX_FUSION
+config ST_HAL_INEMO_GBIAS_THRESOLD_GYRO
+	string "Gyroscope Gbias thresold"
+	default "114999e-9"
+
+endif
+endmenu # Sensor Fusion configuration
+endif

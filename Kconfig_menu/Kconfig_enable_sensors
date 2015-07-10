@@ -1,0 +1,315 @@
+#
+# Enable/Disable sensors
+#
+
+menu "Enable/disable sensors"
+config ST_HAL_ACCEL_ENABLED
+	bool "Accelerometer sensor"
+	default y
+	help
+	  Enable support for Accelerometer sensor.
+
+config ST_HAL_MAGN_ENABLED
+	bool "Magnetometer sensor"
+	default y
+	help
+	  Enable support for Magnetometer sensor.
+
+if ST_HAL_MAGN_ENABLED && ST_HAL_HAS_MAGN_CALIB
+config ST_HAL_MAGN_CALIB_ENABLED
+	bool "Enable Magnetometer calibration Library"
+	depends on ST_HAL_ACCEL_ENABLED
+	default n
+	help
+	  Enable Magnetometer calibration library on Software by AP Library.
+
+endif
+
+if ST_HAL_ACCEL_ENABLED && ST_HAL_HAS_ACCEL_CALIB
+config ST_HAL_ACCEL_CALIB_ENABLED
+	bool "Enable Accelerometer calibration Library"
+	depends on ST_HAL_ACCEL_ENABLED
+	default n
+	help
+	  Enable Accelerometer calibration library on Software by AP Library.
+
+endif
+
+config ST_HAL_GYRO_ENABLED
+	bool "Gyroscope sensor"
+	default y
+	help
+	  Enable support for Gyroscope sensor.
+
+if ST_HAL_GYRO_ENABLED && ST_HAL_HAS_GYRO_GBIAS_ESTIMATION
+config ST_HAL_GYRO_GBIAS_ESTIMATION_ENABLED
+	bool "Enable Gyroscope gbias estimation Library"
+	depends on ST_HAL_ACCEL_ENABLED
+	default n
+	help
+	  Enable Gyroscope bias library estimation on Software by AP Library.
+
+endif
+
+if !ST_HAL_GYRO_ENABLED && ST_HAL_HAS_GEOMAG_FUSION
+config ST_HAL_VIRTUAL_GYRO_ENABLED
+	bool "Virtual Gyroscope sensor"
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_MAGN_ENABLED
+	default n
+	help
+	  Enable Virtual Gyroscope sensors using Accel+Magn iNemoEngine library.
+endif
+
+choice
+	prompt "Magnetometer Uncalibrated sensor"
+	default ST_HAL_MAGN_UNCALIB_DISABLED
+	help
+	  Enable support for Magnetometer Uncalibrated sensor.
+
+config ST_HAL_MAGN_UNCALIB_DISABLED
+	bool "Disabled"
+config ST_HAL_MAGN_UNCALIB_AP_ENABLED
+	depends on ST_HAL_MAGN_CALIB_ENABLED
+	bool "Software by AP Library"
+endchoice
+
+choice
+	prompt "Gyroscope Uncalibrated sensor"
+	default ST_HAL_GYRO_UNCALIB_DISABLED
+	help
+	  Enable support for Gyroscope Uncalibrated sensor.
+
+config ST_HAL_GYRO_UNCALIB_DISABLED
+	bool "Disabled"
+config ST_HAL_GYRO_UNCALIB_AP_ENABLED
+	depends on ST_HAL_GYRO_GBIAS_ESTIMATION_ENABLED
+	bool "Software by AP Library"
+endchoice
+
+config ST_HAL_SIGN_MOTION_ENABLED
+	bool "Significant Motion sensor"
+	default y
+	help
+	  Enable support for Significant Motion sensor.
+
+config ST_HAL_STEP_DETECTOR_ENABLED
+	bool "Step Detector sensor sensor"
+	default y
+	help
+	  Enable support for Step Detector sensor.
+
+config ST_HAL_STEP_COUNTER_ENABLED
+	bool "Step Counter sensor"
+	default y
+	help
+	  Enable support for Step Counter sensor.
+
+config ST_HAL_TILT_ENABLED
+	bool "Tilt sensor"
+	default y
+	help
+	  Enable support for Tilt sensor.
+
+config ST_HAL_WRIST_TILT_GESTURE_ENABLED
+	bool "Wrist Tilt Gesture"
+	default y
+	help
+	  Enable support for Wrist Tilt Gesture sensor.
+
+if (ST_HAL_ANDROID_VERSION != 0)
+
+config ST_HAL_GLANCE_GESTURE_ENABLED
+	bool "Glance Gesture"
+	default n
+	help
+	  Enable support for Glance Gesture sensor.
+
+config ST_HAL_WAKEUP_GESTURE_ENABLED
+	bool "Wake-up Gesture"
+	default n
+	help
+	  Enable support for Wake-up Gesture sensor.
+
+config ST_HAL_PICKUP_GESTURE_ENABLED
+	bool "Pick-up Gesture"
+	default n
+	help
+	  Enable support for Pick-up Gesture sensor.
+
+if (ST_HAL_ANDROID_VERSION != 1 && ST_HAL_ANDROID_VERSION != 2)
+
+config ST_HAL_MOTION_GESTURE_ENABLED
+	bool "Motion Gesture"
+	default n
+	help
+	  Enable support for Motion Gesture sensor.
+
+config ST_HAL_NO_MOTION_GESTURE_ENABLED
+	bool "No-Motion Gesture"
+	default n
+	help
+	  Enable support for No-Motion Gesture sensor.
+
+config ST_HAL_DEVICE_ORIENTATION_ENABLED
+	bool "Device Orientation sensor"
+	default n
+	help
+	  Enable support for Device Orientation sensor.
+
+endif
+endif
+
+config ST_HAL_PRESSURE_ENABLED
+	bool "Pressure sensor"
+	default y
+	help
+	  Enable support for Pressure sensor.
+
+config ST_HAL_RHUMIDITY_ENABLED
+	bool "Relative Humidity sensor"
+	default y
+	help
+	  Enable support for RHumidity sensor.
+
+config ST_HAL_TEMP_ENABLED
+	bool "Temperature sensor"
+	default y
+	help
+	  Enable support for Temperature sensor.
+
+config ST_HAL_ORIENTATION_AP_ENABLED
+	bool
+
+choice
+	prompt "Orientation sensor"
+	default ST_HAL_ORIENTATION_DISABLED
+	help
+	  Enable support for Orientation sensor.
+
+config ST_HAL_ORIENTATION_DISABLED
+	bool "Disabled"
+config ST_HAL_ORIENTATION_AP_ENABLED_9X
+	select ST_HAL_ORIENTATION_AP_ENABLED
+	depends on ST_HAL_HAS_9AX_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_MAGN_ENABLED
+	depends on ST_HAL_GYRO_ENABLED
+	bool "Software by AP Library [9X: Accel+Magn+Gyro]"
+config ST_HAL_ORIENTATION_AP_ENABLED_6X
+	select ST_HAL_ORIENTATION_AP_ENABLED
+	depends on ST_HAL_HAS_GEOMAG_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_MAGN_ENABLED
+	bool "Software by AP Library [6X: Accel+Magn]"
+endchoice
+
+config ST_HAL_GRAVITY_AP_ENABLED
+	bool
+
+choice
+	prompt "Gravity sensor"
+	default ST_HAL_GRAVITY_DISABLED
+	help
+	  Enable support for Gravity sensor.
+
+config ST_HAL_GRAVITY_DISABLED
+	bool "Disabled"
+config ST_HAL_GRAVITY_AP_ENABLED_9X
+	select ST_HAL_GRAVITY_AP_ENABLED
+	depends on ST_HAL_HAS_9AX_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_MAGN_ENABLED
+	depends on ST_HAL_GYRO_ENABLED
+	bool "Software by AP Library [9X: Accel+Magn+Gyro]"
+config ST_HAL_GRAVITY_AP_ENABLED_6X
+	select ST_HAL_GRAVITY_AP_ENABLED
+	depends on ST_HAL_HAS_6AX_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_GYRO_ENABLED
+	bool "Software by AP Library [6X: Accel+Gyro]"
+endchoice
+
+config ST_HAL_LINEAR_AP_ENABLED
+	bool
+
+choice
+	prompt "Linear Acceleration sensor"
+	default ST_HAL_LINEAR_DISABLED
+	help
+	  Enable support for Linear Acceleration sensor.
+
+config ST_HAL_LINEAR_DISABLED
+	bool "Disabled"
+config ST_HAL_LINEAR_AP_ENABLED_9X
+	select ST_HAL_LINEAR_AP_ENABLED
+	depends on ST_HAL_HAS_9AX_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_MAGN_ENABLED
+	depends on ST_HAL_GYRO_ENABLED
+	bool "Software by AP Library [9X: Accel+Magn+Gyro]"
+config ST_HAL_LINEAR_AP_ENABLED_6X
+	select ST_HAL_LINEAR_AP_ENABLED
+	depends on ST_HAL_HAS_6AX_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_GYRO_ENABLED
+	bool "Software by AP Library [6X: Accel+Gyro]"
+endchoice
+
+config ST_HAL_ROT_VECTOR_AP_ENABLED
+	bool
+
+choice
+	prompt "Rotation Vector sensor"
+	default ST_HAL_ROT_VECTOR_DISABLED
+	help
+	  Enable support for Rotation Vector sensor.
+
+config ST_HAL_ROT_VECTOR_DISABLED
+	bool "Disabled"
+config ST_HAL_ROT_VECTOR_AP_ENABLED_9X
+	select ST_HAL_ROT_VECTOR_AP_ENABLED
+	depends on ST_HAL_HAS_9AX_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_MAGN_ENABLED
+	depends on ST_HAL_GYRO_ENABLED
+	bool "Software by AP Library [9X: Accel+Magn+Gyro]"
+config ST_HAL_ROT_VECTOR_AP_ENABLED_6X
+	select ST_HAL_ROT_VECTOR_AP_ENABLED
+	depends on ST_HAL_HAS_GEOMAG_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_MAGN_ENABLED
+	bool "Software by AP Library [6X: Accel+Magn]"
+endchoice
+
+choice
+	prompt "Game Rotation Vector sensor"
+	default ST_HAL_GAME_ROT_VECTOR_DISABLED
+	help
+	  Enable support for Game Rotation Vector sensor.
+
+config ST_HAL_GAME_ROT_VECTOR_DISABLED
+	bool "Disabled"
+config ST_HAL_GAME_ROT_VECTOR_AP_ENABLED
+	depends on ST_HAL_HAS_6AX_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_GYRO_ENABLED
+	bool "Software by AP Library"
+endchoice
+
+choice
+	prompt "Geomagnetic Rotation Vector sensor"
+	default ST_HAL_GEOMAG_ROT_VECTOR_DISABLED
+	help
+	  Enable support for Geomagnetic Rotation Vector sensor.
+
+config ST_HAL_GEOMAG_ROT_VECTOR_DISABLED
+	bool "Disabled"
+config ST_HAL_GEOMAG_ROT_VECTOR_AP_ENABLED
+	depends on ST_HAL_HAS_GEOMAG_FUSION
+	depends on ST_HAL_ACCEL_ENABLED
+	depends on ST_HAL_MAGN_ENABLED
+	bool "Software by AP Library"
+endchoice
+
+endmenu # Enable/disable sensors

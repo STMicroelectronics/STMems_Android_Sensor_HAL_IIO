@@ -1,0 +1,127 @@
+/* Android STMicroelectronics SensorHAL release 3.x
+ *
+ * Copyright (C) 2015-2016 STMicroelectronics
+ * Author: Denis Ciocca - <denis.ciocca@st.com>
+*/
+
+These are the release notes for STMicroelectronics SensorHAL version 3.
+Read them carefully, as they tell you what this is all about, explain how
+to install the dynamic library, and what to do if something goes wrong.
+
+
+SOFTWARE REQUIREMENTS
+
+   Compiling, configuring and running the 3.x SensorHAL requires up-to-date
+   versions of various software packages.
+
+   Installing required packages: (used during `menuconfig`)
+   $ sudo apt-get install build-essential libncurses5-dev
+
+   HAL require two headers file from linux kernel. File can be found under
+   Documentation/iio-example-3.1x.y/. Copy files to linux/iio/
+
+
+LIBS
+   In order to run some sensors in the application processor side, libraries
+   are needed. Run auto-extract script packages in the root folder of the HAL.
+
+STMICROELECTRONICS LIBRARIES VERSION REQUIREMENTS:
+   - STAccCalibration:				v1.x
+   - STMagCalibration:				v1.x
+   - iNemoEngine_gbias_Estimation:		v1.x
+   - iNemoEnginePRO:				v1.x
+   - iNemoEngine_GeoMag_Fusion:			v1.x
+
+
+INSTALLING SOURCE CODE
+   Copy HAL source code into hardware/STMicroelectronics/SensorHAL_IIO folder.
+   During build process Android will include automatically the Android.mk.
+   In your device.mk (device/{vendor}/{board}/device.mk) adds package build
+   information:
+
+   PRODUCT_PACKAGES += sensors.{TARGET_BOARD_PLATFORM}
+
+   Note: device.mk can not read $(TARGET_BOARD_PLATFORM) variable, read and
+   replace the value from your BoardConfig.mk
+
+
+CONFIGURING THE SENSOR HAL
+
+--> From SensorHAL_IIO root folder:
+
+   "mm sensors-defconfig"	Generated default hal_config file.
+
+   "mm sensors-menuconfig"	Text based color menus, radiolists & dialogs.
+
+   "mm sensors-cleanconf"	Delete hal_config, hal_config.old and configuration.h files.
+
+--> From Android source code $TOP folder:
+
+   "make sensors-defconfig"	Generated default hal_config file.
+
+   "make sensors-menuconfig"	Text based color menus, radiolists & dialogs.
+
+   "make sensors-cleanconf"	Delete hal_config, hal_config.old and configuration.h files.
+
+
+COMPILING THE SENSOR HAL CODE
+
+--> From From SensorHAL_IIO root folder:
+
+   "mm"			Build the code.
+
+   "mm -B"		Force to rebuild all the code.
+
+   "mm DEBUG=y"		Build SensorHAL in debug mode (no code optimization, generate map file).
+
+--> From Android source code $TOP folder:
+   Just build Android source code as described on source.android.com. The SensorHAL will
+   be automatically build and installed into system.img
+
+
+SENSORS SUPPORTED:
+   - ST Test sensors		(Accel + Magn + Gyro);
+   - LSM6DSM			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt;
+   - LSM6DSL			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt;
+   - LSM6DS3			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt;
+   - LSM6DS33			(Accel + Gyro) + SC + SD + SM + Tilt;
+   - LSM6DS3H			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt;
+   - LIS3MDL			(Magn);
+   - LSM303DLHC			(Accel + Magn);
+   - LIS3DH			(Accel);
+   - LSM330D			(Accel + Gyro);
+   - LSM330DL			(Accel + Gyro);
+   - LSM330DLC			(Accel + Gyro);
+   - LIS331DLH			(Accel);
+   - LSM303DL			(Accel + Magn);
+   - LSM303DLH			(Accel + Magn);
+   - LSM303DLM			(Accel + Magn);
+   - LSM330			(Accel + Gyro);
+   - LSM303AGR			(Accel + Magn);
+   - LIS2DS12			(Accel) + SC + SD + SM + Tilt;
+   - LIS2DW12			(Accel)
+   - LIS2DG			(Accel) + SC + SD + SM + Tilt;
+   - L3G4200D			(Gyro);
+   - L3GD20			(Gyro);
+   - LPS331AP			(Pressure);
+   - LPS25H			(Pressure);
+   - LSM303AH			(Accel + Magn);
+   - LPS22HB			(Pressure);
+   - LIS2HH12			(Accel);
+   - HTS221			(RHumidity + Temperature);
+   - LIS2MDL			(Magn);
+   - LSM9DS1			(Accel + Gyro + Magn)
+
+SC: Step Counter, SD: Step Detector, SM: Significant Motion
+
+
+CHANGELOG:
+   v3.0.0: First HAL revision
+   v3.1.0: Added selftest program, bugfix
+   v3.1.1: Added injection mode, changed way to decimate sensor data, added support lsm6dsm, bugfix
+   v3.1.2: Added support for new sensors (LSM6DS33, LSM6DS3H), install library under /system/vendor/lib/hw/,
+		bugfix on flush propagation using SW sensors, added wristtiltgesture sensor
+   v3.1.3: Added support for LSM303AH, LPS22HB. Fixed compiling issue on Android L and K (wrist-tilt)
+   v3.1.4: Added support for LIS2HH12, fix gbias lib sample processing and init
+   v3.1.5: Added support for Android N. Added support for different kernel versions
+
