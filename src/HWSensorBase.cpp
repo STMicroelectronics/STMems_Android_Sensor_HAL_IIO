@@ -258,7 +258,7 @@ HWSensorBase::HWSensorBase(HWSensorBaseCommonData *data, const char *name,
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_INFO)
 		ALOGD("\"%s\": injection mode available, sensor is an injector.", GetName());
 #endif /* CONFIG_ST_HAL_DEBUG_INFO */
-		sensor_t_data.flags |= SENSOR_FLAG_SUPPORTS_DATA_INJECTION;
+		sensor_t_data.flags |= DATA_INJECTION_MASK;
 		injection_mode = SENSOR_INJECTOR;
 		break;
 
@@ -266,7 +266,7 @@ HWSensorBase::HWSensorBase(HWSensorBaseCommonData *data, const char *name,
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_INFO)
 		ALOGD("\"%s\": injection mode available, sensor is injected.", GetName());
 #endif /* CONFIG_ST_HAL_DEBUG_INFO */
-		sensor_t_data.flags |= SENSOR_FLAG_SUPPORTS_DATA_INJECTION;
+		sensor_t_data.flags |= DATA_INJECTION_MASK;
 		injection_mode = SENSOR_INJECTED;
 		break;
 
@@ -274,7 +274,7 @@ HWSensorBase::HWSensorBase(HWSensorBaseCommonData *data, const char *name,
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_INFO)
 		ALOGD("\"%s\": injection mode not available.", GetName());
 #endif /* CONFIG_ST_HAL_DEBUG_INFO */
-		sensor_t_data.flags &= ~SENSOR_FLAG_SUPPORTS_DATA_INJECTION;
+		sensor_t_data.flags &= ~DATA_INJECTION_MASK;
 		break;
 	}
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
