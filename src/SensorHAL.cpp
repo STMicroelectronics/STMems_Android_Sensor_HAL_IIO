@@ -46,6 +46,9 @@
 #include "WristTiltGesture.h"
 #include "Gesture.h"
 #include "DeviceOrientation.h"
+#ifdef CONFIG_ST_HAL_DYNAMIC_SENSOR
+#include "DynamicSensorProxy.h"
+#endif /* CONFIG_ST_HAL_DYNAMIC_SENSOR */
 
 /*
  * STSensorHAL_iio_devices_data: informations related to the IIO devices, used during open-sensor function
@@ -846,10 +849,8 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 	struct iio_device iio_devices[ST_HAL_IIO_MAX_DEVICES];
 
 	iio_devices_num = iio_utils_get_devices_name(iio_devices, ST_HAL_IIO_MAX_DEVICES);
-	if (iio_devices_num <= 0) {
-		ALOGE("Failed to read iio devices available into /sys/bus/iio/devices/ folder (errno: %d).", iio_devices_num);
+	if (iio_devices_num <= 0)
 		return iio_devices_num;
-	}
 
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_VERBOSE)
 	ALOGD("%d IIO devices available into /sys/bus/iio/devices/ folder.", iio_devices_num);
@@ -987,6 +988,14 @@ static void st_hal_free_iio_devices_data(STSensorHAL_iio_devices_data *data,
 	}
 }
 
+static inline int st_hal_get_handle(STSensorHAL_data *hal_data, int handle)
+{
+	if (handle >= (int)hal_data->sensor_available)
+		return hal_data->sensor_available;
+	else
+		return handle;
+}
+
 /**
  * st_hal_dev_flush() - Flush sensor data
  * @dev: sensors device.
@@ -997,8 +1006,10 @@ static void st_hal_free_iio_devices_data(STSensorHAL_iio_devices_data *data,
 static int st_hal_dev_flush(struct sensors_poll_device_1 *dev, int handle)
 {
 	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
+	unsigned int index;
 
-	return hal_data->sensor_classes[handle]->FlushData(handle, true);
+	index = st_hal_get_handle(hal_data, handle);
+	return hal_data->sensor_classes[index]->FlushData(handle, true);
 }
 
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_MARSHMALLOW_VERSION)
@@ -1031,10 +1042,11 @@ static int st_hal_dev_batch(struct sensors_poll_device_1 *dev, int handle,
 				int flags, int64_t period_ns, int64_t timeout)
 {
 	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
+	unsigned int index = st_hal_get_handle(hal_data, handle);
 
 #if (CONFIG_ST_HAL_ANDROID_VERSION == ST_HAL_KITKAT_VERSION)
 	if (((flags & SENSORS_BATCH_DRY_RUN) || (flags & SENSORS_BATCH_WAKE_UPON_FIFO_FULL)) && (timeout > 0)) {
-		if (hal_data->sensor_classes[handle]->GetMaxFifoLenght() > 0)
+		if (hal_data->sensor_classes[index]->GetMaxFifoLenght() > 0)
 			return 0;
 		else
 			return -EINVAL;
@@ -1043,7 +1055,7 @@ static int st_hal_dev_batch(struct sensors_poll_device_1 *dev, int handle,
 	(void)flags;
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
-	return hal_data->sensor_classes[handle]->SetDelay(handle, period_ns, timeout, true);
+	return hal_data->sensor_classes[index]->SetDelay(handle, period_ns, timeout, true);
 }
 
 /**
@@ -1095,8 +1107,10 @@ static int st_hal_dev_poll(struct sensors_poll_device_t *dev,
 static int st_hal_dev_setDelay(struct sensors_poll_device_t *dev, int handle, int64_t ns)
 {
 	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
+	unsigned int index;
 
-	return hal_data->sensor_classes[handle]->SetDelay(handle, ns, 0, true);
+	index = st_hal_get_handle(hal_data, handle);
+	return hal_data->sensor_classes[index]->SetDelay(handle, ns, 0, true);
 }
 
 /**
@@ -1110,8 +1124,10 @@ static int st_hal_dev_setDelay(struct sensors_poll_device_t *dev, int handle, in
 static int st_hal_dev_activate(struct sensors_poll_device_t *dev, int handle, int enabled)
 {
 	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
+	unsigned int index;
 
-	return  hal_data->sensor_classes[handle]->Enable(handle, (bool)enabled, true);
+	index = st_hal_get_handle(hal_data, handle);
+	return  hal_data->sensor_classes[index]->Enable(handle, (bool)enabled, true);
 }
 
 /**
@@ -1256,7 +1272,7 @@ static int st_hal_open_sensors(const struct hw_module_t *module,
 #endif /* CONFIG_ST_HAL_FACTORY_CALIBRATION */
 
 	device_found_num = st_hal_load_iio_devices_data(iio_devices_data);
-	if (device_found_num <= 0) {
+	if (device_found_num < 0) {
 		err = device_found_num;
 		goto free_hal_data;
 	}
@@ -1284,10 +1300,6 @@ static int st_hal_open_sensors(const struct hw_module_t *module,
 		if (sensor_class->hasEventChannels())
 			sensor_class_num_event++;
 		classes_available++;
-	}
-	if (classes_available == 0) {
-		err = -ENODEV;
-		goto free_iio_devices_data;
 	}
 
 #ifdef CONFIG_ST_HAL_FACTORY_CALIBRATION
@@ -1368,7 +1380,7 @@ failed_to_add_dependency:
 		}
 	}
 
-	hal_data->sensor_t_list = (struct sensor_t *)malloc(sensor_class_valid_num * sizeof(struct sensor_t));
+	hal_data->sensor_t_list = (struct sensor_t *)malloc((sensor_class_valid_num + 1) * sizeof(struct sensor_t));
 	if (!hal_data->sensor_t_list) {
 		err = -ENOMEM;
 		goto destroy_classes;
@@ -1419,6 +1431,11 @@ failed_to_add_dependency:
 		} else
 			delete temp_sensor_class[i];
 	}
+
+#ifdef CONFIG_ST_HAL_DYNAMIC_SENSOR
+	n++;
+	hal_data->sensor_classes[n] = new DynamicSensorProxy(hal_data, n);
+#endif /* CONFIG_ST_HAL_DYNAMIC_SENSOR */
 
 	hal_data->sensor_available = n;
 

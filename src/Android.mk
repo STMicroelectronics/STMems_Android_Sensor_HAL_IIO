@@ -113,6 +113,7 @@ LOCAL_STATIC_LIBRARIES += STAccCalibration
 endif # ST_HAL_ANDROID_VERSION
 endif # CONFIG_ST_HAL_HAS_ACCEL_CALIB
 
+LOCAL_SHARED_LIBRARIES := liblog libcutils libutils libdl libc
 
 LOCAL_SRC_FILES := \
 		SensorHAL.cpp \
@@ -230,7 +231,10 @@ ifdef CONFIG_ST_HAL_HAS_SELFTEST_FUNCTIONS
 LOCAL_SRC_FILES += SelfTest.cpp
 endif # CONFIG_ST_HAL_HAS_SELFTEST_FUNCTIONS
 
-LOCAL_SHARED_LIBRARIES := liblog libcutils libutils libdl libc
+ifdef CONFIG_ST_HAL_DYNAMIC_SENSOR
+LOCAL_SHARED_LIBRARIES += libdynamic_sensor_ext
+LOCAL_SRC_FILES += DynamicSensorProxy.cpp
+endif # CONFIG_ST_HAL_DYNAMIC_SENSOR
 
 LOCAL_MODULE_TAGS := optional
 
