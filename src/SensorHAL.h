@@ -26,8 +26,10 @@
 #include "SelfTest.h"
 #include "common_data.h"
 
+#ifndef ARRAY_SIZE
 #define ARRAY_SIZE(a)		(int)((sizeof(a) / sizeof(*(a))) / \
 					static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+#endif
 
 /*
  * IIO driver sensors names
