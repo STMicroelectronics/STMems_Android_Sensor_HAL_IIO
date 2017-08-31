@@ -111,6 +111,8 @@ SENSORS SUPPORTED:
    - HTS221			(RHumidity + Temperature);
    - LIS2MDL			(Magn);
    - LSM9DS1			(Accel + Gyro + Magn)
+   - LIS2DH			(Accel);
+   - LIS2DH12			(Accel);
 
 SC: Step Counter, SD: Step Detector, SM: Significant Motion
 

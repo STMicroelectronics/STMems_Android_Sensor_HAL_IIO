@@ -260,6 +260,15 @@ config ST_HAL_LIS2DG_ENABLED
 	  - Tilt;
 	  - Significant Motion;
 
+config ST_HAL_LIS2DH_ENABLED
+	bool "LIS2DH/LIS2DH12 sensor"
+	default n
+	help
+	  Enable support for LIS2DH/LIS2DH12 sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+
 config ST_HAL_L3G4200D_ENABLED
 	bool "L3G4200D sensor"
 	default n
