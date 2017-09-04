@@ -314,6 +314,24 @@ config ST_HAL_LPS22HB_ENABLED
 	  Sensors supported:
 	  - Pressure;
 
+config ST_HAL_LPS33HW_ENABLED
+	bool "LPS33HW sensors"
+	default n
+	help
+	  Enable support for LPS33HW sensors.
+
+	  Sensors supported:
+	  - Pressure;
+
+config ST_HAL_LPS35HW_ENABLED
+	bool "LPS35HW sensors"
+	default n
+	help
+	  Enable support for LPS35HW sensors.
+
+	  Sensors supported:
+	  - Pressure;
+
 config ST_HAL_LIS2HH12_ENABLED
 	bool "LIS2HH12 sensor"
 	default n
