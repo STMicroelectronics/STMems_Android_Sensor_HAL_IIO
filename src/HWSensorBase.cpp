@@ -138,7 +138,8 @@ static int ProcessScanData(uint8_t *data, struct iio_channel_info *channels, int
 			else
 				val = le32toh(*(uint32_t *)
 						(data + channels[k].location));
-
+			val >>= channels[k].shift;
+			val &= channels[k].mask;
 			if (channels[k].is_signed) {
 				sensor_out_data->raw[k] = ((float)(int32_t)val +
 						channels[k].offset) * channels[k].scale;
