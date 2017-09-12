@@ -107,6 +107,7 @@ SENSORS SUPPORTED:
    - LPS25H			(Pressure);
    - LSM303AH			(Accel + Magn);
    - LPS22HB			(Pressure);
+   - LPS22HD			(Pressure);
    - LPS33HW			(Pressure);
    - LPS35HW			(Pressure);
    - LIS2HH12			(Accel);

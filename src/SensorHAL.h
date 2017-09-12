@@ -68,6 +68,7 @@
 #define ST_SENSORS_LIST_33				"lis2dh"
 #define ST_SENSORS_LIST_34				"lps33hw"
 #define ST_SENSORS_LIST_35				"lps35hw"
+#define ST_SENSORS_LIST_36				"lps22hd"
 
 /*
  * IIO driver sensors suffix for sensors
