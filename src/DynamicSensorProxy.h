@@ -44,8 +44,8 @@ class DynamicSensorProxy : public SensorBase, public SensorEventCallback {
 public:
 	DynamicSensorProxy(STSensorHAL_data *hal_data, int index);
 	int Enable(int handle, bool enable, bool lock_en_mutex);
-	int setDelay(int handle, int64_t sampling_period_ns,
-		     int64_t max_report_latency_ns);
+	int SetDelay(int handle, int64_t period_ns, int64_t timeout,
+		     bool lock_en_mutex);
 	int flush(int handle);
 	int submitEvent(sp<BaseSensorObject> source, const sensors_event_t &e);
 private:

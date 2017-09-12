@@ -12,10 +12,6 @@
 int DynamicSensorProxy::submitEvent(sp<BaseSensorObject> source,
 				    const sensors_event_t &e)
 {
-#if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_VERBOSE)
-	ALOGD("%s: received event sensor %d\n", GetName(), e.sensor);
-#endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
-	
 	return write(write_pipe_fd, &e, sizeof(sensors_event_t));
 }
 
@@ -39,18 +35,26 @@ DynamicSensorProxy::DynamicSensorProxy(STSensorHAL_data *hal_data, int index)
 
 int DynamicSensorProxy::Enable(int handle, bool enable, bool lock_en_mutex)
 {
+#if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_VERBOSE)
+	ALOGD("%s: handle: %d enable=%d", GetName(), handle, enable);
+#endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
+
 	if (manager->owns(handle))
 		return manager->activate(handle, enable);
 	else
 		return -EINVAL;
 }
 
-int DynamicSensorProxy::setDelay(int handle, int64_t sampling_period_ns,
-				 int64_t max_report_latency_ns)
+int DynamicSensorProxy::SetDelay(int handle, int64_t period_ns,
+				 int64_t timeout, bool lock_en_mutex)
 {
+#if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_VERBOSE)
+	ALOGD("%s: handle: %d period_ns=%lld timeout=%lld",
+	      GetName(), handle, period_ns, timeout);
+#endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
+
 	if (manager->owns(handle))
-		return manager->batch(handle, sampling_period_ns,
-				      max_report_latency_ns);
+		return manager->batch(handle, period_ns, timeout);
 	else
 		return -EINVAL;
 }
