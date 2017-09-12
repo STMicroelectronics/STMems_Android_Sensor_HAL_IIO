@@ -313,7 +313,7 @@ config ST_HAL_GEOMAG_ROT_VECTOR_AP_ENABLED
 endchoice
 
 config ST_HAL_DYNAMIC_SENSOR
-	prompt "Dynamic Sensor Support"
+	bool "Dynamic Sensor Support"
 	default n
 	help
 	  Enable support for Dynamic sensors.
