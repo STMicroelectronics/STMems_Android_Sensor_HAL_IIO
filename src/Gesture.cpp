@@ -18,7 +18,7 @@ Gesture::Gesture(HWSensorBaseCommonData *data, const char *name, int handle,
 	HWSensorBase(data, name, handle, SENSOR_TYPE_TILT_DETECTOR,
 		     hw_fifo_len, power_consumption)
 {
-#if (CONFIG_ST_HAL_ANDROID_VERSION > ST_HAL_KITKAT_VERSION)
+#if (CONFIG_ST_HAL_ANDROID_VERSION > ST_HAL_LOLLIPOP_VERSION)
 	sensor_t_data.stringType = SENSOR_STRING_TYPE_WRIST_TILT_GESTURE;
 	sensor_t_data.flags |= SENSOR_FLAG_SPECIAL_REPORTING_MODE | SENSOR_FLAG_WAKE_UP;
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
