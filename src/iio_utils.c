@@ -571,6 +571,12 @@ tmp_name_free:
 
 int iio_utils_set_sampling_frequency(const char *device_dir, unsigned int frequency)
 {
+	int err;
+
+	err = check_syfs_file(iio_sampling_frequency_filename, device_dir);
+	if (err < 0 && errno == ENOENT)
+		return 0;
+
 	return write_sysfs_int_and_verify((char *)iio_sampling_frequency_filename, (char *)device_dir, frequency);
 }
 
