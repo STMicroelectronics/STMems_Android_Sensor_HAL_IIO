@@ -6,7 +6,7 @@ menu "Common configuration"
 config ST_HAL_MAX_SAMPLING_FREQUENCY
 	int "Max sampling frequency selectable [Hz]"
 	range 50 2000
-	default 200
+	default 2000
 	help
 	  Maximium value of sampling frequency that can be used in IIO driver.
 

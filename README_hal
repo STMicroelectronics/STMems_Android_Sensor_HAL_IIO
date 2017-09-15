@@ -89,6 +89,7 @@ SENSORS SUPPORTED:
    - LIS3MDL			(Magn);
    - LSM303DLHC			(Accel + Magn);
    - LIS3DH			(Accel);
+   - LIS3DHH			(Accel);
    - LSM330D			(Accel + Gyro);
    - LSM330DL			(Accel + Gyro);
    - LSM330DLC			(Accel + Gyro);
