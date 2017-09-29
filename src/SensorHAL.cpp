@@ -1011,8 +1011,8 @@ static void st_hal_free_iio_devices_data(STSensorHAL_iio_devices_data *data,
 
 static inline int st_hal_get_handle(STSensorHAL_data *hal_data, int handle)
 {
-	if (handle >= (int)hal_data->sensor_available)
-		return hal_data->sensor_available;
+	if (handle >= hal_data->last_handle)
+		return hal_data->last_handle;
 	else
 		return handle;
 }
@@ -1448,14 +1448,17 @@ failed_to_add_dependency:
 			hal_data->android_pollfd[n].events = POLLIN;
 			hal_data->android_pollfd[n].fd = hal_data->sensor_classes[temp_sensor_class[i]->GetHandle()]->GetFdPipeToRead();
 
+			hal_data->last_handle = temp_sensor_class[i]->GetHandle();
 			n++;
 		} else
 			delete temp_sensor_class[i];
 	}
 
 #ifdef CONFIG_ST_HAL_DYNAMIC_SENSOR
+	hal_data->last_handle++;
+	hal_data->sensor_classes[hal_data->last_handle] = new DynamicSensorProxy(hal_data, n,
+										 hal_data->last_handle);
 	n++;
-	hal_data->sensor_classes[n] = new DynamicSensorProxy(hal_data, n);
 #endif /* CONFIG_ST_HAL_DYNAMIC_SENSOR */
 
 	hal_data->sensor_available = n;

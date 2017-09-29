@@ -145,6 +145,8 @@ struct STSensorHAL_data {
 	pthread_t *events_threads;
 	SensorBase *sensor_classes[ST_HAL_IIO_MAX_DEVICES];
 
+	int last_handle;
+
 	unsigned int sensor_available;
 	struct sensor_t *sensor_t_list;
 

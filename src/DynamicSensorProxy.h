@@ -42,7 +42,7 @@ using android::SensorHalExt::SensorEventCallback;
 
 class DynamicSensorProxy : public SensorBase, public SensorEventCallback {
 public:
-	DynamicSensorProxy(STSensorHAL_data *hal_data, int index);
+	DynamicSensorProxy(STSensorHAL_data *hal_data, int index, int handle);
 	int Enable(int handle, bool enable, bool lock_en_mutex);
 	int SetDelay(int handle, int64_t period_ns, int64_t timeout,
 		     bool lock_en_mutex);

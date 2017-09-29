@@ -15,11 +15,12 @@ int DynamicSensorProxy::submitEvent(sp<BaseSensorObject> source,
 	return write(write_pipe_fd, &e, sizeof(sensors_event_t));
 }
 
-DynamicSensorProxy::DynamicSensorProxy(STSensorHAL_data *hal_data, int index)
-	: SensorBase("Dynamic Sensor Proxy", index,
+DynamicSensorProxy::DynamicSensorProxy(STSensorHAL_data *hal_data, int index,
+				       int handle)
+	: SensorBase("Dynamic Sensor Proxy", handle,
 		     SENSOR_TYPE_DYNAMIC_SENSOR_META)
 {
-	manager = DynamicSensorManager::createInstance(index,
+	manager = DynamicSensorManager::createInstance(handle,
 			DYNAMIC_SENSOR_HANDLE_COUNT, this);
 	sensor_t_data = manager->getDynamicMetaSensor();
 
@@ -28,9 +29,9 @@ DynamicSensorProxy::DynamicSensorProxy(STSensorHAL_data *hal_data, int index)
 	      GetName(), GetHandle(), GetType());
 #endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
 
-	GetSensor_tData(&hal_data->sensor_t_list[index - 1]);
-	hal_data->android_pollfd[index - 1].fd = GetFdPipeToRead();
-	hal_data->android_pollfd[index - 1].events = POLLIN;
+	GetSensor_tData(&hal_data->sensor_t_list[index]);
+	hal_data->android_pollfd[index].fd = GetFdPipeToRead();
+	hal_data->android_pollfd[index].events = POLLIN;
 }
 
 int DynamicSensorProxy::Enable(int handle, bool enable, bool lock_en_mutex)
