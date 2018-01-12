@@ -1,7 +1,7 @@
 /*
  * STMicroelectronics SensorHAL core
  *
- * Version 3.1.5
+ * Version 3.1.6
  * Copyright 2015-2016 STMicroelectronics Inc.
  * Author: Denis Ciocca - <denis.ciocca@st.com>
  *
@@ -30,6 +30,7 @@
 #include "TiltSensor.h"
 #include "SWMagnetometerUncalibrated.h"
 #include "SWGyroscopeUncalibrated.h"
+#include "SWAccelerometerUncalibrated.h"
 #include "Pressure.h"
 #include "RHumidity.h"
 #include "Temp.h"
@@ -502,6 +503,9 @@ static const struct ST_virtual_sensors_list {
 #ifdef CONFIG_ST_HAL_LINEAR_AP_ENABLED
 	{ .android_sensor_type = SENSOR_TYPE_LINEAR_ACCELERATION },
 #endif /* CONFIG_ST_HAL_LINEAR_AP_ENABLED */
+#ifdef CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED
+	{ .android_sensor_type = SENSOR_TYPE_ACCELEROMETER_UNCALIBRATED },
+#endif /* CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED */
 };
 
 #ifdef CONFIG_ST_HAL_FACTORY_CALIBRATION
@@ -595,6 +599,11 @@ static SensorBase* st_hal_create_virtual_class_sensor(int sensor_type, int handl
 		sb = new SWLinearAccel("iNemoEngine Linear Acceleration Sensor", handle);
 		break;
 #endif /* CONFIG_ST_HAL_LINEAR_AP_ENABLED */
+#ifdef CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED
+	case SENSOR_TYPE_ACCELEROMETER_UNCALIBRATED:
+		sb = new SWAccelerometerUncalibrated("Accelerometer Uncalibrated Sensor", handle);
+		break;
+#endif /* CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED */
 	default:
 		(void)handle;
 		return NULL;

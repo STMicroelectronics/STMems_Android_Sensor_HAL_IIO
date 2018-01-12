@@ -117,8 +117,15 @@ void Accelerometer::ProcessData(SensorBaseData *data)
 	data->processed[0] = acc_cal_output.acc_cal[0];
 	data->processed[1] = acc_cal_output.acc_cal[1];
 	data->processed[2] = acc_cal_output.acc_cal[2];
-
+	data->offset[0] = acc_cal_output.offset[0];
+	data->offset[1] = acc_cal_output.offset[1];
+	data->offset[2] = acc_cal_output.offset[2];
 	data->accuracy = acc_cal_output.accuracy;
+#if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_EXTRA_VERBOSE)
+	ALOGD("\"%s\": ACCEL-CALIB (accuracy %d - offs: x=%f y=%f z=%f) received new sensor data: x=%f y=%f z=%f (norm is %f), timestamp=%" PRIu64 "ns, deltatime=%" PRIu64 "ns (sensor type: %d).",
+				sensor_t_data.name, data->accuracy, data->offset[0], data->offset[1], data->offset[2], data->processed[0], data->processed[1], data->processed[2],
+				sqrtf(data->processed[0]*data->processed[0] + data->processed[1]*data->processed[1] + data->processed[2]*data->processed[2]), data->timestamp, data->timestamp - sensor_event.timestamp, sensor_t_data.type);
+#endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
 #else /* CONFIG_ST_HAL_ACCEL_CALIB_ENABLED */
 	data->processed[0] = data->raw[0];
 	data->processed[1] = data->raw[1];

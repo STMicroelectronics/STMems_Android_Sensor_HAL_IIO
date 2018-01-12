@@ -31,6 +31,7 @@ STMICROELECTRONICS LIBRARIES VERSION REQUIREMENTS:
    - iNemoEngine_gbias_Estimation:		v1.x
    - iNemoEnginePRO:				v1.x
    - iNemoEngine_GeoMag_Fusion:			v1.x
+   - STAccCalibration:				v1.x
 
 
 INSTALLING SOURCE CODE
@@ -130,4 +131,5 @@ CHANGELOG:
    v3.1.3: Added support for LSM303AH, LPS22HB. Fixed compiling issue on Android L and K (wrist-tilt)
    v3.1.4: Added support for LIS2HH12, fix gbias lib sample processing and init
    v3.1.5: Added support for Android N. Added support for different kernel versions
+   v3.1.6: Added support for Android O. Added support to Calibrated/Uncalibrated Acc.
 

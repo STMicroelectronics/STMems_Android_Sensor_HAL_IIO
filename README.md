@@ -46,7 +46,8 @@ Currently supported sensors are:
 Software architecture and Integration details
 =============
 
-STM Sensor HAL is written in *C++* language using object-oriented design. For each hw sensor there is a custom class file (*Accelerometer.cpp*, *Magnetometer.cpp*, *Gyroscope.cpp*, *Pressure.cpp* and *RHumidity.cpp*) which extends the common base class (*SensorBase.cpp*).
+STM Sensor HAL is written in *C++* language using object-oriented design. For each hw sensor there is a custom class file
+(*Accelerometer.cpp*, *Magnetometer.cpp*, *Gyroscope.cpp*, *Pressure.cpp* and *RHumidity.cpp*) which extends the common base class (*SensorBase.cpp*).
 
 Copy the HAL source code into *<AOSP_DIR\>/hardware/STMicroelectronics/SensorHAL_IIO* folder. During building process Android will include automatically the SensorHAL Android.mk.
 In *<AOSP_DIR\>/device/<vendor\>/<board\>/device.mk* add package build information:
@@ -90,6 +91,9 @@ STM proprietary libraries are used to define composite sensors based on hardware
 
 ### MAGCALIB:
 > The STM Magnetometer Calibration library provides an accurate magnetometer Hard Iron (HI) and Soft Iron (SI) runtime compensation
+
+### ACC_CALIB:
+> The STM Accelerometer Calibration library provide an afficient accelerometer offset runtime compensation
 
 To enable STM proprietary libraries please use mm utility
 

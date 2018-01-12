@@ -87,6 +87,21 @@ config ST_HAL_GYRO_UNCALIB_AP_ENABLED
 	bool "Software by AP Library"
 endchoice
 
+if (ST_HAL_ANDROID_VERSION >= 4)
+choice
+	prompt "Accelerometer Uncalibrated sensor"
+	default ST_HAL_ACCEL_UNCALIB_DISABLED
+	help
+	  Enable support for Accelerometer Uncalibrated sensor.
+
+config ST_HAL_ACCEL_UNCALIB_DISABLED
+	bool "Disabled"
+config ST_HAL_ACCEL_UNCALIB_AP_ENABLED
+	depends on ST_HAL_ACCEL_CALIB_ENABLED
+	bool "Software by AP Library"
+endchoice
+endif
+
 config ST_HAL_SIGN_MOTION_ENABLED
 	bool "Significant Motion sensor"
 	default y
