@@ -65,12 +65,20 @@ To compile the SensorHAL_IIO just build AOSP source code from *$TOP* folder
 
 The compiled library will be placed in *<AOSP_DIR\>/out/target/product/<board\>/system/vendor/lib/hw/sensor.{TARGET_BOARD_PLATFORM}.so*
 
-To configure sensor the Sensor HAL IIO use mm utility from HAL root folder
+To configure sensor the Sensor HAL IIO use mm utility from HAL root folder (up to Android M version included)
 
-	$mm sensors-defconfig (default configuration)
+	$mm sensors-defconfig       (default configuration)
 or
 
 	$mm sensors-menuconfig
+
+otherwise from SensorHAL_IIO root folder (since Android N to latest version):
+
+	"make sensors-defconfig"    Set to default configuration
+
+	"make sensors-menuconfig"   Text based color menus, radiolists & dialogs.
+
+	"make sensors-cleanconf"    Delete hal_config, hal_config.old and configuration.h files.
 
 For more information on compiling an Android project, please consult the [AOSP website](https://source.android.com/source/requirements.html) 
 
