@@ -27,7 +27,15 @@ Gyroscope::Gyroscope(HWSensorBaseCommonData *data, const char *name,
 {
 #if (CONFIG_ST_HAL_ANDROID_VERSION > ST_HAL_KITKAT_VERSION)
 	sensor_t_data.stringType = SENSOR_STRING_TYPE_GYROSCOPE;
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+	/* Support Direct Channel in Android O */
+	sensor_t_data.flags |= (SENSOR_FLAG_CONTINUOUS_MODE |
+				SENSOR_FLAG_DIRECT_CHANNEL_ASHMEM |
+				(SENSOR_DIRECT_RATE_VERY_FAST <<
+				 SENSOR_FLAG_SHIFT_DIRECT_REPORT));
+#else /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 	sensor_t_data.flags |= SENSOR_FLAG_CONTINUOUS_MODE;
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 
 	if (wakeup)
 		sensor_t_data.flags |= SENSOR_FLAG_WAKE_UP;

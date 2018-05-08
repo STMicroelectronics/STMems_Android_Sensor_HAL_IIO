@@ -26,6 +26,12 @@
 #include "SelfTest.h"
 #include "common_data.h"
 
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+#include <unordered_map>
+#include <utils/Mutex.h>
+#include "RingBuffer.h"
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
+
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(a)		(int)((sizeof(a) / sizeof(*(a))) / \
 					static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
@@ -70,6 +76,11 @@
 #define ST_SENSORS_LIST_35				"lps35hw"
 #define ST_SENSORS_LIST_36				"lps22hd"
 #define ST_SENSORS_LIST_37				"lis3dhh"
+#define ST_SENSORS_LIST_40				"ism330dlc"
+#define ST_SENSORS_LIST_42				"iis2mdc"
+#define ST_SENSORS_LIST_43				"iis2dh"
+#define ST_SENSORS_LIST_44				"ism303dac"
+#define ST_SENSORS_LIST_45				"iis3dhhc"
 
 /*
  * IIO driver sensors suffix for sensors
@@ -155,6 +166,12 @@ struct STSensorHAL_data {
 #endif /* CONFIG_ST_HAL_HAS_SELFTEST_FUNCTIONS */
 
 	struct pollfd android_pollfd[ST_HAL_IIO_MAX_DEVICES];
+
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+	int mDirectChannelHandle;
+	android::Mutex mDirectChannelLock;
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
+
 } typedef STSensorHAL_data;
 
 #endif /* ST_SENSOR_HAL_H */

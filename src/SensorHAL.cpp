@@ -1,7 +1,7 @@
 /*
  * STMicroelectronics SensorHAL core
  *
- * Version 3.1.6
+ * Version 3.1.7
  * Copyright 2015-2016 STMicroelectronics Inc.
  * Author: Denis Ciocca - <denis.ciocca@st.com>
  *
@@ -50,6 +50,17 @@
 #ifdef CONFIG_ST_HAL_DYNAMIC_SENSOR
 #include "DynamicSensorProxy.h"
 #endif /* CONFIG_ST_HAL_DYNAMIC_SENSOR */
+
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+#include <vector>
+#include "RingBuffer.h"
+
+/* Maps sensor_handle=>(channel_handle, rate_level) */
+std::unordered_map<int, std::unordered_map<int, int>> mSensorToChannel;
+
+/* Maps channel_handle=>ptr of Channel obj */
+std::unordered_map<int, std::unique_ptr<DirectChannelBase>> mDirectChannel;
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 
 /*
  * STSensorHAL_iio_devices_data: informations related to the IIO devices, used during open-sensor function
@@ -113,6 +124,9 @@ static const struct ST_sensors_supported {
 #ifdef CONFIG_ST_HAL_LIS3DHH_ENABLED
 	ST_HAL_NEW_SENSOR_SUPPORTED(ST_SENSORS_LIST_37, SENSOR_TYPE_ACCELEROMETER, IIO_ACCEL, "LIS3DHH Accelerometer Sensor", 0.0f)
 #endif /* CONFIG_ST_HAL_LIS3DHH_ENABLED */
+#ifdef CONFIG_ST_HAL_IIS3DHHC_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(ST_SENSORS_LIST_45, SENSOR_TYPE_ACCELEROMETER, IIO_ACCEL, "IIS3DHHC Accelerometer Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_IIS3DHHC_ENABLED */
 #ifdef CONFIG_ST_HAL_LIS3DH_ENABLED
 	ST_HAL_NEW_SENSOR_SUPPORTED(ST_SENSORS_LIST_4, SENSOR_TYPE_ACCELEROMETER, IIO_ACCEL, "LIS3DH Accelerometer Sensor", 0.0f)
 #endif /* CONFIG_ST_HAL_LIS3DH_ENABLED */
@@ -176,6 +190,15 @@ static const struct ST_sensors_supported {
 #ifdef CONFIG_ST_HAL_LIS2DH_ENABLED
 	ST_HAL_NEW_SENSOR_SUPPORTED(ST_SENSORS_LIST_33, SENSOR_TYPE_ACCELEROMETER, IIO_ACCEL, "LIS2DH/LIS2DH12 Accelerometer Sensor", 0.0f)
 #endif /* CONFIG_ST_HAL_LIS2DH_ENABLED */
+#ifdef CONFIG_ST_HAL_ISM330DLC_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_40, ACCEL_NAME_SUFFIX_IIO), SENSOR_TYPE_ACCELEROMETER, IIO_ACCEL, "ISM330DLC Accelerometer Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_ISM330DLC_ENABLED */
+#ifdef CONFIG_ST_HAL_IIS2DH_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_43, ACCEL_NAME_SUFFIX_IIO), SENSOR_TYPE_ACCELEROMETER, IIO_ACCEL, "IIS2DH Accelerometer Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_IIS2DH_ENABLED */
+#ifdef CONFIG_ST_HAL_ISM303DAC_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(ST_SENSORS_LIST_44, SENSOR_TYPE_ACCELEROMETER, IIO_ACCEL, "ISM303DAC Accelerometer Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_ISM303DAC_ENABLED */
 #endif /* CONFIG_ST_HAL_ACCEL_ENABLED */
 
 /**************** Magnetometer sensors ****************/
@@ -222,6 +245,15 @@ static const struct ST_sensors_supported {
 #ifdef CONFIG_ST_HAL_LSM6DSL_ENABLED
 	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_31, MAGN_NAME_SUFFIX_IIO), SENSOR_TYPE_GEOMAGNETIC_FIELD, IIO_MAGN, "LSM6DSL Magnetometer Sensor", 0.0f)
 #endif /* CONFIG_ST_HAL_LSM6DSL_ENABLED */
+#ifdef CONFIG_ST_HAL_ISM330DLC_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_40, MAGN_NAME_SUFFIX_IIO), SENSOR_TYPE_GEOMAGNETIC_FIELD, IIO_MAGN, "ISM330DLC Magnetometer Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_ISM330DLC_ENABLED */
+#ifdef CONFIG_ST_HAL_IIS2MDC_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_42, MAGN_NAME_SUFFIX_IIO), SENSOR_TYPE_GEOMAGNETIC_FIELD, IIO_MAGN, "IIS2MDC Magnetometer Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_IIS2MDC_ENABLED */
+#ifdef CONFIG_ST_HAL_ISM303DAC_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_44, MAGN_NAME_SUFFIX_IIO), SENSOR_TYPE_GEOMAGNETIC_FIELD, IIO_MAGN, "ISM303DAC Magnetometer Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_ISM303DAC_ENABLED */
 #endif /* CONFIG_ST_HAL_MAGN_ENABLED */
 
 /**************** Gyroscope sensors ****************/
@@ -265,6 +297,9 @@ static const struct ST_sensors_supported {
 #ifdef CONFIG_ST_HAL_LSM6DSL_ENABLED
 	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_31, GYRO_NAME_SUFFIX_IIO), SENSOR_TYPE_GYROSCOPE, IIO_ANGL_VEL, "LSM6DSL Gyroscope Sensor", 0.0f)
 #endif /* CONFIG_ST_HAL_LSM6DSL_ENABLED */
+#ifdef CONFIG_ST_HAL_ISM330DLC_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_40, GYRO_NAME_SUFFIX_IIO), SENSOR_TYPE_GYROSCOPE, IIO_ANGL_VEL, "ISM330DLC Gyroscope Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_ISM330DLC_ENABLED */
 #endif /* CONFIG_ST_HAL_GYRO_ENABLED */
 
 /**************** Step Detector sensors ****************/
@@ -389,6 +424,9 @@ static const struct ST_sensors_supported {
 #ifdef CONFIG_ST_HAL_LSM6DSL_ENABLED
 	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_31, TILT_NAME_SUFFIX_IIO), SENSOR_TYPE_TILT_DETECTOR, IIO_TILT, "LSM6DSL Tilt Sensor", 0.0f)
 #endif /* CONFIG_ST_HAL_LSM6DSL_ENABLED */
+#ifdef CONFIG_ST_HAL_ISM330DLC_ENABLED
+	ST_HAL_NEW_SENSOR_SUPPORTED(CONCATENATE_STRING(ST_SENSORS_LIST_20, TILT_NAME_SUFFIX_IIO), SENSOR_TYPE_TILT_DETECTOR, IIO_TILT, "ISM330DLC Tilt Sensor", 0.0f)
+#endif /* CONFIG_ST_HAL_ISM330DLC_ENABLED */
 #endif /* CONFIG_ST_HAL_TILT_ENABLED */
 
 /**************** Wrist Tilt Gesture ****************/
@@ -945,11 +983,13 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_WRIST_TILT_GESTURE &&
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_WAKE_GESTURE &&
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_PICK_UP_GESTURE &&
+
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_NOUGAT_VERSION)
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_MOTION_DETECT &&
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_STATIONARY_DETECT &&
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_DEVICE_ORIENTATION &&
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_GLANCE_GESTURE) {
 			err = iio_utils_get_sampling_frequency_available(data[index].iio_sysfs_path, &data[index].sfa);
 			if (err < 0)
@@ -1245,6 +1285,245 @@ static void st_hal_set_default_private_data(struct st_hal_private_data *priv_dat
 }
 #endif /* CONFIG_ST_HAL_FACTORY_CALIBRATION */
 
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+/**
+ * st_hal_dev_stop_all_direct_report() - Close all sensor for a channel handle
+ *
+ * @hal_data: Sensor HAL structure
+ * @channel_handle: handle from st_hal_add_direct_channel()
+ * @activeSensorList: active sensor list to be stopped (if null
+ *                    do none)
+ */
+static int st_hal_dev_stop_all_direct_report(STSensorHAL_data *hal_data,
+					     int channel_handle,
+					     std::vector<int32_t> *activeSensorList)
+{
+	unsigned int handle;
+
+	android::Mutex::Autolock autoLock(hal_data->mDirectChannelLock);
+
+	if (mDirectChannel.find(channel_handle) ==
+		mDirectChannel.end())
+		return android::BAD_VALUE;
+
+	std::vector<int32_t> sensorToStop;
+	for (auto &it : mSensorToChannel) {
+		auto j = it.second.find(channel_handle);
+		if (j != it.second.end()) {
+			it.second.erase(j);
+			if (it.second.empty())
+				sensorToStop.push_back(it.first);
+		}
+	}
+
+	if (activeSensorList != nullptr)
+		*activeSensorList = sensorToStop;
+
+	for (auto sensor_handle : sensorToStop) {
+		handle = st_hal_get_handle(hal_data, sensor_handle);
+		hal_data->sensor_classes[handle]->Enable(handle, false, true);
+		hal_data->sensor_classes[handle]->SetDelay(handle, 0, 0, true);
+		ALOGD("Stopping Direct Report CH %d Sensor Handle %d",
+		      channel_handle, handle);
+	}
+
+	return android::NO_ERROR;
+}
+
+/**
+ * st_hal_dev_config_direct_report() - Android call this function to
+ * configure a Direct Report Channel structure for a sensor
+ *
+ * @dev: poll device pointer
+ * @sensor_handle: handle to sensor to configure on Direct Report Channel
+ * @channel_handle: handle from st_hal_add_direct_channel()
+ * @config: contains rate_level SENSOR_DIRECT_RATE_
+ **/
+static int st_hal_dev_config_direct_report(struct sensors_poll_device_1 *dev,
+					   int sensor_handle, int channel_handle,
+					   const sensors_direct_cfg_t *config)
+{
+	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
+	int rate_level = config->rate_level;
+	int64_t ns;
+	unsigned int handle;
+
+
+	/* Check if need to disable direct report on all channel. */
+	if (sensor_handle == -1 && rate_level == SENSOR_DIRECT_RATE_STOP) {
+		/* All sensor associated to channel_handle MUST be stopped. */
+		return st_hal_dev_stop_all_direct_report(hal_data, channel_handle,
+							 nullptr);
+	}
+
+	if (rate_level > SENSOR_DIRECT_RATE_VERY_FAST) {
+		ALOGW("Rate Level too high %d for channel %d",
+		      channel_handle, rate_level);
+		rate_level = SENSOR_DIRECT_RATE_VERY_FAST;
+	}
+
+	android::Mutex::Autolock autoLock(hal_data->mDirectChannelLock);
+
+	/* Manage direct channel data structure. */
+	auto i = mDirectChannel.find(channel_handle);
+	if (i == mDirectChannel.end()) {
+		ALOGE("Invalid Direct Channel %d", channel_handle);
+		return 0;
+	}
+	if (i->second == NULL) {
+		ALOGE("mDirectChannel is NULL, not sharable resource");
+
+		return 0;
+	}
+
+	auto j = mSensorToChannel.find(sensor_handle);
+	if (j == mSensorToChannel.end()) {
+		ALOGD("Adding Sensor Handle %d to Direct Channel %d",
+		      sensor_handle, channel_handle);
+		/* Dynamicaly emplace a new map of mSensorToChannel. */
+		mSensorToChannel.emplace(sensor_handle,
+			std::unordered_map<int32_t, int32_t>());
+		j = mSensorToChannel.find(sensor_handle);
+	}
+
+	j->second.erase(channel_handle);
+	if (rate_level != SENSOR_DIRECT_RATE_STOP)
+		j->second.insert(std::make_pair(channel_handle, rate_level));
+
+	/*
+	 * From Android Doc:
+	 *  SENSOR_DIRECT_RATE_STOP - Sensor stopped (no event output).
+	 *  SENSOR_DIRECT_RATE_NORMAL - Sensor operates at nominal rate of 50Hz.
+	 *  SENSOR_DIRECT_RATE_FAST - Sensor operates at nominal rate of 200Hz.
+	 *  SENSOR_DIRECT_RATE_VERY_FAST - Sensor operates at nominal rate of 800Hz.
+	 *
+	 * There is a direct correlation from Direct rate value to sample rate of
+	 * sensor.
+	 */
+	switch(rate_level) {
+	case SENSOR_DIRECT_RATE_NORMAL:
+		ns = FREQUENCY_TO_NS(50);
+		break;
+	case SENSOR_DIRECT_RATE_FAST:
+		ns = FREQUENCY_TO_NS(200);
+		break;
+	case SENSOR_DIRECT_RATE_VERY_FAST:
+		ns = FREQUENCY_TO_NS(800);
+		break;
+	default:
+		ALOGW("Invalid rate level (%d)", rate_level);
+		break;
+	}
+
+	/* Associate an existing Channel Report to sensor. */
+	handle = st_hal_get_handle(hal_data, sensor_handle);
+	hal_data->sensor_classes[handle]->mDirectChannel = std::move(i->second);
+	hal_data->sensor_classes[handle]->SetChannelHandle(channel_handle);
+	hal_data->sensor_classes[handle]->Enable(handle, true, true);
+	hal_data->sensor_classes[handle]->SetDelay(handle, ns, 0, true);
+	hal_data->sensor_classes[handle]->SetChannelDatarate(rate_level);
+	ALOGD("Setting Direct Channel %d Sensor(%d) %d to rate %ld ns",
+	      channel_handle, sensor_handle, handle, ns);
+
+	return sensor_handle;
+}
+
+/**
+ * st_hal_add_direct_channel() - Add a Direct Channel
+ * @mem: shared memory information pointer for a direct channel
+ * @return: > 0 channel_handle for new created Direct Channel
+ * 	    NO_MEMORY, INVALID_OPERATION if error
+ *
+ * TODO: Unsupported Hardware Buffer type GRALLOC
+ **/
+static int st_hal_add_direct_channel(struct sensors_poll_device_1 *dev,
+                                     const struct sensors_direct_mem_t *mem)
+{
+	std::unique_ptr<DirectChannelBase> ch;
+	int ret = android::NO_MEMORY;
+	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
+
+	switch(mem->type) {
+	case SENSOR_DIRECT_MEM_TYPE_ASHMEM:
+		ch = std::make_unique<AshmemDirectChannel>(mem);
+		break;
+	case SENSOR_DIRECT_MEM_TYPE_GRALLOC:
+		ret = android::INVALID_OPERATION;
+		break;
+	default:
+		ret = android::INVALID_OPERATION;
+		break;
+	}
+
+	if (ch->isValid()) {
+		android::Mutex::Autolock autoLock(hal_data->mDirectChannelLock);
+		ret = hal_data->mDirectChannelHandle++;
+		/* Associate channel_handle to Direct Channel buffer. */
+		mDirectChannel.insert(std::make_pair(ret, std::move(ch)));
+		ALOGD("Direct Channel type ASHMEM created (%d)", ret);
+	} else {
+		ret = ch->getError();
+		ALOGW("Direct channel object(type:%d) has error %d upon init",
+		      mem->type, ret);
+	}
+
+	return ret;
+}
+
+/**
+ * st_hal_dev_remove_direct_channel() - Remove a Direct Channel
+ * @channel_handle: handle from st_hal_add_direct_channel()
+ * TODO: Unsupported Hardware Buffer type GRALLOC
+ **/
+static int st_hal_dev_remove_direct_channel(struct sensors_poll_device_1 *dev,
+                                            int channel_handle)
+{
+	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
+	unsigned int handle;
+
+	/* Check if there are sensors enabled for Direct Report. */
+	for (auto &it : mSensorToChannel) {
+		auto j = it.second.find(channel_handle);
+		if (j != it.second.end()) {
+			it.second.erase(j);
+			handle = st_hal_get_handle(hal_data, it.first);
+			hal_data->sensor_classes[handle]->mDirectChannelLock.lock();
+			hal_data->sensor_classes[handle]->SetDelay(handle, 0ll, 0, true);
+			hal_data->sensor_classes[handle]->Enable(handle, false, true);
+			mDirectChannel.find(channel_handle)->second =
+				std::move(hal_data->sensor_classes[handle]->mDirectChannel);
+			hal_data->sensor_classes[handle]->mDirectChannelLock.unlock();
+			ALOGD("Stopping Direct Report Sensor CH %d Handle %d",
+			      it.first, handle);
+		}
+	}
+
+	/* Remove the channel record. */
+	android::Mutex::Autolock autoLock(hal_data->mDirectChannelLock);
+	mDirectChannel.erase(channel_handle);
+
+	return android::NO_ERROR;
+}
+
+/**
+ * st_hal_dev_register_direct_channel() - Android call this function to
+ * allocate a new Direct Report Channel structure
+ *
+ * @dev: poll device pointer
+ * @mem: shared memory information pointer for a direct channel
+ * @channel_handle: handle from st_hal_add_direct_channel()
+ **/
+static int st_hal_dev_register_direct_channel(struct sensors_poll_device_1 *dev,
+					      const struct sensors_direct_mem_t* mem,
+					      int channel_handle)
+{
+	if (mem)
+		return st_hal_add_direct_channel(dev, mem);
+
+	return st_hal_dev_remove_direct_channel(dev, channel_handle);
+}
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
+
 /**
  * open_sensors() - Open sensor device
  * see Android documentation.
@@ -1288,6 +1567,11 @@ static int st_hal_open_sensors(const struct hw_module_t *module,
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_MARSHMALLOW_VERSION)
 	hal_data->poll_device.inject_sensor_data = st_hal_dev_inject_sensor_data;
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+	hal_data->poll_device.register_direct_channel = st_hal_dev_register_direct_channel;
+	hal_data->poll_device.config_direct_report = st_hal_dev_config_direct_report;
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 
 	*device = &hal_data->poll_device.common;
 
@@ -1485,6 +1769,10 @@ failed_to_add_dependency:
 	ALOGD("%d sensors available and ready.", hal_data->sensor_available);
 #endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
 
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+	hal_data->mDirectChannelHandle = 1;
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
+
 	return 0;
 
 free_data_threads:
@@ -1494,7 +1782,7 @@ free_sensor_t_list:
 destroy_classes:
 	for (i = 0; i < classes_available; i ++)
 		delete temp_sensor_class[i];
-free_iio_devices_data:
+
 	st_hal_free_iio_devices_data(iio_devices_data, device_found_num);
 free_hal_data:
 	free(hal_data);

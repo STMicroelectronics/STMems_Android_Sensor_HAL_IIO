@@ -33,7 +33,26 @@ SWGameRotationVector::~SWGameRotationVector()
 
 void SWGameRotationVector::ProcessData(SensorBaseData *data)
 {
-	memcpy(sensor_event.data, data->processed, SENSOR_DATA_4AXIS * sizeof(float));
+	/*
+	 * Game rotation vector
+	 *
+	 * Underlying physical sensors: Accelerometer and Gyroscope (no Magnetometer)
+	 * Reporting-mode: Continuous
+	 * getDefaultSensor(SENSOR_TYPE_GAME_ROTATION_VECTOR) returns a non-wake-up sensor
+	 * A game rotation vector sensor is similar to a rotation vector sensor but not using the geomagnetic field.
+	 * Therefore the Y axis doesn't point north but instead to some other reference. That reference is allowed
+	 * to drift by the same order of magnitude as the gyroscope drifts around the Z axis.
+	 * See the Rotation vector sensor for details on how to set sensors_event_t.data[0-3].
+	 * This sensor does not report an estimated heading accuracy: sensors_event_t.data[4]
+	 * is reserved and should be set to 0.
+	 * In an ideal case, a phone rotated and returned to the same real-world orientation should
+	 * report the same game rotation vector.
+	 *
+	 * TODO:
+	 * This sensor must be based on a gyroscope and an accelerometer. It cannot use magnetometer
+	 * as an input, besides, indirectly, through estimation of the gyroscope bias.
+	 */
+	memcpy(sensor_event.data, data->processed, SENSOR_DATA_4AXIS_ACCUR * sizeof(float));
 	sensor_event.timestamp = data->timestamp;
 
 	SWSensorBaseWithPollrate::WriteDataToPipe(data->pollrate_ns);

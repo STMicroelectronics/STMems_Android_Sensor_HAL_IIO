@@ -126,6 +126,15 @@ config ST_HAL_LIS3DHH_ENABLED
 	  Sensors supported:
 	  - Accelerometer;
 
+config ST_HAL_IIS3DHHC_ENABLED
+	bool "IIS3DHHC sensor"
+	default n
+	help
+	  Enable support for IIS3DHHC sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+
 config ST_HAL_LSM330D_ENABLED
 	bool "LSM330D sensor"
 	default n
@@ -225,11 +234,30 @@ config ST_HAL_LSM303AH_ENABLED
 	  - Accelerometer;
 	  - Magnetometer;
 
+config ST_HAL_ISM303DAC_ENABLED
+	bool "ISM303DAC sensor"
+	default n
+	help
+	  Enable support for ISM303DAC sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer;
+
 config ST_HAL_LIS2MDL_ENABLED
 	bool "LIS2MDL sensor"
 	default n
 	help
 	  Enable support for LIS2MDL sensor.
+
+	  Sensors supported:
+	  - Magnetometer;
+
+config ST_HAL_IIS2MDC_ENABLED
+	bool "IIS2MDC sensor"
+	default n
+	help
+	  Enable support for IIS2MDC sensor.
 
 	  Sensors supported:
 	  - Magnetometer;
@@ -274,6 +302,15 @@ config ST_HAL_LIS2DH_ENABLED
 	default n
 	help
 	  Enable support for LIS2DH/LIS2DH12 sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+
+config ST_HAL_IIS2DH_ENABLED
+	bool "IIS2DH sensor"
+	default n
+	help
+	  Enable support for IIS2DH sensor.
 
 	  Sensors supported:
 	  - Accelerometer;
@@ -379,5 +416,17 @@ config ST_HAL_LSM9DS1_ENABLED
 	  - Accelerometer;
 	  - Magnetometer
 	  - Gyroscope;
+
+config ST_HAL_ISM330DLC_ENABLED
+	bool "ISM330DLC sensor"
+	default y
+	help
+	  Enable support for ISM330DLC combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer (optional: must be connected on i2c mater);
+	  - Gyroscope;
+	  - Tilt;
 
 endmenu # IIO drivers configuration

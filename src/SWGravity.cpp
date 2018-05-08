@@ -13,8 +13,6 @@
 
 #include "SWGravity.h"
 
-#define ST_HAL_GRAVITY_MAX_ON_EARTH			(10.7f)
-
 SWGravity::SWGravity(const char *name, int handle) :
 		SWSensorBaseWithPollrate(name, handle, SENSOR_TYPE_GRAVITY,
 			true, false, true, false)

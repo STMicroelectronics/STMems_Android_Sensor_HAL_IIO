@@ -12,6 +12,17 @@
 int DynamicSensorProxy::submitEvent(sp<BaseSensorObject> source,
 				    const sensors_event_t &e)
 {
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+		ALOGE("WriteDataToPipe: mDirectChannel is %s", mDirectChannel != nullptr ? "OK" : "NULL");
+
+		if (mDirectChannel != nullptr) {
+			if (mDirectChannelLock.tryLock() == android::NO_ERROR) {
+				mDirectChannel->write(&e);
+				mDirectChannelLock.unlock();
+			}
+		}
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
+
 	return write(write_pipe_fd, &e, sizeof(sensors_event_t));
 }
 

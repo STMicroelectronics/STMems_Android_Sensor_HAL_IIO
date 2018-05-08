@@ -101,6 +101,11 @@ SensorBase::SensorBase(const char *name, int handle, int type)
 	decimator = 1;
 	samples_counter = 0;
 
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+	direct_channel_handle = 0;
+	direct_channel_rate_level = 0;
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
+
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_MARSHMALLOW_VERSION)
 	injection_mode = SENSOR_INJECTION_NONE;
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
@@ -709,3 +714,25 @@ bool SensorBase::hasDataChannels()
 {
 	return false;
 }
+
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+int SensorBase::GetChannelHandle(void)
+{
+	return direct_channel_handle;
+}
+
+void SensorBase::SetChannelHandle(int dc_handle)
+{
+	direct_channel_handle = dc_handle;
+}
+
+int SensorBase::GetChannelDatarate(void)
+{
+	return direct_channel_rate_level;
+}
+
+void SensorBase::SetChannelDatarate(int dc_datarate)
+{
+	direct_channel_rate_level = dc_datarate;
+}
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */

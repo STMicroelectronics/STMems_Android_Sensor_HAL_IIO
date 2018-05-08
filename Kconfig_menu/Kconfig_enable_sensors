@@ -327,10 +327,18 @@ config ST_HAL_GEOMAG_ROT_VECTOR_AP_ENABLED
 	bool "Software by AP Library"
 endchoice
 
+if (ST_HAL_ANDROID_VERSION >= 4)
 config ST_HAL_DYNAMIC_SENSOR
 	bool "Dynamic Sensor Support"
 	default n
 	help
 	  Enable support for Dynamic sensors.
+
+config ST_HAL_DIRECT_REPORT_SENSOR
+	bool "Direct Report Sensor Support"
+	default n
+	help
+	  Enable support for Direct Report sensors.
+endif
 
 endmenu # Enable/disable sensors

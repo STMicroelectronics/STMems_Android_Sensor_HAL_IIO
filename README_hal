@@ -118,6 +118,11 @@ SENSORS SUPPORTED:
    - LSM9DS1			(Accel + Gyro + Magn)
    - LIS2DH			(Accel);
    - LIS2DH12			(Accel);
+   - ISM330DLC			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + Tilt;
+   - IIS2MDC 			(Magn);
+   - IIS2DH			(Accel);
+   - ISM303DAC			(Accel + Magn);
+   - IIS3DHHC			(Accel);
 
 SC: Step Counter, SD: Step Detector, SM: Significant Motion
 

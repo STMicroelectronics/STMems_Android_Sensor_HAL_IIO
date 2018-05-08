@@ -40,7 +40,11 @@ SWRotationVector::~SWRotationVector()
 
 void SWRotationVector::ProcessData(SensorBaseData *data)
 {
-	memcpy(sensor_event.data, data->processed, SENSOR_DATA_4AXIS * sizeof(float));
+	/*
+	 * The heading error must be less than estimated_accuracy 95% of the time.
+	 * This sensor must use a gyroscope as the main orientation change input.
+	 */
+	memcpy(sensor_event.data, data->processed, SENSOR_DATA_4AXIS_ACCUR * sizeof(float));
 	sensor_event.timestamp = data->timestamp;
 
 	SWSensorBaseWithPollrate::WriteDataToPipe(data->pollrate_ns);

@@ -41,7 +41,8 @@ endif # ST_HAL_ANDROID_VERSION
 LOCAL_MODULE_OWNER := STMicroelectronics
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/ \
-			$(LOCAL_PATH)/../
+			$(LOCAL_PATH)/../ \
+			$(LOCAL_PATH)/../../../../hardware/libhardware/modules/sensors/dynamic_sensor/
 
 LOCAL_CFLAGS += -DLOG_TAG=\"SensorHAL\" -Wall \
 		-Wunused-parameter -Wunused-value -Wunused-function
@@ -125,6 +126,10 @@ LOCAL_SRC_FILES := \
 		SensorBase.cpp \
 		HWSensorBase.cpp \
 		SWSensorBase.cpp
+
+ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+LOCAL_SRC_FILES += RingBuffer.cpp
+endif # CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
 
 ifdef CONFIG_ST_HAL_ACCEL_ENABLED
 LOCAL_SRC_FILES += Accelerometer.cpp

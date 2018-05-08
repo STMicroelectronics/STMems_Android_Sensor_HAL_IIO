@@ -22,6 +22,8 @@
 
 #include "../configuration.h"
 
+#define ST_HAL_GRAVITY_MAX_ON_EARTH			(10.7f)
+
 /*
  * Android version
  */

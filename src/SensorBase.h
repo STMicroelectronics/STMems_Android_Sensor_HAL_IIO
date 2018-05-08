@@ -41,6 +41,11 @@
 #include <FlushRequested.h>
 #include <ChangeODRTimestampStack.h>
 
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+#include <unordered_map>
+#include "RingBuffer.h"
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
+
 #ifdef CONFIG_ST_HAL_HAS_SELFTEST_FUNCTIONS
 #include <SelfTest.h>
 #endif /* CONFIG_ST_HAL_HAS_SELFTEST_FUNCTIONS */
@@ -62,6 +67,7 @@ int atomic_load(atomic_short *counter);
 #define SENSOR_DATA_1AXIS			(1)
 #define SENSOR_DATA_3AXIS			(3)
 #define SENSOR_DATA_4AXIS			(4)
+#define SENSOR_DATA_4AXIS_ACCUR		(5)
 
 #define SENSOR_BASE_ANDROID_NAME_MAX		(40)
 
@@ -117,6 +123,11 @@ private:
 	void RemoveSensorToDataPush(SensorBase *t);
 
 	void SetDependencyIDOfHandle(int handle, DependencyID id);
+
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+	int direct_channel_handle;
+	int direct_channel_rate_level;
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 
 protected:
 	char android_name[SENSOR_BASE_ANDROID_NAME_MAX];
@@ -228,6 +239,15 @@ public:
 
 	virtual bool hasEventChannels();
 	virtual bool hasDataChannels();
+
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+	virtual int GetChannelHandle(void);
+	virtual void SetChannelHandle(int dc_handle);
+	virtual int GetChannelDatarate(void);
+	virtual void SetChannelDatarate(int dc_datarate);
+	std::unique_ptr<DirectChannelBase> mDirectChannel;
+	android::Mutex mDirectChannelLock;
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 };
 
 #endif /* ST_SENSOR_BASE_H */

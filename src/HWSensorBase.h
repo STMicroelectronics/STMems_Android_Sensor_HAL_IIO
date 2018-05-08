@@ -24,6 +24,7 @@
 #include "SensorBase.h"
 
 extern "C" {
+	#include "half_float.h"
 	#include "iio_utils.h"
 	#include <linux/iio/events.h>
 };

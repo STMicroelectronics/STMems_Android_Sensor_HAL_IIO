@@ -284,7 +284,6 @@ HWSensorBase::HWSensorBase(HWSensorBaseCommonData *data, const char *name,
 
 	return;
 
-close_iio_buffer:
 	close(pollfd_iio[0].fd);
 free_buffer_path:
 	free(buffer_path);
@@ -936,6 +935,15 @@ void HWSensorBaseWithPollrate::WriteDataToPipe(int64_t hw_pollrate)
 
 		if (decimator == 0)
 			decimator = 1;
+
+#ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
+		if (mDirectChannel != nullptr) {
+			if (mDirectChannelLock.tryLock() == android::NO_ERROR) {
+				mDirectChannel->write(&sensor_event);
+				mDirectChannelLock.unlock();
+			}
+		}
+#endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 
 		if (((samples_counter % decimator) == 0) || odr_changed) {
 			err = write(write_pipe_fd, &sensor_event, sizeof(sensors_event_t));
