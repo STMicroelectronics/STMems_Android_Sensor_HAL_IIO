@@ -169,7 +169,7 @@ static inline int iio_utils_get_type(unsigned *is_signed, unsigned *bytes,
 			if (*bits_used == 64)
 				*mask = ~0;
 			else
-				*mask = (1 << *bits_used) - 1;
+				*mask = (1ULL << *bits_used) - 1;
 
 			if (signchar == 's')
 				*is_signed = 1;
