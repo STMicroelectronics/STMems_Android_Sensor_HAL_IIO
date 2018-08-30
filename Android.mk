@@ -31,6 +31,7 @@ VERSION_L := $(shell test $(MAJOR_VERSION) -eq 5 && echo true)
 VERSION_M := $(shell test $(MAJOR_VERSION) -eq 6 && echo true)
 VERSION_N := $(shell test $(MAJOR_VERSION) -eq 7 && echo true)
 VERSION_O := $(shell test $(MAJOR_VERSION) -eq 8 && echo true)
+VERSION_P := $(shell test $(MAJOR_VERSION) -eq 9 && echo true)
 
 ifeq ($(VERSION_KK),true)
 export ST_HAL_ANDROID_VERSION=0
@@ -52,6 +53,10 @@ ifeq ($(VERSION_O),true)
 export ST_HAL_ANDROID_VERSION=4
 DEFCONFIG := android_O_defconfig
 endif # VERSION_O
+ifeq ($(VERSION_P),true)
+export ST_HAL_ANDROID_VERSION=4
+DEFCONFIG := android_P_defconfig
+endif # VERSION_P
 
 ifeq ("$(wildcard $(CURRENT_DIRECTORY)/linux/iio/events.h)","")
 $(error ${\n}${\n}${\space}${\n}linux/iio/events.h file not found. Copy it from kernel source tree to linux/iio folder ${\n})

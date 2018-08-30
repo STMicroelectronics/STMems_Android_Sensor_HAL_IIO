@@ -369,6 +369,15 @@ config ST_HAL_LPS22HD_ENABLED
 	  Sensors supported:
 	  - Pressure;
 
+config ST_HAL_LPS22HH_ENABLED
+	bool "LPS22HH sensor"
+	default n
+	help
+	  Enable support for LPS22HH sensor.
+
+	  Sensors supported:
+	  - Pressure;
+
 config ST_HAL_LPS33HW_ENABLED
 	bool "LPS33HW sensors"
 	default n
@@ -415,6 +424,18 @@ config ST_HAL_LSM9DS1_ENABLED
 	  Sensors supported:
 	  - Accelerometer;
 	  - Magnetometer
+	  - Gyroscope;
+
+config ST_HAL_LSM6DSO_ENABLED
+	bool "LSM6DSO sensor"
+	default y
+	help
+	  Enable support for LSM6DSO combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer (optional: must be connected on i2c mater);
+	  - Pressure (optional: must be connected on i2c mater);
 	  - Gyroscope;
 
 config ST_HAL_ISM330DLC_ENABLED

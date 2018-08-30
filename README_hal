@@ -110,12 +110,14 @@ SENSORS SUPPORTED:
    - LSM303AH			(Accel + Magn);
    - LPS22HB			(Pressure);
    - LPS22HD			(Pressure);
+   - LPS22HH			(Pressure);
    - LPS33HW			(Pressure);
    - LPS35HW			(Pressure);
    - LIS2HH12			(Accel);
    - HTS221			(RHumidity + Temperature);
    - LIS2MDL			(Magn);
    - LSM9DS1			(Accel + Gyro + Magn)
+   - LSM6DSO			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt + Gesture;
    - LIS2DH			(Accel);
    - LIS2DH12			(Accel);
    - ISM330DLC			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + Tilt;
@@ -137,4 +139,6 @@ CHANGELOG:
    v3.1.4: Added support for LIS2HH12, fix gbias lib sample processing and init
    v3.1.5: Added support for Android N. Added support for different kernel versions
    v3.1.6: Added support for Android O. Added support to Calibrated/Uncalibrated Acc.
+   v3.1.7: Added support for Android P.
+   v3.1.8: Added support to LPS22HH, LSM6DSO.
 
