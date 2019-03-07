@@ -72,6 +72,7 @@
 #define ST_SENSORS_LIST_29				"lsm9ds1"
 #define ST_SENSORS_LIST_30				"lsm6dso"
 #define ST_SENSORS_LIST_31				"lsm6dsl"
+#define ST_SENSORS_LIST_32				"asm330lhh"
 #define ST_SENSORS_LIST_33				"lis2dh"
 #define ST_SENSORS_LIST_34				"lps33hw"
 #define ST_SENSORS_LIST_35				"lps35hw"

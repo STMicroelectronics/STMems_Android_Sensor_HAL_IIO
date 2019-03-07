@@ -87,6 +87,7 @@ SENSORS SUPPORTED:
    - LSM6DS3			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt;
    - LSM6DS33			(Accel + Gyro) + SC + SD + SM + Tilt;
    - LSM6DS3H			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt;
+   - ASM330LHH			(Accel + Magn);
    - LIS3MDL			(Magn);
    - LSM303DLHC			(Accel + Magn);
    - LIS3DH			(Accel);
@@ -141,4 +142,5 @@ CHANGELOG:
    v3.1.6: Added support for Android O. Added support to Calibrated/Uncalibrated Acc.
    v3.1.7: Added support for Android P.
    v3.1.8: Added support to LPS22HH, LSM6DSO.
+   v3.1.9: Added support to ASM330LHH.
 

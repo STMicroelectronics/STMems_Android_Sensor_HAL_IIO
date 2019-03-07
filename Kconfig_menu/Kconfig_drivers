@@ -450,4 +450,14 @@ config ST_HAL_ISM330DLC_ENABLED
 	  - Gyroscope;
 	  - Tilt;
 
+config ST_HAL_ASM330LHH_ENABLED
+	bool "ASM330LHH sensor"
+	default y
+	help
+	  Enable support for ASM330LHH combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Gyroscope;
+
 endmenu # IIO drivers configuration
