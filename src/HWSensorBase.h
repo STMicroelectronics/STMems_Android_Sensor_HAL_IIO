@@ -23,11 +23,6 @@
 
 #include "SensorBase.h"
 
-extern "C" {
-	#include "iio_utils.h"
-	#include <linux/iio/events.h>
-};
-
 #define HW_SENSOR_BASE_DEFAULT_IIO_BUFFER_LEN	(2)
 #define HW_SENSOR_BASE_IIO_SYSFS_PATH_MAX	(50)
 #define HW_SENSOR_BASE_IIO_DEVICE_NAME_MAX	(30)

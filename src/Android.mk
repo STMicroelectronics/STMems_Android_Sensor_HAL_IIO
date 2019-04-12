@@ -118,7 +118,6 @@ LOCAL_SHARED_LIBRARIES := liblog libcutils libutils libdl libc
 
 LOCAL_SRC_FILES := \
 		SensorHAL.cpp \
-		iio_utils.c \
 		CircularBuffer.cpp \
 		FlushBufferStack.cpp \
 		FlushRequested.cpp \

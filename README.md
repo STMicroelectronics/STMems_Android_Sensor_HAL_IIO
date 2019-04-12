@@ -46,6 +46,8 @@ Currently supported sensors are:
 Software architecture and Integration details
 =============
 
+The STM Sensor HAL need a sysfs iio layer (implementation left the customer) before to integrate and compile in AOSP environment.
+
 STM Sensor HAL is written in *C++* language using object-oriented design. For each hw sensor there is a custom class file
 (*Accelerometer.cpp*, *Magnetometer.cpp*, *Gyroscope.cpp*, *Pressure.cpp* and *RHumidity.cpp*) which extends the common base class (*SensorBase.cpp*).
 
