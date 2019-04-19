@@ -26,7 +26,7 @@
 class Accelerometer : public HWSensorBaseWithPollrate {
 public:
 	Accelerometer(HWSensorBaseCommonData *data, const char *name,
-			struct iio_sampling_frequency_available *sfa, int handle,
+			struct device_iio_sampling_freqs *sfa, int handle,
 			unsigned int hw_fifo_len,
 			float power_consumption, bool wakeup);
 	~Accelerometer();

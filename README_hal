@@ -143,4 +143,4 @@ CHANGELOG:
    v3.1.7: Added support for Android P.
    v3.1.8: Added support to LPS22HH, LSM6DSO.
    v3.1.9: Added support to ASM330LHH.
-
+   v3.1.10: New iio layer.

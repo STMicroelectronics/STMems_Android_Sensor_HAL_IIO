@@ -32,7 +32,7 @@ public:
 
 	virtual int SetDelay(int handle, int64_t period_ns, int64_t timeout, bool lock_en_mute);
 	virtual void ProcessData(SensorBaseData *data);
-	void ProcessEvent(struct iio_event_data *event_data);
+	void ProcessEvent(struct device_iio_events *event_data);
 };
 
 #endif /* ST_STEP_DETECTOR_SENSOR_H */

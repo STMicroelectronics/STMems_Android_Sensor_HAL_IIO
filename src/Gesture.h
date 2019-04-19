@@ -31,7 +31,7 @@ public:
 
 	virtual int SetDelay(int handle, int64_t period_ns, int64_t timeout,
 			     bool lock_en_mute);
-	virtual void ProcessEvent(struct iio_event_data *event_data);
+	virtual void ProcessEvent(struct device_iio_events *event_data);
 	/* used to maintain compatibility with lsm6dsm */
 	virtual void ProcessData(SensorBaseData *data);
 };

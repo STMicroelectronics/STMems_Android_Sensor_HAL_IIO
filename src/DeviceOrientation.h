@@ -26,7 +26,7 @@
 class DeviceOrientation : public HWSensorBaseWithPollrate {
 public:
 	DeviceOrientation(HWSensorBaseCommonData *data, const char *name,
-			  struct iio_sampling_frequency_available *sfa,
+			  struct device_iio_sampling_freqs *sfa,
 			  int handle, unsigned int hw_fifo_len,
 			  float power_consumption, bool wakeup);
 	~DeviceOrientation() {};

@@ -31,7 +31,7 @@ public:
 
 	virtual int FlushData(int handle, bool lock_en_mutex);
 	virtual int SetDelay(int handle, int64_t period_ns, int64_t timeout, bool lock_en_mutex);
-	virtual void ProcessEvent(struct iio_event_data *event_data);
+	virtual void ProcessEvent(struct device_iio_events *event_data);
 };
 
 #endif /* ST_SIGN_MOTION_BASE_H */

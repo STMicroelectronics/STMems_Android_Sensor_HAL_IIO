@@ -23,20 +23,24 @@
 
 #include "SensorBase.h"
 
+extern "C" {
+	#include "utils.h"
+};
+
 #define HW_SENSOR_BASE_DEFAULT_IIO_BUFFER_LEN	(2)
 #define HW_SENSOR_BASE_IIO_SYSFS_PATH_MAX	(50)
 #define HW_SENSOR_BASE_IIO_DEVICE_NAME_MAX	(30)
 #define HW_SENSOR_BASE_MAX_CHANNELS		(8)
 
 struct HWSensorBaseCommonData {
-	char iio_sysfs_path[HW_SENSOR_BASE_IIO_SYSFS_PATH_MAX];
+	char device_iio_sysfs_path[HW_SENSOR_BASE_IIO_SYSFS_PATH_MAX];
 	char device_name[HW_SENSOR_BASE_IIO_DEVICE_NAME_MAX];
-	unsigned int iio_dev_num;
+	unsigned int device_iio_dev_num;
 
 	int num_channels;
-	struct iio_channel_info channels[HW_SENSOR_BASE_MAX_CHANNELS];
+	struct device_iio_info_channel channels[HW_SENSOR_BASE_MAX_CHANNELS];
 
-	struct iio_scale_available sa;
+	struct device_iio_scales sa;
 } typedef HWSensorBaseCommonData;
 
 
@@ -76,9 +80,11 @@ protected:
 	int WriteBufferLenght(unsigned int buf_len);
 
 public:
-	HWSensorBase(HWSensorBaseCommonData *data, const char *name,
-				int handle, int sensor_type, unsigned int hw_fifo_len,
-				float power_consumption);
+	HWSensorBase(HWSensorBaseCommonData *data,
+		     const char *name,
+		     int handle, int sensor_type,
+		     unsigned int hw_fifo_len,
+		     float power_consumption);
 	virtual ~HWSensorBase();
 
 #ifdef CONFIG_ST_HAL_HAS_SELFTEST_FUNCTIONS
@@ -94,7 +100,7 @@ public:
 
 	int ApplyFactoryCalibrationData(char *filename, time_t *last_modification);
 
-	virtual void ProcessEvent(struct iio_event_data *event_data);
+	virtual void ProcessEvent(struct device_iio_events *event_data);
 	virtual int FlushData(int handle, bool lock_en_mute);
 	virtual void ProcessFlushData(int handle, int64_t timestamp);
 	virtual void ThreadDataTask();
@@ -114,16 +120,17 @@ public:
  */
 class HWSensorBaseWithPollrate : public HWSensorBase {
 private:
-	struct iio_sampling_frequency_available sampling_frequency_available;
+	struct device_iio_sampling_freqs sampling_frequency_available;
 
 public:
 	HWSensorBaseWithPollrate(HWSensorBaseCommonData *data, const char *name,
-			struct iio_sampling_frequency_available *sfa, int handle,
+			struct device_iio_sampling_freqs *sfa, int handle,
 			int sensor_type, unsigned int hw_fifo_len,
 			float power_consumption);
 	virtual ~HWSensorBaseWithPollrate();
 
-	virtual int SetDelay(int handle, int64_t period_ns, int64_t timeout, bool lock_en_mute);
+	virtual int SetDelay(int handle, int64_t period_ns, int64_t timeout,
+			     bool lock_en_mute);
 	virtual int FlushData(int handle, bool lock_en_mute);
 	virtual void WriteDataToPipe(int64_t hw_pollrate);
 };

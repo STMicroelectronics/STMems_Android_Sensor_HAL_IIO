@@ -74,14 +74,6 @@ ifeq ($(DEFCONFIG),)
 $(error ${\n}${\n}${\space}${\n}AOSP Version Unknown${\n})
 endif # DEFCONFIG
 
-ifeq ("$(wildcard $(CURRENT_DIRECTORY)/linux/iio/events.h)","")
-$(error ${\n}${\n}${\space}${\n}linux/iio/events.h file not found. Copy it from kernel source tree to linux/iio folder ${\n})
-endif
-
-ifeq ("$(wildcard $(CURRENT_DIRECTORY)/linux/iio/types.h)","")
-$(error ${\n}${\n}${\space}${\n}linux/iio/types.h file not found. Copy it from kernel source tree to linux/iio/ folder ${\n})
-endif
-
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/FUFD_CustomTilt/FUFD_CustomTilt*)","")
 ST_HAL_HAS_FDFD_LIB=y
 else

@@ -14,7 +14,7 @@
 #include "Pressure.h"
 
 Pressure::Pressure(HWSensorBaseCommonData *data, const char *name,
-		struct iio_sampling_frequency_available *sfa, int handle,
+		struct device_iio_sampling_freqs *sfa, int handle,
 		unsigned int hw_fifo_len, float power_consumption, bool wakeup) :
 			HWSensorBaseWithPollrate(data, name, sfa, handle,
 			SENSOR_TYPE_PRESSURE, hw_fifo_len, power_consumption)

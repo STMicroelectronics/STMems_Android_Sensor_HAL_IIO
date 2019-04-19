@@ -58,14 +58,6 @@ export ST_HAL_ANDROID_VERSION=4
 DEFCONFIG := android_P_defconfig
 endif # VERSION_P
 
-ifeq ("$(wildcard $(CURRENT_DIRECTORY)/linux/iio/events.h)","")
-$(error ${\n}${\n}${\space}${\n}linux/iio/events.h file not found. Copy it from kernel source tree to linux/iio folder ${\n})
-endif # KCONFIG_CONFIG_HAL
-
-ifeq ("$(wildcard $(CURRENT_DIRECTORY)/linux/iio/types.h)","")
-$(error ${\n}${\n}${\space}${\n}linux/iio/types.h file not found. Copy it from kernel source tree to linux/iio/ folder ${\n})
-endif # KCONFIG_CONFIG_HAL
-
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/FUFD_CustomTilt/FUFD_CustomTilt*)","")
 export ST_HAL_HAS_FDFD_LIB=y
 else

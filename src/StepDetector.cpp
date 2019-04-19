@@ -59,13 +59,13 @@ void StepDetector::ProcessData(SensorBaseData *data)
 	HWSensorBase::ProcessData(data);
 }
 
-void StepDetector::ProcessEvent(struct iio_event_data *event_data)
+void StepDetector::ProcessEvent(struct device_iio_events *event_data)
 {
 	sensor_event.data[0] = 1.0f;
-	sensor_event.timestamp = event_data->timestamp;
+	sensor_event.timestamp = event_data->event_timestamp;
 
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_EXTRA_VERBOSE)
-	ALOGD("\"%s\": received new sensor event: timestamp=%" PRIu64 "ns (sensor type: %d).", sensor_t_data.name, event_data->timestamp, sensor_t_data.type);
+	ALOGD("\"%s\": received new sensor event: timestamp=%" PRIu64 "ns (sensor type: %d).", sensor_t_data.name, sensor_event.timestamp, sensor_t_data.type);
 #endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
 
 	HWSensorBase::WriteDataToPipe(0);
