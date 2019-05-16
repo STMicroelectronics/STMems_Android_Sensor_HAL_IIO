@@ -87,7 +87,6 @@ SENSORS SUPPORTED:
    - LSM6DS3			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt;
    - LSM6DS33			(Accel + Gyro) + SC + SD + SM + Tilt;
    - LSM6DS3H			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt;
-   - ASM330LHH			(Accel + Magn);
    - LIS3MDL			(Magn);
    - LSM303DLHC			(Accel + Magn);
    - LIS3DH			(Accel);
@@ -119,6 +118,7 @@ SENSORS SUPPORTED:
    - LIS2MDL			(Magn);
    - LSM9DS1			(Accel + Gyro + Magn)
    - LSM6DSO			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt + Gesture;
+   - ASM330LHH			(Accel + Gyro)
    - LIS2DH			(Accel);
    - LIS2DH12			(Accel);
    - ISM330DLC			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + Tilt;
