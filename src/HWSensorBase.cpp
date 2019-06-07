@@ -635,8 +635,8 @@ void HWSensorBase::ThreadDataTask()
 
 	data = (uint8_t *)malloc(hw_fifo_len * scan_size * HW_SENSOR_BASE_DEFAULT_IIO_BUFFER_LEN * sizeof(uint8_t));
 	if (!data) {
-		ALOGE("%s: Failed to allocate sensor data buffer (%u %u).",
-		      GetName(), hw_fifo_len, scan_size);
+		ALOGE("%s: Failed to allocate sensor data buffer (%u %d).",
+		      GetName(), hw_fifo_len, (int)scan_size);
 		return;
 	}
 

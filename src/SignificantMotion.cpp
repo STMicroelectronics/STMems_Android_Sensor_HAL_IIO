@@ -51,7 +51,7 @@ void SignMotion::ProcessEvent(struct device_iio_events *event_data)
 	sensor_event.timestamp = event_data->event_timestamp;
 
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_EXTRA_VERBOSE)
-	ALOGD("\"%s\": received new sensor data: timestamp=%lldns (sensor type: %d).", sensor_t_data.name, sensor_event.timestamp, sensor_t_data.type);
+	ALOGD("\"%s\": received new sensor data: timestamp=%" PRIu64 "ns (sensor type: %d).", sensor_t_data.name, sensor_event.timestamp, sensor_t_data.type);
 #endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
 
 	HWSensorBase::WriteDataToPipe(0);

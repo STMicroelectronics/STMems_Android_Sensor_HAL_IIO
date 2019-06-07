@@ -9,7 +9,7 @@
 
 #include "DynamicSensorProxy.h"
 
-int DynamicSensorProxy::submitEvent(sp<BaseSensorObject> source,
+int DynamicSensorProxy::submitEvent(__attribute__((unused)) sp<BaseSensorObject> source,
 				    const sensors_event_t &e)
 {
 #ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
@@ -45,7 +45,7 @@ DynamicSensorProxy::DynamicSensorProxy(STSensorHAL_data *hal_data, int index,
 	hal_data->android_pollfd[index].events = POLLIN;
 }
 
-int DynamicSensorProxy::Enable(int handle, bool enable, bool lock_en_mutex)
+int DynamicSensorProxy::Enable(int handle, bool enable, __attribute__((unused)) bool lock_en_mutex)
 {
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_VERBOSE)
 	ALOGD("%s: handle: %d enable=%d", GetName(), handle, enable);
@@ -58,10 +58,10 @@ int DynamicSensorProxy::Enable(int handle, bool enable, bool lock_en_mutex)
 }
 
 int DynamicSensorProxy::SetDelay(int handle, int64_t period_ns,
-				 int64_t timeout, bool lock_en_mutex)
+				 int64_t timeout, __attribute__((unused)) bool lock_en_mutex)
 {
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_VERBOSE)
-	ALOGD("%s: handle: %d period_ns=%lld timeout=%lld",
+	ALOGD("%s: handle: %d period_ns=%" PRId64 " timeout=%" PRId64,
 	      GetName(), handle, period_ns, timeout);
 #endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
 
