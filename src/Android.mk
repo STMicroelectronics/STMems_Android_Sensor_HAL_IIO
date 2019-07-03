@@ -23,6 +23,11 @@ ST_HAL_ROOT_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 include $(ST_HAL_ROOT_PATH)/../hal_config
 
+LOCAL_HEADER_LIBRARIES := libhardware_headers
+LOCAL_SHARED_LIBRARIES := \
+    liblog
+LOCAL_VENDOR_MODULE := true
+
 LOCAL_PRELINK_MODULE := false
 LOCAL_PROPRIETARY_MODULE := true
 

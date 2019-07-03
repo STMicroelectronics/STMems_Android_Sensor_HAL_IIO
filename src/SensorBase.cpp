@@ -15,6 +15,7 @@
 #include <assert.h>
 #include <string.h>
 #include <signal.h>
+#include <unistd.h>
 
 #include "SensorBase.h"
 

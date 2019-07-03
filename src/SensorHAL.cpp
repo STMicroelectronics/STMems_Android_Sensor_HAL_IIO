@@ -19,6 +19,7 @@
 #include <math.h>
 #include <pthread.h>
 #include <endian.h>
+#include <unistd.h>
 
 #include "SensorHAL.h"
 #include "Accelerometer.h"
@@ -1043,7 +1044,8 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 				break;
 
 			default:
-				ALOGD("\"%s\": IIO device found and supported. Wake-up sensor: %s", iio_devices[i].name, data[index].wake_up_sensor ? "yes" : "no" );
+				ALOGD("\"%s\": IIO device found and supported. Wake-up sensor: %s",
+				      iio_devices[i].name, data[index].wake_up_sensor ? "yes" : "no" );
 				break;
 		}
 #endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
@@ -1051,8 +1053,10 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 		err = asprintf(&data[index].iio_sysfs_path,
 			       "/sys/bus/iio/devices/iio:device%d",
 			       iio_devices[i].num);
-		if (err < 0)
+		if (err < 0) {
+			ALOGE("\"%s\": failed to build device information. (errno: %d)", iio_devices[i].name, err);
 			continue;
+		}
 
 		data[index].power_consumption = ST_sensors_supported[n].power_consumption;
 
@@ -1110,12 +1114,16 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 		}
 
 		err = asprintf(&data[index].device_name, "%s", iio_devices[i].name);
-		if (err < 0)
+		if (err < 0) {
+			ALOGE("\"%s\": asprintf %d", iio_devices[i].name, err);
 			goto st_hal_load_free_iio_channels;
+		}
 
 		err = asprintf(&data[index].android_name, "%s", ST_sensors_supported[n].android_name);
-		if (err < 0)
+		if (err < 0) {
+			ALOGE("\"%s\": asprintf %d", ST_sensors_supported[n].android_name, err);
 			goto st_hal_load_free_device_name;
+		}
 
 		data[index].hw_fifo_len = device_iio_utils::get_hw_fifo_length(data[index].iio_sysfs_path);
 		data[index].sensor_type = ST_sensors_supported[n].android_sensor_type;
