@@ -460,4 +460,16 @@ config ST_HAL_ASM330LHH_ENABLED
 	  - Accelerometer;
 	  - Gyroscope;
 
+config ST_HAL_LSM6DSR_ENABLED
+	bool "LSM6DSR sensor"
+	default y
+	help
+	  Enable support for LSM6DSR combo sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Magnetometer (optional: must be connected on i2c mater);
+	  - Pressure (optional: must be connected on i2c mater);
+	  - Gyroscope;
+
 endmenu # IIO drivers configuration
