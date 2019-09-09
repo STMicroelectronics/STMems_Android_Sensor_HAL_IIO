@@ -38,7 +38,7 @@ void DirectChannelBase::write(const sensors_event_t * ev)
     }
 }
 
-RingBuffer::RingBuffer(void* buf, size_t size) : mData((sensors_event_t *)buf), 
+RingBuffer::RingBuffer(void* buf, size_t size) : mData((sensors_event_t *)buf),
                 mSize(size/sizeof(sensors_event_t)), mWritePos(0), mCounter(1)
 {
     memset(mData, 0, size);
