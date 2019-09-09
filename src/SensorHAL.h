@@ -78,6 +78,7 @@
 #define ST_SENSORS_LIST_35				"lps35hw"
 #define ST_SENSORS_LIST_36				"lps22hd"
 #define ST_SENSORS_LIST_37				"lis3dhh"
+#define ST_SENSORS_LIST_38				"lsm6ds0"
 #define ST_SENSORS_LIST_40				"ism330dlc"
 #define ST_SENSORS_LIST_41				"lps22hh"
 #define ST_SENSORS_LIST_42				"iis2mdc"

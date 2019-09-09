@@ -426,6 +426,16 @@ config ST_HAL_LSM9DS1_ENABLED
 	  - Magnetometer
 	  - Gyroscope;
 
+config ST_HAL_LSM6DS0_ENABLED
+	bool "LSM6DS0 sensor"
+	default y
+	help
+	  Enable support for LSM6DS0 6-axis sensor.
+
+	  Sensors supported:
+	  - Accelerometer;
+	  - Gyroscope;
+
 config ST_HAL_LSM6DSO_ENABLED
 	bool "LSM6DSO sensor"
 	default y

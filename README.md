@@ -9,7 +9,7 @@ Index
 
 Introduction
 =========
-The STM Android sensor Hardware Abstraction Layer (*HAL*) defines a standard interface for STM sensors allowing Android to be agnostic about [lower-level driver implementations](https://github.com/STMicroelectronics/STMems_Linux_IIO_drivers/tree/linux-4.4.y-gh) . The HAL library is packaged into modules (.so) file and loaded by the Android system at the appropriate time. For more information see [AOSP HAL Interface](https://source.android.com/devices/sensors/hal-interface.html) 
+The STM Android sensor Hardware Abstraction Layer (*HAL*) defines a standard interface for STM sensors allowing Android to be agnostic about [lower-level driver implementations](https://github.com/STMicroelectronics/STMems_Linux_IIO_drivers/tree/linux-4.4.y-gh) . The HAL library is packaged into modules (.so) file and loaded by the Android system at the appropriate time. For more information see [AOSP HAL Interface](https://source.android.com/devices/sensors/hal-interface.html)
 
 STM Sensor HAL is leaning on [Linux IIO framework](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/iio) to gather data from sensor device drivers and to forward samples to the Android Framework
 
@@ -17,7 +17,7 @@ Currently supported sensors are:
 
 ### Inertial Module Unit (IMU):
 
-> LSM330, LSM330DLC, LSM6DS3, LSM6DS3H, LSM6DSM, LSM6DSL, LSM9DS0, LSM9DS1, LSM330D, LSM330DL, ISM330DLC, LSM6DSO, ASM330LHH, LSM6DSR
+> LSM330, LSM330DLC, LSM6DS3, LSM6DS3H, LSM6DSM, LSM6DSL, LSM6DS0, LSM9DS0, LSM9DS1, LSM330D, LSM330DL, ISM330DLC, LSM6DSO, ASM330LHH, LSM6DSR
 
 ### eCompass:
 
@@ -29,7 +29,7 @@ Currently supported sensors are:
 
 ### Gyroscope:
 
-> L3GD20, L3GD20H, L3G4200D, 
+> L3GD20, L3GD20H, L3G4200D
 
 ### Magnetometer:
 
@@ -80,7 +80,8 @@ otherwise from SensorHAL_IIO root folder (since Android N to latest version):
 
 	"make sensors-cleanconf"    Delete hal_config, hal_config.old and configuration.h files.
 
-For more information on compiling an Android project, please consult the [AOSP website](https://source.android.com/source/requirements.html) 
+For more information on compiling an Android project, please consult the [AOSP website](https://source.android.com/source/requirements.html)
+
 
 
 STM proprietary libraries
@@ -112,7 +113,7 @@ The release of STM proprietary libraries is subject to signature of a License Us
 
 Copyright
 ========
-Copyright (C) 2017 STMicroelectronics
+Copyright (C) 2019 STMicroelectronics
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

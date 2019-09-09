@@ -1,6 +1,6 @@
 /* Android STMicroelectronics SensorHAL release 3.x
  *
- * Copyright (C) 2015-2016 STMicroelectronics
+ * Copyright (C) 2015-2019 STMicroelectronics
  * Author: Denis Ciocca - <denis.ciocca@st.com>
 */
 
@@ -117,6 +117,7 @@ SENSORS SUPPORTED:
    - HTS221			(RHumidity + Temperature);
    - LIS2MDL			(Magn);
    - LSM9DS1			(Accel + Gyro + Magn)
+   - LSM6DS0			(Accel + Gyro)
    - LSM6DSO			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt + Gesture;
    - LSM6DSR			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt + Gesture;
    - ASM330LHH			(Accel + Gyro)
@@ -136,7 +137,7 @@ CHANGELOG:
    v3.1.0: Added selftest program, bugfix
    v3.1.1: Added injection mode, changed way to decimate sensor data, added support lsm6dsm, bugfix
    v3.1.2: Added support for new sensors (LSM6DS33, LSM6DS3H), install library under /system/vendor/lib/hw/,
-		bugfix on flush propagation using SW sensors, added wristtiltgesture sensor
+           bugfix on flush propagation using SW sensors, added wristtiltgesture sensor
    v3.1.3: Added support for LSM303AH, LPS22HB. Fixed compiling issue on Android L and K (wrist-tilt)
    v3.1.4: Added support for LIS2HH12, fix gbias lib sample processing and init
    v3.1.5: Added support for Android N. Added support for different kernel versions
