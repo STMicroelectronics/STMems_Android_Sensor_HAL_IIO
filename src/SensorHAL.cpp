@@ -1177,6 +1177,9 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 		}
 
 		data[index].hw_fifo_len = device_iio_utils::get_hw_fifo_length(data[index].iio_sysfs_path);
+		if (data[index].hw_fifo_len <= 0)
+			data[index].hw_fifo_len = 1;
+
 		data[index].sensor_type = ST_sensors_supported[n].android_sensor_type;
 		data[index].dev_id = iio_devices[i].num;
 

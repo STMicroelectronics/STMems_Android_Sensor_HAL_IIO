@@ -585,37 +585,37 @@ int device_iio_utils::get_hw_fifo_length(const char *device_dir)
 	ret = snprintf(tmp_filaname, DEVICE_IIO_MAX_FILENAME_LEN,
 		       "%s/%s", device_dir, device_iio_hw_fifo_length);
 	if (ret < 0)
-		return -ENOMEM;
+		return 0;
 
 	ret = sysfs_read_int(tmp_filaname, &len);
 	if (ret < 0 || len <= 0)
-		return ret;
+		return 0;
 
 	/* write "len * 2" -> <iio:devicex>/buffer/length */
 	ret = snprintf(tmp_filaname, DEVICE_IIO_MAX_FILENAME_LEN,
 		       "%s/%s", device_dir, device_iio_buffer_length);
 	if (ret < 0)
-		return -ENOMEM;
+		return 0;
 
 	ret = sysfs_write_int(tmp_filaname, 2 * len);
 	if (ret < 0)
-		return ret;
+		return 0;
 
 	/* write "1" -> <iio:devicex>/hwfifo_enabled */
 	ret = snprintf(tmp_filaname, DEVICE_IIO_MAX_FILENAME_LEN,
 		       "%s/%s", device_dir, device_iio_hw_fifo_enabled);
 	if (ret < 0)
-		return -ENOMEM;
+		return 0;
 
 	/* used for compatibility with old iio API */
 	ret = check_file(tmp_filaname);
 	if (ret < 0 && errno == ENOENT)
-		return len;
+		return 0;
 
 	ret = sysfs_write_int(tmp_filaname, 1);
 	if (ret < 0) {
 		ALOGE("Failed to enable hw fifo: %s.", tmp_filaname);
-		return ret;
+		return 0;
 	}
 
 	return len;
@@ -673,7 +673,15 @@ int device_iio_utils::set_hw_fifo_watermark(char *device_dir,
 	ret = snprintf(tmp_filaname, DEVICE_IIO_MAX_FILENAME_LEN,
 		       "%s/%s", device_dir, device_iio_hw_fifo_watermark);
 
-	return ret < 0 ? -ENOMEM : sysfs_write_int(tmp_filaname, watermark);
+	if (ret < 0)
+		return -ENOMEM;
+
+	/* it's ok if file not exists */
+	ret = check_file(tmp_filaname);
+	if (ret < 0 && errno == ENOENT)
+		return 0;
+
+	return sysfs_write_int(tmp_filaname, watermark);
 }
 
 int device_iio_utils::hw_fifo_flush(char *device_dir)
