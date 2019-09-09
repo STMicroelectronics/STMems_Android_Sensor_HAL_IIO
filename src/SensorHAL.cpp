@@ -1610,7 +1610,7 @@ static int st_hal_add_direct_channel(struct sensors_poll_device_1 *dev,
 		ch = std::make_unique<AshmemDirectChannel>(mem);
 		break;
 	case SENSOR_DIRECT_MEM_TYPE_GRALLOC:
-		ret = android::INVALID_OPERATION;
+		ch = std::make_unique<GrallocDirectChannel>(mem);
 		break;
 	default:
 		ret = android::INVALID_OPERATION;
