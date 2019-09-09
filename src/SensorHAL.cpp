@@ -1507,7 +1507,7 @@ static int st_hal_dev_config_direct_report(struct sensors_poll_device_1 *dev,
 {
 	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
 	int rate_level = config->rate_level;
-	int64_t ns;
+	int64_t ns = 0LL;
 	unsigned int handle;
 
 
@@ -1584,7 +1584,7 @@ static int st_hal_dev_config_direct_report(struct sensors_poll_device_1 *dev,
 	hal_data->sensor_classes[handle]->Enable(handle, true, true);
 	hal_data->sensor_classes[handle]->SetDelay(handle, ns, 0, true);
 	hal_data->sensor_classes[handle]->SetChannelDatarate(rate_level);
-	ALOGD("Setting Direct Channel %d Sensor(%d) %d to rate %ld ns",
+	ALOGD("Setting Direct Channel %d Sensor(%d) %d to rate %" PRId64 " ns",
 	      channel_handle, sensor_handle, handle, ns);
 
 	return sensor_handle;
