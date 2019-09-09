@@ -47,7 +47,7 @@ Software architecture and Integration details
 =============
 
 STM Sensor HAL is written in *C++* language using object-oriented design. For each hw sensor there is a custom class file
-(*Accelerometer.cpp*, *Magnetometer.cpp*, *Gyroscope.cpp*, *Pressure.cpp* and *RHumidity.cpp*) which extends the common base class (*SensorBase.cpp*).
+(*Accelerometer.cpp*, *Magnetometer.cpp*, *Gyroscope.cpp*, *Pressure.cpp*, *Temp.cpp* and *RHumidity.cpp*) which extends the common base class (*SensorBase.cpp*).
 
 Copy the HAL source code into *<AOSP_DIR\>/hardware/STMicroelectronics/SensorHAL_IIO* folder. During building process Android will include automatically the SensorHAL Android.mk.
 In *<AOSP_DIR\>/device/<vendor\>/<board\>/device.mk* add package build information:

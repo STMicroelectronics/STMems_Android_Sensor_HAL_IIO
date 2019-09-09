@@ -469,6 +469,7 @@ config ST_HAL_ASM330LHH_ENABLED
 	  Sensors supported:
 	  - Accelerometer;
 	  - Gyroscope;
+	  - Temperature;
 
 config ST_HAL_LSM6DSR_ENABLED
 	bool "LSM6DSR sensor"
