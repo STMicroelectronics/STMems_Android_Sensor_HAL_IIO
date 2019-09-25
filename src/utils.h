@@ -83,7 +83,7 @@ struct device_iio_scales {
 };
 
 struct device_iio_sampling_freqs {
-	unsigned int freq[DEVICE_IIO_MAX_SAMP_FREQ_AVAILABLE];
+	float freq[DEVICE_IIO_MAX_SAMP_FREQ_AVAILABLE];
 	unsigned int length;
 };
 
