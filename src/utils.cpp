@@ -595,29 +595,29 @@ int device_iio_utils::get_hw_fifo_length(const char *device_dir)
 	ret = snprintf(tmp_filaname, DEVICE_IIO_MAX_FILENAME_LEN,
 		       "%s/%s", device_dir, device_iio_buffer_length);
 	if (ret < 0)
-		return 0;
+		goto out;
 
 	ret = sysfs_write_int(tmp_filaname, 2 * len);
 	if (ret < 0)
-		return 0;
+		goto out;;
 
 	/* write "1" -> <iio:devicex>/hwfifo_enabled */
 	ret = snprintf(tmp_filaname, DEVICE_IIO_MAX_FILENAME_LEN,
 		       "%s/%s", device_dir, device_iio_hw_fifo_enabled);
 	if (ret < 0)
-		return 0;
+		goto out;
 
 	/* used for compatibility with old iio API */
 	ret = check_file(tmp_filaname);
 	if (ret < 0 && errno == ENOENT)
-		return 0;
+		goto out;
 
 	ret = sysfs_write_int(tmp_filaname, 1);
 	if (ret < 0) {
 		ALOGE("Failed to enable hw fifo: %s.", tmp_filaname);
-		return 0;
 	}
 
+out:
 	return len;
 }
 
