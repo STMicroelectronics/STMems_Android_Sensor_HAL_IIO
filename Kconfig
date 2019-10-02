@@ -30,15 +30,24 @@ config ST_HAL_ANDROID_VERSION
 endif
 if (ENV_ANDROID_VERSION = 3)
 config ST_HAL_ANDROID_VERSION
-        int
-        default 3
+	int
+	default 3
 endif
 if (ENV_ANDROID_VERSION = 4)
 config ST_HAL_ANDROID_VERSION
-        int
-        default 4
+	int
+	default 4
 endif
-
+if (ENV_ANDROID_VERSION = 5)
+config ST_HAL_ANDROID_VERSION
+	int
+	default 5
+endif
+if (ENV_ANDROID_VERSION = 6)
+config ST_HAL_ANDROID_VERSION
+	int
+	default 6
+endif
 
 config ST_HAL_HAS_6AX_FUSION_CHECK
 	bool

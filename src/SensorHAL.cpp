@@ -1054,7 +1054,8 @@ static int st_hal_set_fullscale(char *iio_sysfs_path,
 static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 {
 	unsigned int index = 0;
-	int err, iio_devices_num, i, n;
+	int err;
+	unsigned int i, n, iio_devices_num;
 	struct device_iio_type_name iio_devices[ST_HAL_IIO_MAX_DEVICES];
 
 	iio_devices_num =  device_iio_utils::get_devices_name(iio_devices,
@@ -1792,7 +1793,7 @@ static int st_hal_open_sensors(const struct hw_module_t *module,
 		ALOGE("Failed to write private data.");
 #endif /* CONFIG_ST_HAL_FACTORY_CALIBRATION */
 
-	for (i = 0; i < ARRAY_SIZE(ST_virtual_sensors_list); i++) {
+	for (i = 0; i < (int)ARRAY_SIZE(ST_virtual_sensors_list); i++) {
 		sensor_class = st_hal_create_virtual_class_sensor(ST_virtual_sensors_list[i].android_sensor_type, classes_available + 1);
 		if (!sensor_class) {
 			ALOGE("Failed to create SW sensor class (sensor type: %d).", ST_virtual_sensors_list[i].android_sensor_type);

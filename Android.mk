@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013-2016 STMicroelectronics
+# Copyright (C) 2013-2019 STMicroelectronics
 # Denis Ciocca - Motion MEMS Product Div.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 
 ifneq ($(TARGET_SIMULATOR),true)
 
-.PHONY: sensors-defconfig sensors-menuconfig sensors-cleanconf
+.PHONY: sensors-defconfig sensors-menuconfig sensors-cleanconf configfile
 
 CURRENT_DIRECTORY := $(call my-dir)
 
@@ -32,73 +32,81 @@ VERSION_M := $(shell test $(MAJOR_VERSION) -eq 6 && echo true)
 VERSION_N := $(shell test $(MAJOR_VERSION) -eq 7 && echo true)
 VERSION_O := $(shell test $(MAJOR_VERSION) -eq 8 && echo true)
 VERSION_P := $(shell test $(MAJOR_VERSION) -eq 9 && echo true)
+VERSION_Q := $(shell test $(MAJOR_VERSION) -eq 10 && echo true)
 
 ifeq ($(VERSION_KK),true)
-export ST_HAL_ANDROID_VERSION=0
+ST_HAL_ANDROID_VERSION := 0
 DEFCONFIG := android_KK_defconfig
 endif # VERSION_KK
 ifeq ($(VERSION_L),true)
-export ST_HAL_ANDROID_VERSION=1
+ST_HAL_ANDROID_VERSION := 1
 DEFCONFIG := android_L_defconfig
 endif # VERSION_L
 ifeq ($(VERSION_M),true)
-export ST_HAL_ANDROID_VERSION=2
+ST_HAL_ANDROID_VERSION := 2
 DEFCONFIG := android_M_defconfig
 endif # VERSION_M
 ifeq ($(VERSION_N),true)
-export ST_HAL_ANDROID_VERSION=3
+ST_HAL_ANDROID_VERSION := 3
 DEFCONFIG := android_N_defconfig
 endif # VERSION_N
 ifeq ($(VERSION_O),true)
-export ST_HAL_ANDROID_VERSION=4
+ST_HAL_ANDROID_VERSION := 4
 DEFCONFIG := android_O_defconfig
 endif # VERSION_O
 ifeq ($(VERSION_P),true)
-export ST_HAL_ANDROID_VERSION=4
+ST_HAL_ANDROID_VERSION := 5
 DEFCONFIG := android_P_defconfig
 endif # VERSION_P
+ifeq ($(VERSION_Q),true)
+ST_HAL_ANDROID_VERSION := 6
+DEFCONFIG := android_Q_defconfig
+endif # VERSION_Q
+
+ANDROID_VERSION_CONFIG_HAL=$(CURRENT_DIRECTORY)/android_data_config
+KCONFIG_CONFIG_HAL=$(CURRENT_DIRECTORY)/hal_config
+
+$(shell rm $(ANDROID_VERSION_CONFIG_HAL))
+$(shell echo 'export DEFCONFIG=$(DEFCONFIG)' > $(ANDROID_VERSION_CONFIG_HAL))
+$(shell echo 'export ST_HAL_ANDROID_VERSION=$(ST_HAL_ANDROID_VERSION)' >> $(ANDROID_VERSION_CONFIG_HAL))
 
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/FUFD_CustomTilt/FUFD_CustomTilt*)","")
-export ST_HAL_HAS_FDFD_LIB=y
+$(shell echo 'export ST_HAL_HAS_FDFD_LIB=y' >> $(ANDROID_VERSION_CONFIG_HAL))
 else
-export ST_HAL_HAS_FDFD_LIB=n
+$(shell echo 'export ST_HAL_HAS_FDFD_LIB=n' >> $(ANDROID_VERSION_CONFIG_HAL))
 endif
 
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/iNemoEngine_gbias_Estimation/iNemoEngine_gbias_Estimation*)","")
-export ST_HAL_HAS_GBIAS_LIB=y
+$(shell echo 'export ST_HAL_HAS_GBIAS_LIB=y' >> $(ANDROID_VERSION_CONFIG_HAL))
 else
-export ST_HAL_HAS_GBIAS_LIB=n
+$(shell echo 'export ST_HAL_HAS_GBIAS_LIB=n' >> $(ANDROID_VERSION_CONFIG_HAL))
 endif
 
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/iNemoEngine_GeoMag_Fusion/iNemoEngine_GeoMag*)","")
-export ST_HAL_HAS_GEOMAG_LIB=y
+$(shell echo 'export ST_HAL_HAS_GEOMAG_LIB=y' >> $(ANDROID_VERSION_CONFIG_HAL))
 else
-export ST_HAL_HAS_GEOMAG_LIB=n
+$(shell echo 'export ST_HAL_HAS_GEOMAG_LIB=n' >> $(ANDROID_VERSION_CONFIG_HAL))
 endif
 
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/iNemoEnginePRO/iNemoEnginePRO*)","")
-export ST_HAL_HAS_9X_6X_LIB=y
+$(shell echo 'export ST_HAL_HAS_9X_6X_LIB=y' >> $(ANDROID_VERSION_CONFIG_HAL))
 else
-export ST_HAL_HAS_9X_6X_LIB=n
+$(shell echo 'export ST_HAL_HAS_9X_6X_LIB=n' >> $(ANDROID_VERSION_CONFIG_HAL))
 endif
 
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/STMagCalibration/STMagCalibration*)","")
-export ST_HAL_HAS_MAGN_CALIB_LIB=y
+$(shell echo 'export ST_HAL_HAS_MAGN_CALIB_LIB=y' >> $(ANDROID_VERSION_CONFIG_HAL))
 else
-export ST_HAL_HAS_MAGN_CALIB_LIB=n
+$(shell echo 'export ST_HAL_HAS_MAGN_CALIB_LIB=n' >> $(ANDROID_VERSION_CONFIG_HAL))
 endif
 
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/STAccCalibration/STAccCalibration*)","")
-export ST_HAL_HAS_ACCEL_CALIB_LIB=y
+$(shell echo 'export ST_HAL_HAS_ACCEL_CALIB_LIB=y' >> $(ANDROID_VERSION_CONFIG_HAL))
 else
-export ST_HAL_HAS_ACCEL_CALIB_LIB=n
+$(shell echo 'export ST_HAL_HAS_ACCEL_CALIB_LIB=n' >> $(ANDROID_VERSION_CONFIG_HAL))
 endif
 
-export KCONFIG_CONFIG_HAL=$(CURRENT_DIRECTORY)/hal_config
-export ST_HAL_PATH=$(CURRENT_DIRECTORY)
-
 define \n
-
 
 endef
 
@@ -110,7 +118,7 @@ configfile:
 	$(if $(wildcard $(KCONFIG_CONFIG_HAL)), , $(warning ${\n}${\n}${\space}${\n}defconfig file not found. Used default one: `$(DEFCONFIG)`.${\n}${\space}${\n}) @$(MAKE) sensors-defconfig > NULL)
 
 sensors-defconfig:
-	cp $(CURRENT_DIRECTORY)/src/$(DEFCONFIG) $(KCONFIG_CONFIG_HAL)
+	$(shell cp $(CURRENT_DIRECTORY)/src/$(DEFCONFIG) $(KCONFIG_CONFIG_HAL))
 	$(CURRENT_DIRECTORY)/tools/mkconfig $(CURRENT_DIRECTORY)/ > $(CURRENT_DIRECTORY)/configuration.h
 
 sensors-menuconfig: configfile
@@ -136,3 +144,4 @@ include $(call all-makefiles-under, $(CURRENT_DIRECTORY))
 endif # filter
 
 endif # !TARGET_SIMULATOR
+

@@ -39,6 +39,7 @@ VERSION_M := $(shell test $(MAJOR_VERSION) -eq 6 && echo true)
 VERSION_N := $(shell test $(MAJOR_VERSION) -eq 7 && echo true)
 VERSION_O := $(shell test $(MAJOR_VERSION) -eq 8 && echo true)
 VERSION_P := $(shell test $(MAJOR_VERSION) -eq 9 && echo true)
+VERSION_Q := $(shell test $(MAJOR_VERSION) -eq 10 && echo true)
 
 ifeq ($(VERSION_KK),true)
 ST_HAL_ANDROID_VERSION=0
@@ -66,9 +67,14 @@ DEFCONFIG := android_O_defconfig
 endif # VERSION_O
 
 ifeq ($(VERSION_P),true)
-ST_HAL_ANDROID_VERSION=4
+ST_HAL_ANDROID_VERSION=5
 DEFCONFIG := android_P_defconfig
 endif # VERSION_P
+
+ifeq ($(VERSION_Q),true)
+ST_HAL_ANDROID_VERSION=6
+DEFCONFIG := android_Q_defconfig
+endif # VERSION_Q
 
 ifeq ($(DEFCONFIG),)
 $(error ${\n}${\n}${\space}${\n}AOSP Version Unknown${\n})
@@ -113,6 +119,7 @@ endif
 # Export to config tools
 export ST_HAL_HAS_ACCEL_CALIB_LIB ST_HAL_HAS_MAGN_CALIB_LIB ST_HAL_HAS_9X_6X_LIB ST_HAL_HAS_GEOMAG_LIB ST_HAL_HAS_GBIAS_LIB ST_HAL_HAS_FDFD_LIB
 export ST_HAL_ANDROID_VERSION
+export DEFCONFIG
 export KCONFIG_CONFIG_HAL=$(CURRENT_DIRECTORY)/hal_config
 export ST_HAL_PATH=$(CURRENT_DIRECTORY)
 

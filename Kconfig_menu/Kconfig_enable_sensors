@@ -327,7 +327,7 @@ config ST_HAL_GEOMAG_ROT_VECTOR_AP_ENABLED
 	bool "Software by AP Library"
 endchoice
 
-if (ST_HAL_ANDROID_VERSION >= 4)
+if (ST_HAL_ANDROID_VERSION = 4 || ST_HAL_ANDROID_VERSION = 5 || ST_HAL_ANDROID_VERSION = 6)
 config ST_HAL_DYNAMIC_SENSOR
 	bool "Dynamic Sensor Support"
 	default n

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013-2016 STMicroelectronics
+# Copyright (C) 2013-2019 STMicroelectronics
 # Denis Ciocca - Motion MEMS Product Div.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +23,26 @@ ST_HAL_ROOT_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 include $(ST_HAL_ROOT_PATH)/../hal_config
 
-LOCAL_HEADER_LIBRARIES := libhardware_headers
+ANDROID_VERSION_CONFIG_HAL=$(LOCAL_PATH)/../android_data_config
+$(shell source $(ANDROID_VERSION_CONFIG_HAL))
+
 LOCAL_SHARED_LIBRARIES := \
-    liblog
+	libcutils \
+	libhardware \
+	libhardware_legacy \
+	libutils \
+	liblog \
+	libdl \
+	libc
+
+LOCAL_HEADER_LIBRARIES := \
+	libhardware_headers
+
+ifeq ($(shell test $(ST_HAL_ANDROID_VERSION) -gt 4; echo $$?),0)
+LOCAL_SHARED_LIBRARIES += libstagefright_foundation
+LOCAL_HEADER_LIBRARIES += libstagefright_foundation_headers
+endif # ST_HAL_ANDROID_VERSION
+
 LOCAL_VENDOR_MODULE := true
 
 LOCAL_PRELINK_MODULE := false
@@ -118,8 +135,6 @@ else # ST_HAL_ANDROID_VERSION
 LOCAL_STATIC_LIBRARIES += STAccCalibration
 endif # ST_HAL_ANDROID_VERSION
 endif # CONFIG_ST_HAL_HAS_ACCEL_CALIB
-
-LOCAL_SHARED_LIBRARIES := liblog libcutils libutils libdl libc
 
 LOCAL_SRC_FILES := \
 		SensorHAL.cpp \
