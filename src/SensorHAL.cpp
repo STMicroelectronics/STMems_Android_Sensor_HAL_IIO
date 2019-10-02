@@ -1255,6 +1255,10 @@ static int st_hal_dev_inject_sensor_data(struct sensors_poll_device_1 *dev, cons
 {
 	STSensorHAL_data *hal_data = (STSensorHAL_data *)dev;
 
+	/* check for operational parameter */
+	if (data->sensor == -1)
+		return -EINVAL;
+
 	return hal_data->sensor_classes[data->sensor]->InjectSensorData(data);
 }
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
