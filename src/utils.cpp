@@ -195,7 +195,7 @@ int device_iio_utils::sysfs_enable_channels(const char *device_dir, bool enable)
 	const struct dirent *ent;
 	FILE *sysfsfp;
 	DIR *dp;
-	int ret;
+	int ret = 0;
 
 	/* check in scan_elements dir entry all enable file flag */
 	if (strlen(device_dir) + strlen("scan_elements") + 1 >
@@ -216,15 +216,20 @@ int device_iio_utils::sysfs_enable_channels(const char *device_dir, bool enable)
 			    "_en")) {
 			sprintf(filename, "%s/%s", dir, ent->d_name);
 			sysfsfp = fopen(filename, "r+");
-			if (!sysfsfp)
-				return -errno;
+			if (!sysfsfp) {
+				ret = -errno;
+				goto out;
+			}
 
 			fprintf(sysfsfp, "%d", enable);
 			fclose(sysfsfp);
 		}
 	}
 
-	return 0;
+out:
+	closedir(dp);
+
+	return ret;
 }
 
 int device_iio_utils::get_device_by_name(const char *name)
@@ -841,6 +846,8 @@ int device_iio_utils::get_type(struct device_iio_info_channel *channel,
 			fclose(sysfsfp);
 		}
 	}
+
+	closedir(dp);
 
 	return 0;
 }
