@@ -17,6 +17,9 @@
 
 #include "utils.h"
 
+#define SELFTEST_POSITIVE_RESULT                "pass"
+#define SELFTEST_NEGATIVE_RESULT                "fail"
+
 /* IIO SYSFS interface */
 static const char *device_iio_dir = "/sys/bus/iio/devices/";
 static const char *device_iio_sfa_filename = "sampling_frequency_available";
@@ -33,6 +36,8 @@ static const char *device_iio_device_name = "iio:device";
 static const char *device_iio_injection_mode_enable = "injection_mode";
 static const char *device_iio_injection_sensors_filename = "injection_sensors";
 static const char *device_iio_scan_elements_en = "_en";
+static const char *device_iio_selftest_available_filename = "selftest_available";
+static const char *device_iio_selftest_filename = "selftest";
 
 int device_iio_utils::sysfs_opendir(const char *name, DIR **dp)
 {
@@ -1018,4 +1023,70 @@ int device_iio_utils::inject_data(const char *device_dir, unsigned char *data,
 	fclose(sysfsfp);
 
 	return ret;
+}
+
+int device_iio_utils::get_selftest_available(const char *device_dir,
+					     char list[][20])
+{
+	FILE *fp;
+	int err, elements = 0;
+	char *pch, *res, line[200];
+	char sf_filaname[DEVICE_IIO_MAX_FILENAME_LEN];
+
+	err = sprintf(sf_filaname, "%s/%s", device_dir,
+		      device_iio_selftest_available_filename);
+	if (err < 0)
+		return err;
+
+	fp = fopen(sf_filaname, "r");
+	if (fp == NULL)
+		return -errno;
+
+	res = fgets(line, sizeof(line), fp);
+	if (res == NULL) {
+		err = -EINVAL;
+		goto close_file;
+	}
+
+	pch = strtok(line," ,.");
+	while (pch != NULL) {
+		memcpy(list[elements], pch, strlen(pch) + 1);
+		pch = strtok(NULL, " ,.");
+		elements++;
+	}
+
+close_file:
+	fclose(fp);
+
+        return err < 0 ? err : elements;
+}
+
+int device_iio_utils::execute_selftest(const char *device_dir, char *mode)
+{
+	int err;
+	char result[20];
+	char sf_filaname[DEVICE_IIO_MAX_FILENAME_LEN];
+
+	err = sprintf(sf_filaname, "%s/%s", device_dir,
+		      device_iio_selftest_filename);
+	if (err < 0)
+		return err;
+
+	err = sysfs_write_str(sf_filaname, mode);
+	if (err < 0)
+		return err;
+
+	err = sysfs_read_str(sf_filaname, result, 20);
+	if (err < 0)
+		return err;
+
+	err = strncmp(result, SELFTEST_POSITIVE_RESULT, strlen(SELFTEST_POSITIVE_RESULT));
+	if (err == 0)
+		return 1;
+
+	err = strncmp(result, SELFTEST_NEGATIVE_RESULT, strlen(SELFTEST_NEGATIVE_RESULT));
+	if (err == 0)
+		return 0;
+
+	return -EINVAL;
 }

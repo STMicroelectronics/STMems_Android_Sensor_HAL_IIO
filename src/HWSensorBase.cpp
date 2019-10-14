@@ -321,7 +321,8 @@ void HWSensorBase::GetSelfTestAvailable()
 {
 	int err;
 
-	err = iio_utils_get_selftest_available(common_data.iio_sysfs_path, selftest.mode);
+	err = device_iio_utils::get_selftest_available(common_data.device_iio_sysfs_path,
+					       selftest.mode);
 	if (err < 0)
 		return;
 
@@ -335,9 +336,11 @@ selftest_status HWSensorBase::ExecuteSelfTest()
 	if (selftest.available == 0)
 		return NOT_AVAILABLE;
 
-	status = iio_utils_execute_selftest(common_data.iio_sysfs_path, &selftest.mode[0][0]);
+	status = device_iio_utils::execute_selftest(common_data.device_iio_sysfs_path,
+					    &selftest.mode[0][0]);
 	if (status < 0) {
-		ALOGE("\"%s\": failed to execute selftest procedure. (errno: %d)", GetName(), status);
+		ALOGE("\"%s\": failed to execute selftest procedure. (errno: %d)",
+		      GetName(), status);
 		return GENERIC_ERROR;
 	}
 
