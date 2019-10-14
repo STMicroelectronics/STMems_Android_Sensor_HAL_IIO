@@ -297,7 +297,9 @@ int main(int __attribute__((unused))argc, char __attribute__((unused))*argv[])
 #endif /* CONFIG_ST_HAL_FACTORY_CALIBRATION_USING_APK */
 	}
 
+#ifdef CONFIG_ST_HAL_FACTORY_CALIBRATION_USING_APK
 remove_inotify_watch:
+#endif /* CONFIG_ST_HAL_FACTORY_CALIBRATION_USING_APK */
 	inotify_rm_watch(inotify_fd, inotify_watch_fd);
 
 	return err < 0 ? err : 0;
