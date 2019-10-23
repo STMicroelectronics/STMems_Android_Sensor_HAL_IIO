@@ -28,6 +28,10 @@ LOCAL_MODULE_OWNER := STMicroelectronics
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
 
+ifeq ($(shell test $(ST_HAL_ANDROID_VERSION) -gt 2; echo $$?),0)
+LOCAL_C_INCLUDES += frameworks/native/libs/sensor/include/
+endif # ST_HAL_ANDROID_VERSION
+
 LOCAL_CFLAGS += -DLOG_TAG=\"SensorHAL-selftest\" -Wall \
 		-Wunused-parameter -Wunused-value -Wunused-function
 
@@ -43,6 +47,9 @@ LOCAL_CPPFLAGS := \
 		-W -Wall -Wextra
 
 LOCAL_SHARED_LIBRARIES := libc liblog libcutils libutils libandroid libgui libbinder
+ifeq ($(shell test $(ST_HAL_ANDROID_VERSION) -gt 2; echo $$?),0)
+LOCAL_SHARED_LIBRARIES += libsensor
+endif # ST_HAL_ANDROID_VERSION
 
 LOCAL_MODULE_TAGS := optional
 

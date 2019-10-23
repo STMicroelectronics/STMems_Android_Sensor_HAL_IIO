@@ -29,8 +29,13 @@
 #include <cutils/log.h>
 #endif /* use log/log.h start from android 8 major version */
 
+#if ST_HAL_ANDROID_VERSION >= ST_HAL_NOUGAT_VERSION
+#include <sensor/SensorManager.h>
+#include <sensor/Sensor.h>
+#else
 #include <gui/SensorManager.h>
 #include <gui/Sensor.h>
+#endif /* use log/log.h start from android 8 major version */
 
 #include "../src/common_data.h"
 #include "../src/SelfTest.h"
