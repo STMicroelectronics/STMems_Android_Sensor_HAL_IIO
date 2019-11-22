@@ -297,6 +297,11 @@ HWSensorBase::HWSensorBase(HWSensorBaseCommonData *data, const char *name,
 	}
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+	sensor_t_data.flags |= SENSOR_FLAG_ADDITIONAL_INFO;
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 	free(buffer_path);
 
 	return;
@@ -376,6 +381,13 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 	int err = 0;
 	bool old_status, old_status_no_handle;
 
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+	additional_info_event_t *array_sensorAdditionalInfoDataFrames = nullptr;
+	size_t frames;
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
 	if (lock_en_mutex)
 		pthread_mutex_lock(&enable_mutex);
 
@@ -401,9 +413,19 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 	}
 
 	if (sensor_t_data.handle == handle) {
-		if (enable)
+		if (enable) {
 			sensor_my_enable = android::elapsedRealtimeNano();
-		 else
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+			frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoDataFrames);
+			if (array_sensorAdditionalInfoDataFrames) {
+				ALOGD("%s : ENABLE: Sending Report.", __func__);
+				WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoDataFrames, frames);
+				free(array_sensorAdditionalInfoDataFrames);
+			}
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+		} else
 			sensor_my_disable = android::elapsedRealtimeNano();
 	}
 
@@ -552,6 +574,27 @@ void HWSensorBase::ProcessEvent(struct device_iio_events *event_data)
 				 event_data->event_timestamp);
 }
 
+void HWSensorBase::ProcessData(SensorBaseData *data)
+{
+	SensorBase::ProcessData(data);
+
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+	additional_info_event_t *array_sensorAdditionalInfoPLFrames = nullptr;
+	size_t frames;
+
+	if (data->flush_event_handle == sensor_t_data.handle) {
+		frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoPLFrames);
+		if (array_sensorAdditionalInfoPLFrames) {
+			ALOGD("%s : FLUSH: Sending Report.", __func__);
+			WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoPLFrames, frames);
+			free(array_sensorAdditionalInfoPLFrames);
+		}
+	}
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+}
+
 int HWSensorBase::FlushData(int handle, bool lock_en_mutex)
 {
 	int err;
@@ -611,9 +654,9 @@ void HWSensorBase::ProcessFlushData(int __attribute__((unused))handle,
 			ALOGE("%s: Failed to write Flush event into stack.",
 			      GetName());
 	} else {
-		if (flush_handle == sensor_t_data.handle)
+		if (flush_handle == sensor_t_data.handle) {
 			WriteFlushEventToPipe();
-		else {
+		} else {
 			for (i = 0; i < push_data.num; i++)
 				push_data.sb[i]->ProcessFlushData(flush_handle,
 								  timestamp);
@@ -622,6 +665,50 @@ void HWSensorBase::ProcessFlushData(int __attribute__((unused))handle,
 
 	pthread_mutex_unlock(&sample_in_processing_mutex);
 }
+
+
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+void HWSensorBase::WriteSensorAdditionalInfoFrames(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames_numb)
+{
+
+	for (size_t i = 0; i < frames_numb; ++i) {
+		ALOGV("%s : Before: item #: %zu of %zu",__func__, (i+1), frames_numb);
+		SensorBase::WriteSensorAdditionalInfoFrameToPipe(&array_sensorAdditionaInfoDataFrames[i]);
+		ALOGV("%s : Frame #:(%zu) of %zu sent.", __func__, (i=1),frames_numb);
+	}
+
+}
+
+
+void HWSensorBase::WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames_numb)
+{
+	const additional_info_event_t *begin_additional_info = SensorAdditionalInfoEvent::getBeginFrameEvent();
+
+	const additional_info_event_t *end_additional_info = SensorAdditionalInfoEvent::getEndFrameEvent();
+
+	SensorBase::WriteSensorAdditionalInfoFrameToPipe(const_cast<additional_info_event_t*>(begin_additional_info));
+	WriteSensorAdditionalInfoFrames(array_sensorAdditionaInfoDataFrames, frames_numb);
+	SensorBase::WriteSensorAdditionalInfoFrameToPipe(const_cast<additional_info_event_t*>(end_additional_info));
+	ALOGD("%s : Sensor Additional Info Report sent.", __func__);
+
+}
+
+size_t HWSensorBase::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
+{
+	size_t frames = 1;
+
+	*array_sensorAdditionalInfoPLFrames = (additional_info_event_t *)malloc(frames * sizeof(additional_info_event_t));
+	if (!*array_sensorAdditionalInfoPLFrames) {
+		ALOGE("%s: Failed to allocate memory.", GetName());
+		return (size_t)-ENOMEM;
+	}
+
+	*array_sensorAdditionalInfoPLFrames[0] = defaultSensorPlacement_additional_info_event;
+	return sizeof(**array_sensorAdditionalInfoPLFrames)/sizeof(*array_sensorAdditionalInfoPLFrames[0]);
+}
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 void HWSensorBase::ThreadDataTask()
 {

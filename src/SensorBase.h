@@ -226,6 +226,12 @@ public:
 	void WriteFlushEventToPipe();
 	virtual void WriteDataToPipe(int64_t hw_pollrate);
 
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+	void WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p_additional_info_event);
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
 	virtual void ProcessData(SensorBaseData *data);
 	virtual void ReceiveDataFromDependency(int handle, SensorBaseData *data);
 	virtual int GetLatestValidDataFromDependency(int dependency_id, SensorBaseData *data, int64_t timesync);

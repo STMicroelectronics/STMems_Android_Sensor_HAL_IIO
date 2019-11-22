@@ -22,6 +22,7 @@
 #include <math.h>
 
 #include "SensorBase.h"
+#include "SensorAdditionalInfo.h"
 
 extern "C" {
 	#include "utils.h"
@@ -58,6 +59,12 @@ class HWSensorBaseWithPollrate;
  * class HWSensorBase
  */
 class HWSensorBase : public SensorBase {
+private:
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+	void WriteSensorAdditionalInfoFrames(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames_numb);
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 protected:
 	ssize_t scan_size;
 	struct pollfd pollfd_iio[2];
@@ -78,6 +85,19 @@ protected:
 	bool has_event_channels;
 
 	int WriteBufferLenght(unsigned int buf_len);
+
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+	bool supportsSensorAdditionalInfo;
+	const additional_info_event_t defaultSensorPlacement_additional_info_event = {
+		.type = AINFO_SENSOR_PLACEMENT,
+		.serial = 0,
+		.data_float = {	1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
+	};
+	virtual size_t getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
+	void WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames);
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 public:
 	HWSensorBase(HWSensorBaseCommonData *data,
@@ -100,6 +120,7 @@ public:
 
 	int ApplyFactoryCalibrationData(char *filename, time_t *last_modification);
 
+	virtual void ProcessData(SensorBaseData *data);
 	virtual void ProcessEvent(struct device_iio_events *event_data);
 	virtual int FlushData(int handle, bool lock_en_mute);
 	virtual void ProcessFlushData(int handle, int64_t timestamp);

@@ -145,7 +145,8 @@ LOCAL_SRC_FILES := \
 		ChangeODRTimestampStack.cpp \
 		SensorBase.cpp \
 		HWSensorBase.cpp \
-		SWSensorBase.cpp
+		SWSensorBase.cpp \
+		SensorAdditionalInfo.cpp
 
 ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
 LOCAL_SRC_FILES += RingBuffer.cpp
