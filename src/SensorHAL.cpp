@@ -1017,19 +1017,25 @@ static int st_hal_set_fullscale(char *iio_sysfs_path,
 		iio_sensor_type = DEVICE_IIO_GYRO;
 		break;
 #endif /* CONFIG_ST_HAL_GYRO_ENABLED */
+#ifdef CONFIG_ST_HAL_TEMP_ENABLED
+	/* temperature sensors generally do not support change full scale */
+	case SENSOR_TYPE_TEMPERATURE:
+		return 0;
+#endif /* CONFIG_ST_HAL_TEMP_ENABLED */
 	default:
 		return -EINVAL;
 	}
 
-	for (i = 0; i < (int)sa->length; i++) {
-		if (channels[0].sign)
-			max_number = (pow(2, channels[0].bits_used - 1) - 1);
-		else
-			max_number = (pow(2, channels[0].bits_used) - 1);
+	if (channels[0].sign)
+		max_number = pow(2, channels[0].bits_used - 1) - 1;
+	else
+		max_number = pow(2, channels[0].bits_used) - 1;
 
+	for (i = 0; i < (int)sa->length; i++) {
 		if ((sa->scales[i] * max_number) >= max_value)
 			break;
 	}
+
 	if (i == (int)sa->length)
 		i = sa->length - 1;
 
@@ -1147,9 +1153,9 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 				goto st_hal_load_free_iio_channels;
 			}
 
-				err = device_iio_utils::get_scale(data[index].iio_sysfs_path,
-								  &data[index].sa.scales[0],
-								  ST_sensors_supported[n].iio_sensor_type);
+			err = device_iio_utils::get_available_scales(data[index].iio_sysfs_path,
+								     &data[index].sa,
+								     ST_sensors_supported[n].iio_sensor_type);
 			if (err < 0)  {
 				ALOGE("\"%s\": unable to get scale availability. (errno: %d)", iio_devices[i].name, err);
 				goto st_hal_load_free_iio_channels;
@@ -1159,7 +1165,7 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 				err = st_hal_set_fullscale(data[index].iio_sysfs_path, ST_sensors_supported[n].android_sensor_type,
 								&data[index].sa, data[index].channels, data[index].num_channels);
 				if (err < 0) {
-					ALOGE("\"%s\": unable to get scale availability. (errno: %d)", iio_devices[i].name, err);
+					ALOGE("\"%s\": unable to set full scale. (errno: %d)", iio_devices[i].name, err);
 					goto st_hal_load_free_iio_channels;
 				}
 			}
