@@ -125,6 +125,11 @@ void Magnetometer::ProcessData(SensorBaseData *data)
 	data->processed[1] = mag_cal_output.mag_cal[1];
 	data->processed[2] = mag_cal_output.mag_cal[2];
 
+	/* update sensor bias offset */
+	data->offset[0] = mag_cal_output.offset[0];
+	data->offset[1] = mag_cal_output.offset[1];
+	data->offset[2] = mag_cal_output.offset[2];
+
 	data->accuracy = mag_cal_output.accuracy;
 #else /* CONFIG_ST_HAL_MAGN_CALIB_ENABLED */
 	data->processed[0] = data->raw[0];
