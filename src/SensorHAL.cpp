@@ -1061,7 +1061,8 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 {
 	unsigned int index = 0;
 	int err;
-	unsigned int i, n, iio_devices_num;
+	unsigned int n;
+	int i, iio_devices_num;
 	struct device_iio_type_name iio_devices[ST_HAL_IIO_MAX_DEVICES];
 
 	iio_devices_num =  device_iio_utils::get_devices_name(iio_devices,
