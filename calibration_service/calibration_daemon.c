@@ -16,7 +16,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/inotify.h>
-#if ST_HAL_ANDROID_VERSION >= ST_HAL_OREO_VERSION
+#if CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_OREO_VERSION
 #include <log/log.h>
 #else
 #include <cutils/log.h>
