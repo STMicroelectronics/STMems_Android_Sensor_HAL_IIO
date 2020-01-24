@@ -20,8 +20,8 @@
 
 #include "common_data.h"
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 
 #include <hardware/sensors.h>
 
@@ -45,7 +45,7 @@ public:
 	void incrementEventSerial();
 };
 
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 #endif /* ST_SENSOR_ADDITIONAL_INFO_H */

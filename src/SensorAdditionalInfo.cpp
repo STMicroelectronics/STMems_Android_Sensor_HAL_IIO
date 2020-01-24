@@ -10,8 +10,8 @@
 
 #include "SensorAdditionalInfo.h"
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 
 #include <stdlib.h>
 
@@ -56,5 +56,5 @@ void SensorAdditionalInfoEvent::incrementEventSerial()
 	sensor_additional_info_event.serial++;
 }
 
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */

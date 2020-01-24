@@ -51,10 +51,10 @@ Magnetometer::Magnetometer(HWSensorBaseCommonData *data, const char *name,
 	sensor_t_data.resolution = GAUSS_TO_UTESLA(data->channels[0].scale);
 	sensor_t_data.maxRange = sensor_t_data.resolution * (pow(2, data->channels[0].bits_used - 1) - 1);
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION) /* ST_HAL_NOUGAT_VERSION */
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 	supportsSensorAdditionalInfo = true;
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 }
 
@@ -156,8 +156,8 @@ void Magnetometer::ProcessData(SensorBaseData *data)
 }
 
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION) /* ST_HAL_NOUGAT_VERSION */
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 size_t Magnetometer::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
 {
 
@@ -186,5 +186,5 @@ size_t Magnetometer::getSensorAdditionalInfoPayLoadFramesArray(additional_info_e
 	*array_sensorAdditionalInfoPLFrames = p;
 	return sizeof(**array_sensorAdditionalInfoPLFrames)/sizeof(*array_sensorAdditionalInfoPLFrames[0]);
 }
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */

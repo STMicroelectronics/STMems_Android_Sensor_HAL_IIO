@@ -145,8 +145,7 @@ LOCAL_SRC_FILES := \
 		ChangeODRTimestampStack.cpp \
 		SensorBase.cpp \
 		HWSensorBase.cpp \
-		SWSensorBase.cpp \
-		SensorAdditionalInfo.cpp
+		SWSensorBase.cpp
 
 ifdef CONFIG_ST_HAL_DIRECT_REPORT_SENSOR
 LOCAL_SRC_FILES += RingBuffer.cpp
@@ -265,6 +264,11 @@ ifdef CONFIG_ST_HAL_DYNAMIC_SENSOR
 LOCAL_SHARED_LIBRARIES += libdynamic_sensor_ext
 LOCAL_SRC_FILES += DynamicSensorProxy.cpp
 endif # CONFIG_ST_HAL_DYNAMIC_SENSOR
+
+ifdef CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED
+LOCAL_SRC_FILES += SensorAdditionalInfo.cpp
+endif # CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED
+
 
 LOCAL_MODULE_TAGS := optional
 

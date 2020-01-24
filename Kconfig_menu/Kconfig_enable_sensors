@@ -341,4 +341,12 @@ config ST_HAL_DIRECT_REPORT_SENSOR
 	  Enable support for Direct Report sensors.
 endif
 
+if (ST_HAL_ANDROID_VERSION = 5 || ST_HAL_ANDROID_VERSION = 6)
+config ST_HAL_ADDITIONAL_INFO_ENABLED
+	bool "Additional Info Sensor Support"
+	default n
+	help
+	  Enable support for Additional Info Sensor type.
+endif
+
 endmenu # Enable/disable sensors

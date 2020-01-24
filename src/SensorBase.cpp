@@ -563,8 +563,8 @@ void SensorBase::WriteFlushEventToPipe()
 		ALOGE("%s: Failed to write flush event data to pipe.", android_name);
 }
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 void SensorBase::WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p_sensor_additional_info_event)
 {
 	int err;
@@ -586,7 +586,7 @@ void SensorBase::WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p
 	if (err <= 0)
 		ALOGE("%s: Failed to write additional sensor info event data to pipe.", android_name);
 }
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 

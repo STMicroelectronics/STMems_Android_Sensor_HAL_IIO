@@ -297,11 +297,11 @@ HWSensorBase::HWSensorBase(HWSensorBaseCommonData *data, const char *name,
 	}
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 	sensor_t_data.flags |= SENSOR_FLAG_ADDITIONAL_INFO;
 	supportsSensorAdditionalInfo = false;
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 	free(buffer_path);
 
@@ -382,11 +382,11 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 	int err = 0;
 	bool old_status, old_status_no_handle;
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 	additional_info_event_t *array_sensorAdditionalInfoDataFrames = nullptr;
 	size_t frames;
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 	if (lock_en_mutex)
@@ -416,8 +416,8 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 	if (sensor_t_data.handle == handle) {
 		if (enable) {
 			sensor_my_enable = android::elapsedRealtimeNano();
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 			if (supportsSensorAdditionalInfo) {
 				frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoDataFrames);
 				if (array_sensorAdditionalInfoDataFrames) {
@@ -427,7 +427,7 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 					free(array_sensorAdditionalInfoDataFrames);
 				}
 			}
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 		} else
 			sensor_my_disable = android::elapsedRealtimeNano();
@@ -582,8 +582,8 @@ void HWSensorBase::ProcessData(SensorBaseData *data)
 {
 	SensorBase::ProcessData(data);
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 	additional_info_event_t *array_sensorAdditionalInfoPLFrames = nullptr;
 	size_t frames;
 
@@ -598,7 +598,7 @@ void HWSensorBase::ProcessData(SensorBaseData *data)
 			}
 		}
 	}
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 }
 
@@ -674,8 +674,8 @@ void HWSensorBase::ProcessFlushData(int __attribute__((unused))handle,
 }
 
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
-//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 void HWSensorBase::WriteSensorAdditionalInfoFrames(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames_numb)
 {
 
@@ -714,7 +714,7 @@ size_t HWSensorBase::getSensorAdditionalInfoPayLoadFramesArray(additional_info_e
 	*array_sensorAdditionalInfoPLFrames[0] = defaultSensorPlacement_additional_info_event;
 	return sizeof(**array_sensorAdditionalInfoPLFrames)/sizeof(*array_sensorAdditionalInfoPLFrames[0]);
 }
-//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 void HWSensorBase::ThreadDataTask()
