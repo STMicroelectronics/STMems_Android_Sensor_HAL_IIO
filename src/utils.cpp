@@ -900,9 +900,12 @@ int device_iio_utils::get_available_scales(const char *device_dir,
 
 	sprintf(tmp_name, "%s/%s", device_dir, avl_name);
 
+	/* if scale not available not report error */
 	fp = fopen(tmp_name, "r");
-	if (fp == NULL)
-		return -1;
+	if (fp == NULL) {
+		err = 0;
+		return err;
+	}
 
 	if (!fgets(line, sizeof(line), fp)) {
 		err = -EINVAL;
