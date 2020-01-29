@@ -19,13 +19,14 @@
 
 CURRENT_DIRECTORY := $(shell pwd)
 
-ifeq ($(ANDROID_BUILD_TOP),)
-$(error ${\n}${\n}${\space}${\n}Undefined ANDROID_BUILD_TOP${\n})
-endif # ANDROID_BUILD_TOP
-
 # Check AOSP version
 ifeq ($(PLATFORM_VERSION),)
+# ANDROID_BUILD_TOP is deprecated
+ifeq ($(ANDROID_BUILD_TOP),)
+VERSION_DEFAULT := $(.)/build/core/version_defaults.mk
+else # ANDROID_BUILD_TOP
 VERSION_DEFAULT := $(ANDROID_BUILD_TOP)/build/core/version_defaults.mk
+endif # ANDROID_BUILD_TOP
 PLATFORM_COMMAND_VERSION := $(shell grep "PLATFORM_VERSION := " $(VERSION_DEFAULT))
 PLATFORM_VERSION := $(shell echo $(PLATFORM_COMMAND_VERSION) | awk -F':= ' '{print $$2}')
 endif # PLATFORM_VERSION

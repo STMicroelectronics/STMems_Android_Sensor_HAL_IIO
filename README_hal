@@ -48,21 +48,35 @@ INSTALLING SOURCE CODE
 
 CONFIGURING THE SENSOR HAL
 
---> From SensorHAL_IIO root folder (up to Android M version included):
+--> To configure sensor the Sensor HAL IIO use mm utility from HAL root folder (only for Android version up to M included)
 
-   "mm sensors-defconfig"    Generated default hal_config file.
+        $mm sensors-defconfig       (default configuration)
+or
 
-   "mm sensors-menuconfig"   Text based color menus, radiolists & dialogs.
+        $mm sensors-menuconfig
 
-   "mm sensors-cleanconf"    Delete hal_config, hal_config.old and configuration.h files.
+--> For all the Android versions:
 
---> From SensorHAL_IIO root folder (since Android N to latest version):
+	from <AOSP_DIR\> run the usual android build procedure:
 
-   "make sensors-defconfig"   Generated default hal_config file.
+        source build/envsetup.sh
 
-   "make sensors-menuconfig"  Text based color menus, radiolists & dialogs.
+        lunch <target version>
 
-   "make sensors-cleanconf"   Delete hal_config, hal_config.old and configuration.h files.
+        make
+
+
+	After the initial build of Android and SensorHAL, change directory to SensorHAL path and load initial Android settings
+
+        "source android_data_config"
+
+	than run make command with one of the following options:
+
+        "make sensors-defconfig"        Set to default configuration
+
+        "make sensors-menuconfig"       Text based color menus, radiolists & dialogs.
+
+        "make sensors-cleanconf"        Delete hal_config, hal_config.old and configuration.h files.
 
 
 COMPILING THE SENSOR HAL CODE

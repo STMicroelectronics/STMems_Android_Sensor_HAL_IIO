@@ -65,9 +65,13 @@ endif # VERSION_Q
 
 ANDROID_VERSION_CONFIG_HAL=$(CURRENT_DIRECTORY)/android_data_config
 KCONFIG_CONFIG_HAL=$(CURRENT_DIRECTORY)/hal_config
+ST_HAL_PATH=$(CURRENT_DIRECTORY)
 
 $(shell rm $(ANDROID_VERSION_CONFIG_HAL))
-$(shell echo 'export DEFCONFIG=$(DEFCONFIG)' > $(ANDROID_VERSION_CONFIG_HAL))
+
+$(shell echo 'export PLATFORM_VERSION=$(PLATFORM_VERSION)' > $(ANDROID_VERSION_CONFIG_HAL))
+
+$(shell echo 'export DEFCONFIG=$(DEFCONFIG)' >> $(ANDROID_VERSION_CONFIG_HAL))
 $(shell echo 'export ST_HAL_ANDROID_VERSION=$(ST_HAL_ANDROID_VERSION)' >> $(ANDROID_VERSION_CONFIG_HAL))
 
 ifneq ("$(wildcard $(CURRENT_DIRECTORY)/lib/FUFD_CustomTilt/FUFD_CustomTilt*)","")
@@ -136,7 +140,13 @@ endif
 
 ifeq ($(filter sensors-defconfig sensors-menuconfig sensors-cleanconf,$(MAKECMDGOALS)),)
 ifeq ("$(wildcard $(KCONFIG_CONFIG_HAL))","")
-$(warning ${\n}${\n}${\space}${\n}defconfig file not found. Used default one: `$(DEFCONFIG)`.${\n}${\space}${\n})
+$(warning ${\n}${\n}${\space}${\n})
+$(warning ${\n}Defconfig file not found. Using default one: `$(DEFCONFIG)` {\n})
+$(warning ${\n}If you want to change HAL configuration please follow the steps below:${\n})
+$(warning ${\n}source build/envsetup.sh${\n})
+$(warning ${\n}cd <STMicroelectronics HAL PATH>${\n})
+$(warning ${\n}PLATFORM_VERSION=$(PLATFORM_VERSION) make sensors-menuconfig${\n})
+$(warning ${\n}${\n}${\space}${\n})
 $(shell cp $(CURRENT_DIRECTORY)/src/$(DEFCONFIG) $(KCONFIG_CONFIG_HAL))
 $(shell $(CURRENT_DIRECTORY)/tools/mkconfig $(CURRENT_DIRECTORY)/ > $(CURRENT_DIRECTORY)/configuration.h)
 endif # KCONFIG_CONFIG_HAL
