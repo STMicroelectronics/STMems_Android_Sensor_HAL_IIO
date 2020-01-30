@@ -300,7 +300,7 @@ HWSensorBase::HWSensorBase(HWSensorBaseCommonData *data, const char *name,
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
 //#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
 	sensor_t_data.flags |= SENSOR_FLAG_ADDITIONAL_INFO;
-	supportsSensorAdditionalInfo = true;
+	supportsSensorAdditionalInfo = false;
 //#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 	free(buffer_path);

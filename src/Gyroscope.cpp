@@ -46,6 +46,12 @@ Gyroscope::Gyroscope(HWSensorBaseCommonData *data, const char *name,
 	sensor_t_data.resolution = data->channels[0].scale;
 	sensor_t_data.maxRange = sensor_t_data.resolution * (pow(2, data->channels[0].bits_used - 1) - 1);
 
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION) /* ST_HAL_NOUGAT_VERSION */
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+	supportsSensorAdditionalInfo = true;
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
 #ifdef CONFIG_ST_HAL_GYRO_GBIAS_ESTIMATION_ENABLED
 	dependencies_type_list[SENSOR_DEPENDENCY_ID_0] = SENSOR_TYPE_ACCELEROMETER;
 #endif /* CONFIG_ST_HAL_GYRO_GBIAS_ESTIMATION_ENABLED */
@@ -193,3 +199,37 @@ void Gyroscope::ProcessData(SensorBaseData *data)
 	HWSensorBaseWithPollrate::WriteDataToPipe(data->pollrate_ns);
 	HWSensorBaseWithPollrate::ProcessData(data);
 }
+
+
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION) /* ST_HAL_NOUGAT_VERSION */
+//#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
+size_t Gyroscope::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
+{
+
+	additional_info_event_t Gyro_SAI_Placement_event, *p;
+	additional_info_event_t *p_custom_Gyro_SAI_Placement_event =  NULL;
+
+	// place for ODM/OEM to fill custom_Gyro_SAI_Placement_event
+
+	if (!p_custom_Gyro_SAI_Placement_event) {
+		Gyro_SAI_Placement_event = defaultSensorPlacement_additional_info_event;
+		ALOGD("%s: using Sensor Additional Info Placement default", GetName());
+	} else {
+		Gyro_SAI_Placement_event = *p_custom_Gyro_SAI_Placement_event;
+	}
+
+	size_t frames = 1;
+
+	p = (additional_info_event_t *)calloc(frames , sizeof(additional_info_event_t));
+	if (!p) {
+		ALOGE("%s: Failed to allocate memory.", GetName());
+		return (size_t)-ENOMEM;
+	}
+	for (size_t i = 0; i < frames; i++)
+		memcpy(&p[i], &Gyro_SAI_Placement_event, sizeof(additional_info_event_t));
+
+	*array_sensorAdditionalInfoPLFrames = p;
+	return sizeof(**array_sensorAdditionalInfoPLFrames)/sizeof(*array_sensorAdditionalInfoPLFrames[0]);
+}
+//#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
