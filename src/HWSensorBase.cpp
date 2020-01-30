@@ -300,6 +300,7 @@ HWSensorBase::HWSensorBase(HWSensorBaseCommonData *data, const char *name,
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
 //#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
 	sensor_t_data.flags |= SENSOR_FLAG_ADDITIONAL_INFO;
+	supportsSensorAdditionalInfo = true;
 //#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 	free(buffer_path);
@@ -417,11 +418,14 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 			sensor_my_enable = android::elapsedRealtimeNano();
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_10_VERSION)
 //#if (CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO)
-			frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoDataFrames);
-			if (array_sensorAdditionalInfoDataFrames) {
-				ALOGD("%s : ENABLE: Sending Report.", __func__);
-				WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoDataFrames, frames);
-				free(array_sensorAdditionalInfoDataFrames);
+			if (supportsSensorAdditionalInfo) {
+				frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoDataFrames);
+				if (array_sensorAdditionalInfoDataFrames) {
+					ALOGD("%s : %s, ENABLE: Sending Report.", GetName(), __func__);
+					if (frames > 0)
+						WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoDataFrames, frames);
+					free(array_sensorAdditionalInfoDataFrames);
+				}
 			}
 //#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
@@ -584,11 +588,14 @@ void HWSensorBase::ProcessData(SensorBaseData *data)
 	size_t frames;
 
 	if (data->flush_event_handle == sensor_t_data.handle) {
-		frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoPLFrames);
-		if (array_sensorAdditionalInfoPLFrames) {
-			ALOGD("%s : FLUSH: Sending Report.", __func__);
-			WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoPLFrames, frames);
-			free(array_sensorAdditionalInfoPLFrames);
+		if (supportsSensorAdditionalInfo) {
+			frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoPLFrames);
+			if (array_sensorAdditionalInfoPLFrames) {
+				ALOGD("%s %s: FLUSH: Sending Report.", GetName(), __func__);
+				if (frames > 0)
+					WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoPLFrames, frames);
+				free(array_sensorAdditionalInfoPLFrames);
+			}
 		}
 	}
 //#endif /* CONFIG_ST_HAL_ADDITIONAL_SENSOR_INFO */
