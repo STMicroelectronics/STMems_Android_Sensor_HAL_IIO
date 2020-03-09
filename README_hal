@@ -111,6 +111,7 @@ SENSORS SUPPORTED:
    - LPS22HB			(Pressure);
    - LPS22HD			(Pressure);
    - LPS22HH			(Pressure);
+   - LPS27HHW			(Pressure);
    - LPS33HW			(Pressure);
    - LPS35HW			(Pressure);
    - LIS2HH12			(Accel);
