@@ -18,11 +18,11 @@ Temp::Temp(HWSensorBaseCommonData *data, const char *name,
 	   int handle, unsigned int hw_fifo_len,
 	   float power_consumption, bool wakeup)
 	: HWSensorBaseWithPollrate(data, name, sfa, handle,
-				   SENSOR_TYPE_TEMPERATURE,
+				   SENSOR_TYPE_AMBIENT_TEMPERATURE,
 				   hw_fifo_len, power_consumption)
 {
 #if (CONFIG_ST_HAL_ANDROID_VERSION > ST_HAL_KITKAT_VERSION)
-	sensor_t_data.stringType = SENSOR_STRING_TYPE_TEMPERATURE;
+	sensor_t_data.stringType = SENSOR_STRING_TYPE_AMBIENT_TEMPERATURE;
 	sensor_t_data.flags |= SENSOR_FLAG_CONTINUOUS_MODE;
 
 	if (wakeup)
