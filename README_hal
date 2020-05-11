@@ -120,6 +120,7 @@ SENSORS SUPPORTED:
    - LSM9DS1			(Accel + Gyro + Magn)
    - LSM6DS0			(Accel + Gyro)
    - LSM6DSO			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt + Gesture;
+   - LSM6DSO32			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt + Gesture;
    - LSM6DSR			(Accel + Gyro) + [optional Magn or Pressure on i2c master] + SC + SD + SM + Tilt + Gesture;
    - ASM330LHH			(Accel + Gyro + Temp)
    - LIS2DH			(Accel);
@@ -148,3 +149,4 @@ CHANGELOG:
    v3.1.9: Added support to ASM330LHH.
    v3.1.10: New iio layer.
    v3.1.11: Added support to LSM6DSR.
+   v3.1.12: Added support to LSM6DSO32.
