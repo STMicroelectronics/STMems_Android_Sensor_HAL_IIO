@@ -24,9 +24,13 @@ Factory calibration option:
 Selftest tool manual:
 	If you build HAL enabling Selftest functions, an executable will be
 	available and installed into /system/bin/STSensor_selftest.
-	Using this binaty you will be able to execute easly selftest,
+	Using this binary you will be able to easly execute selftest,
 	based only on Android sensor handle. No information about device
 	driver will be used.
 	You can run binary directly in your device using adb shell. All sensors
 	must be switched off in order to execute the test.
+
+	NOTE: Selftest tool is maintained for compatibility with the past Android
+	version (last successfully tested version was 8.0) but will soon be removed
+	and no longer supported.
 
