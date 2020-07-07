@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <signal.h>
+#include <unistd.h>
 
 #include "Gyroscope.h"
 
