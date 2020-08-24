@@ -888,9 +888,10 @@ HWSensorBaseWithPollrate::HWSensorBaseWithPollrate(HWSensorBaseCommonData *data,
 							hw_fifo_len,
 							power_consumption)
 {
-	unsigned int i, max_sampling_frequency = 0;
+	unsigned int i;
+	float max_sampling_frequency = 0.0f;
 #if (CONFIG_ST_HAL_ANDROID_VERSION > ST_HAL_KITKAT_VERSION)
-	unsigned int min_sampling_frequency = UINT_MAX;
+	float min_sampling_frequency = FLT_MAX;
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 	memcpy(&sampling_frequency_available, sfa,
