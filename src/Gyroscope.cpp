@@ -177,7 +177,7 @@ void Gyroscope::ProcessData(SensorBaseData *data)
 			iNemoEngine_API_gbias_set_frequency(NS_TO_FREQUENCY(data->pollrate_ns));
 		}
 
-		iNemoEngine_API_gbias_Run(accel_data.raw, data->raw);
+		iNemoEngine_API_gbias_Run(accel_data.raw, data->raw, NS_TO_MS(data->timestamp));
 	}
 
 	iNemoEngine_API_Get_gbias(data->offset);
