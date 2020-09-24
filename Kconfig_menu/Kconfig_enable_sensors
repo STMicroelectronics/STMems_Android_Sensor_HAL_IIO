@@ -87,7 +87,7 @@ config ST_HAL_GYRO_UNCALIB_AP_ENABLED
 	bool "Software by AP Library"
 endchoice
 
-if (ST_HAL_ANDROID_VERSION >= 4)
+if (ST_HAL_ANDROID_VERSION != 1 && ST_HAL_ANDROID_VERSION != 2 && ST_HAL_ANDROID_VERSION != 3)
 choice
 	prompt "Accelerometer Uncalibrated sensor"
 	default ST_HAL_ACCEL_UNCALIB_DISABLED
