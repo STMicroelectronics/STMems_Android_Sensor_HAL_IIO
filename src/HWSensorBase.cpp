@@ -385,7 +385,7 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 	additional_info_event_t *array_sensorAdditionalInfoDataFrames = nullptr;
-	size_t frames;
+	int frames;
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
@@ -585,7 +585,7 @@ void HWSensorBase::ProcessData(SensorBaseData *data)
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 	additional_info_event_t *array_sensorAdditionalInfoPLFrames = nullptr;
-	size_t frames;
+	int frames;
 
 	if (data->flush_event_handle == sensor_t_data.handle) {
 		if (supportsSensorAdditionalInfo) {
@@ -701,18 +701,18 @@ void HWSensorBase::WriteSensorAdditionalInfoReport(additional_info_event_t array
 
 }
 
-size_t HWSensorBase::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
+int HWSensorBase::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
 {
-	size_t frames = 1;
+	int frames = 1;
 
 	*array_sensorAdditionalInfoPLFrames = (additional_info_event_t *)malloc(frames * sizeof(additional_info_event_t));
 	if (!*array_sensorAdditionalInfoPLFrames) {
 		ALOGE("%s: Failed to allocate memory.", GetName());
-		return (size_t)-ENOMEM;
+		return -ENOMEM;
 	}
 
 	*array_sensorAdditionalInfoPLFrames[0] = defaultSensorPlacement_additional_info_event;
-	return sizeof(**array_sensorAdditionalInfoPLFrames)/sizeof(*array_sensorAdditionalInfoPLFrames[0]);
+	return frames;
 }
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */

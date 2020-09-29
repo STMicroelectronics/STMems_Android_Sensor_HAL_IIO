@@ -158,7 +158,7 @@ void Magnetometer::ProcessData(SensorBaseData *data)
 
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-size_t Magnetometer::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
+int Magnetometer::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
 {
 
 	additional_info_event_t Mag_SAI_Placement_event, *p;
@@ -173,18 +173,18 @@ size_t Magnetometer::getSensorAdditionalInfoPayLoadFramesArray(additional_info_e
 		Mag_SAI_Placement_event = *p_custom_Mag_SAI_Placement_event;
 	}
 
-	size_t frames = 1;
+	int frames = 1;
 
 	p = (additional_info_event_t *)calloc(frames , sizeof(additional_info_event_t));
 	if (!p) {
 		ALOGE("%s: Failed to allocate memory.", GetName());
-		return (size_t)-ENOMEM;
+		return -ENOMEM;
 	}
-	for (size_t i = 0; i < frames; i++)
+	for (int i = 0; i < frames; i++)
 		memcpy(&p[i], &Mag_SAI_Placement_event, sizeof(additional_info_event_t));
 
 	*array_sensorAdditionalInfoPLFrames = p;
-	return sizeof(**array_sensorAdditionalInfoPLFrames)/sizeof(*array_sensorAdditionalInfoPLFrames[0]);
+	return frames;
 }
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */

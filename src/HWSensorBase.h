@@ -100,9 +100,8 @@ protected:
 		.serial = 0,
 		.data_float = {	1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
 	};
-	virtual size_t getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
+	virtual int getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
 	void WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames);
-	void getSensorAdditionalInfoDataFramesArray(additional_info_event_t **array_sensorAdditionalInfoDataFrames, size_t *p_array_size);
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
