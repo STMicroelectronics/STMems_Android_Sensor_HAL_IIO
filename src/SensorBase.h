@@ -50,6 +50,12 @@
 #include "RingBuffer.h"
 #endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+#include "SensorAdditionalInfo.h"
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
 #ifdef CONFIG_ST_HAL_HAS_SELFTEST_FUNCTIONS
 #include <SelfTest.h>
 #endif /* CONFIG_ST_HAL_HAS_SELFTEST_FUNCTIONS */
@@ -132,6 +138,12 @@ private:
 	int direct_channel_handle;
 	int direct_channel_rate_level;
 #endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
+
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+	void WriteSensorAdditionalInfoFrames(additional_info_event_t array_sensorAdditionalInfoDataFrames[], size_t frames_numb);
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 protected:
 	char android_name[SENSOR_BASE_ANDROID_NAME_MAX];
@@ -228,7 +240,17 @@ public:
 
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+
+	bool supportsSensorAdditionalInfo;
+	const additional_info_event_t defaultSensorPlacement_additional_info_event = {
+		.type = AINFO_SENSOR_PLACEMENT,
+		.serial = 0,
+		.data_float = {	1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
+	};
+
 	void WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p_additional_info_event);
+	virtual int getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
+	void WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionalInfoDataFrames[], size_t frames);
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 

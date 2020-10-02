@@ -581,11 +581,50 @@ void SensorBase::WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p
 #if (CONFIG_ST_HAL_DEBUG_LEVEL >= ST_HAL_DEBUG_VERBOSE)
 	ALOGD("\"%s\": write additional sensor info event to pipe (sensor type: %d, additional info type: %d).", GetName(), GetType(), sens_info_singleframe.additional_info.type);
 #endif /* CONFIG_ST_HAL_DEBUG_LEVEL */
-	//TODO: check correctness of additional_info
 	err = write(write_pipe_fd, &sens_info_singleframe, sizeof(sensors_event_t));
 	if (err <= 0)
 		ALOGE("%s: Failed to write additional sensor info event data to pipe.", android_name);
 }
+
+void SensorBase::WriteSensorAdditionalInfoFrames(additional_info_event_t array_sensorAdditionalInfoDataFrames[], size_t frames_numb)
+{
+
+	for (size_t i = 0; i < frames_numb; ++i) {
+		ALOGV("%s : Before: item #: %zu of %zu",__func__, (i+1), frames_numb);
+		SensorBase::WriteSensorAdditionalInfoFrameToPipe(&array_sensorAdditionalInfoDataFrames[i]);
+		ALOGV("%s : Frame #:(%zu) of %zu sent.", __func__, (i=1),frames_numb);
+	}
+
+}
+
+
+void SensorBase::WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionalInfoDataFrames[], size_t frames_numb)
+{
+	const additional_info_event_t *begin_additional_info = SensorAdditionalInfoEvent::getBeginFrameEvent();
+
+	const additional_info_event_t *end_additional_info = SensorAdditionalInfoEvent::getEndFrameEvent();
+
+	SensorBase::WriteSensorAdditionalInfoFrameToPipe(const_cast<additional_info_event_t*>(begin_additional_info));
+	WriteSensorAdditionalInfoFrames(array_sensorAdditionalInfoDataFrames, frames_numb);
+	SensorBase::WriteSensorAdditionalInfoFrameToPipe(const_cast<additional_info_event_t*>(end_additional_info));
+	ALOGD("%s : Sensor Additional Info Report sent.", __func__);
+
+}
+
+int SensorBase::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
+{
+	int frames = 1;
+
+	*array_sensorAdditionalInfoPLFrames = (additional_info_event_t *)malloc((size_t)frames * sizeof(additional_info_event_t));
+	if (!*array_sensorAdditionalInfoPLFrames) {
+		ALOGE("%s: Failed to allocate memory.", GetName());
+		return -ENOMEM;
+	}
+
+	*array_sensorAdditionalInfoPLFrames[0] = defaultSensorPlacement_additional_info_event;
+	return frames;
+}
+
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 

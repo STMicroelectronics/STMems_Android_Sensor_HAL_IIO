@@ -674,49 +674,6 @@ void HWSensorBase::ProcessFlushData(int __attribute__((unused))handle,
 }
 
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
-#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-void HWSensorBase::WriteSensorAdditionalInfoFrames(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames_numb)
-{
-
-	for (size_t i = 0; i < frames_numb; ++i) {
-		ALOGV("%s : Before: item #: %zu of %zu",__func__, (i+1), frames_numb);
-		SensorBase::WriteSensorAdditionalInfoFrameToPipe(&array_sensorAdditionaInfoDataFrames[i]);
-		ALOGV("%s : Frame #:(%zu) of %zu sent.", __func__, (i=1),frames_numb);
-	}
-
-}
-
-
-void HWSensorBase::WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames_numb)
-{
-	const additional_info_event_t *begin_additional_info = SensorAdditionalInfoEvent::getBeginFrameEvent();
-
-	const additional_info_event_t *end_additional_info = SensorAdditionalInfoEvent::getEndFrameEvent();
-
-	SensorBase::WriteSensorAdditionalInfoFrameToPipe(const_cast<additional_info_event_t*>(begin_additional_info));
-	WriteSensorAdditionalInfoFrames(array_sensorAdditionaInfoDataFrames, frames_numb);
-	SensorBase::WriteSensorAdditionalInfoFrameToPipe(const_cast<additional_info_event_t*>(end_additional_info));
-	ALOGD("%s : Sensor Additional Info Report sent.", __func__);
-
-}
-
-int HWSensorBase::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
-{
-	int frames = 1;
-
-	*array_sensorAdditionalInfoPLFrames = (additional_info_event_t *)malloc(frames * sizeof(additional_info_event_t));
-	if (!*array_sensorAdditionalInfoPLFrames) {
-		ALOGE("%s: Failed to allocate memory.", GetName());
-		return -ENOMEM;
-	}
-
-	*array_sensorAdditionalInfoPLFrames[0] = defaultSensorPlacement_additional_info_event;
-	return frames;
-}
-#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
-#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
-
 void HWSensorBase::ThreadDataTask()
 {
 	uint8_t *data;

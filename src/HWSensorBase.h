@@ -23,13 +23,6 @@
 
 #include "SensorBase.h"
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
-#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-#include "SensorAdditionalInfo.h"
-#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
-#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
-
-
 extern "C" {
 	#include "utils.h"
 };
@@ -66,11 +59,6 @@ class HWSensorBaseWithPollrate;
  */
 class HWSensorBase : public SensorBase {
 private:
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
-#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-	void WriteSensorAdditionalInfoFrames(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames_numb);
-#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
-#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 protected:
 	ssize_t scan_size;
 	struct pollfd pollfd_iio[2];
@@ -91,19 +79,6 @@ protected:
 	bool has_event_channels;
 
 	int WriteBufferLenght(unsigned int buf_len);
-
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
-#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-	bool supportsSensorAdditionalInfo;
-	const additional_info_event_t defaultSensorPlacement_additional_info_event = {
-		.type = AINFO_SENSOR_PLACEMENT,
-		.serial = 0,
-		.data_float = {	1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-	};
-	virtual int getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
-	void WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionaInfoDataFrames[], size_t frames);
-#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
-#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 public:
 	HWSensorBase(HWSensorBaseCommonData *data,
