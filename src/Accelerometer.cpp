@@ -170,7 +170,7 @@ int Accelerometer::getSensorAdditionalInfoPayLoadFramesArray(additional_info_eve
 	// place for ODM/OEM to fill custom_XL_SAI_Placement_event
 
 	if (!p_custom_XL_SAI_Placement_event) {
-		XL_SAI_Placement_event = defaultSensorPlacement_additional_info_event;
+		XL_SAI_Placement_event = *SensorAdditionalInfoEvent::getDefaultSensorPlacementFrameEvent();
 		ALOGD("%s: using Sensor Additional Info Placement default", GetName());
 	} else {
 		XL_SAI_Placement_event = *p_custom_XL_SAI_Placement_event;

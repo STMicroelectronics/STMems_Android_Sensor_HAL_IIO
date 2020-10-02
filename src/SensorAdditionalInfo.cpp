@@ -51,6 +51,16 @@ const additional_info_event_t* SensorAdditionalInfoEvent::getEndFrameEvent()
 	return &sensor_additional_info_endFrame;
 }
 
+const additional_info_event_t* SensorAdditionalInfoEvent::getDefaultSensorPlacementFrameEvent()
+{
+	static const additional_info_event_t sensor_additional_info_defaultSensorPlacementFrame = {
+		.type = AINFO_SENSOR_PLACEMENT,
+		.serial = 0,
+		.data_float = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
+	};
+	return &sensor_additional_info_defaultSensorPlacementFrame;
+}
+
 void SensorAdditionalInfoEvent::incrementEventSerial()
 {
 	sensor_additional_info_event.serial++;

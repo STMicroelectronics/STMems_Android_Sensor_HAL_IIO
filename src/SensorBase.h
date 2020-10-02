@@ -242,11 +242,6 @@ public:
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 
 	bool supportsSensorAdditionalInfo;
-	const additional_info_event_t defaultSensorPlacement_additional_info_event = {
-		.type = AINFO_SENSOR_PLACEMENT,
-		.serial = 0,
-		.data_float = {	1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-	};
 
 	void WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p_additional_info_event);
 	virtual int getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);

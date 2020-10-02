@@ -217,7 +217,7 @@ int Gyroscope::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t
 	// place for ODM/OEM to fill custom_Gyro_SAI_Placement_event
 
 	if (!p_custom_Gyro_SAI_Placement_event) {
-		Gyro_SAI_Placement_event = defaultSensorPlacement_additional_info_event;
+		Gyro_SAI_Placement_event = *SensorAdditionalInfoEvent::getDefaultSensorPlacementFrameEvent();
 		ALOGD("%s: using Sensor Additional Info Placement default", GetName());
 	} else {
 		Gyro_SAI_Placement_event = *p_custom_Gyro_SAI_Placement_event;

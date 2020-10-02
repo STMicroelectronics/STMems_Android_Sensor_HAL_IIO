@@ -167,7 +167,7 @@ int Magnetometer::getSensorAdditionalInfoPayLoadFramesArray(additional_info_even
 	// place for ODM/OEM to fill custom_Mag_SAI_Placement_event
 
 	if (!p_custom_Mag_SAI_Placement_event) {
-		Mag_SAI_Placement_event = defaultSensorPlacement_additional_info_event;
+		Mag_SAI_Placement_event = *SensorAdditionalInfoEvent::getDefaultSensorPlacementFrameEvent();
 		ALOGD("%s: using Sensor Additional Info Placement default", GetName());
 	} else {
 		Mag_SAI_Placement_event = *p_custom_Mag_SAI_Placement_event;

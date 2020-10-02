@@ -621,7 +621,7 @@ int SensorBase::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_
 		return -ENOMEM;
 	}
 
-	*array_sensorAdditionalInfoPLFrames[0] = defaultSensorPlacement_additional_info_event;
+	*array_sensorAdditionalInfoPLFrames[0] = *SensorAdditionalInfoEvent::getDefaultSensorPlacementFrameEvent();
 	return frames;
 }
 

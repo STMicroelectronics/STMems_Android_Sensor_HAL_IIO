@@ -42,6 +42,7 @@ public:
 
 	static const additional_info_event_t* getBeginFrameEvent();
 	static const additional_info_event_t* getEndFrameEvent();
+	static const additional_info_event_t* getDefaultSensorPlacementFrameEvent();
 	void incrementEventSerial();
 };
 
