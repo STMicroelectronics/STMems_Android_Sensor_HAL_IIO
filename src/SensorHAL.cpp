@@ -695,13 +695,13 @@ static const struct ST_virtual_sensors_list {
 #ifdef ST_HAL_NEEDS_GEOMAG_FUSION
 	{ .android_sensor_type = SENSOR_TYPE_ST_ACCEL_MAGN_FUSION6X },
 #endif /* ST_HAL_NEEDS_GEOMAG_FUSION */
-#ifdef CONFIG_ST_HAL_MAGN_UNCALIB_AP_ENABLED
+#if defined(CONFIG_ST_HAL_MAGN_UNCALIB_AP_ENABLED) || defined(CONFIG_ST_HAL_MAGN_UNCALIB_AP_EMULATED)
 	{ .android_sensor_type = SENSOR_TYPE_MAGNETIC_FIELD_UNCALIBRATED },
 #endif /* CONFIG_ST_HAL_MAGN_UNCALIB_AP_ENABLED */
 #ifdef CONFIG_ST_HAL_VIRTUAL_GYRO_ENABLED
 	{ .android_sensor_type = SENSOR_TYPE_GYROSCOPE },
 #endif /* CONFIG_ST_HAL_VIRTUAL_GYRO_ENABLED */
-#ifdef CONFIG_ST_HAL_GYRO_UNCALIB_AP_ENABLED
+#if defined(CONFIG_ST_HAL_GYRO_UNCALIB_AP_ENABLED) || defined(CONFIG_ST_HAL_GYRO_UNCALIB_AP_EMULATED)
 	{ .android_sensor_type = SENSOR_TYPE_GYROSCOPE_UNCALIBRATED },
 #endif /* CONFIG_ST_HAL_GYRO_UNCALIB_AP_ENABLED */
 #ifdef CONFIG_ST_HAL_GEOMAG_ROT_VECTOR_AP_ENABLED
@@ -728,7 +728,7 @@ static const struct ST_virtual_sensors_list {
 #ifdef CONFIG_ST_HAL_LINEAR_AP_ENABLED
 	{ .android_sensor_type = SENSOR_TYPE_LINEAR_ACCELERATION },
 #endif /* CONFIG_ST_HAL_LINEAR_AP_ENABLED */
-#ifdef CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED
+#if defined(CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED) || defined(CONFIG_ST_HAL_ACCEL_UNCALIB_AP_EMULATED)
 	{ .android_sensor_type = SENSOR_TYPE_ACCELEROMETER_UNCALIBRATED },
 #endif /* CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED */
 };
@@ -769,12 +769,12 @@ static SensorBase* st_hal_create_virtual_class_sensor(int sensor_type, int handl
 		sb = new SWVirtualGyroscope("iNemoEngine Virtual Gyroscope Sensor", handle);
 		break;
 #endif /* CONFIG_ST_HAL_VIRTUAL_GYRO_ENABLED */
-#ifdef CONFIG_ST_HAL_MAGN_UNCALIB_AP_ENABLED
+#if defined(CONFIG_ST_HAL_MAGN_UNCALIB_AP_ENABLED) || defined(CONFIG_ST_HAL_MAGN_UNCALIB_AP_EMULATED)
 	case SENSOR_TYPE_MAGNETIC_FIELD_UNCALIBRATED:
 		sb = new SWMagnetometerUncalibrated("Magnetometer Uncalibrated Sensor", handle);
 		break;
 #endif /* CONFIG_ST_HAL_MAGN_UNCALIB_AP_ENABLED */
-#ifdef CONFIG_ST_HAL_GYRO_UNCALIB_AP_ENABLED
+#if defined(CONFIG_ST_HAL_GYRO_UNCALIB_AP_ENABLED) || defined(CONFIG_ST_HAL_GYRO_UNCALIB_AP_EMULATED)
 	case SENSOR_TYPE_GYROSCOPE_UNCALIBRATED:
 		sb = new SWGyroscopeUncalibrated("Gyroscope Uncalibrated Sensor", handle);
 		break;
@@ -824,7 +824,7 @@ static SensorBase* st_hal_create_virtual_class_sensor(int sensor_type, int handl
 		sb = new SWLinearAccel("iNemoEngine Linear Acceleration Sensor", handle);
 		break;
 #endif /* CONFIG_ST_HAL_LINEAR_AP_ENABLED */
-#ifdef CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED
+#if defined(CONFIG_ST_HAL_ACCEL_UNCALIB_AP_ENABLED) || defined(CONFIG_ST_HAL_ACCEL_UNCALIB_AP_EMULATED)
 	case SENSOR_TYPE_ACCELEROMETER_UNCALIBRATED:
 		sb = new SWAccelerometerUncalibrated("Accelerometer Uncalibrated Sensor", handle);
 		break;

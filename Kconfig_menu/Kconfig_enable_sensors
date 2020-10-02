@@ -9,11 +9,67 @@ config ST_HAL_ACCEL_ENABLED
 	help
 	  Enable support for Accelerometer sensor.
 
+if (ST_HAL_ANDROID_VERSION >= 4)
+choice
+	prompt "Accelerometer Uncalibrated sensor"
+	default ST_HAL_ACCEL_UNCALIB_AP_EMULATED
+	depends on ST_HAL_ACCEL_ENABLED
+	help
+	  Enable support for Accelerometer Uncalibrated sensor.
+
+config ST_HAL_ACCEL_UNCALIB_DISABLED
+	bool "Disabled"
+	help
+	  Disable Accelerometer Uncalibrated sensor (by selecting this no more
+	  Accelerometer Uncalibrated sensor will be available on HAL).
+
+config ST_HAL_ACCEL_UNCALIB_AP_ENABLED
+	depends on ST_HAL_ACCEL_CALIB_ENABLED
+	bool "Software by AP Library"
+	help
+	  Enabling Accelerometer Calibration Library.
+
+config ST_HAL_ACCEL_UNCALIB_AP_EMULATED
+	bool "Emulation"
+	help
+	  Enabling Emulation mode the offset will be set to zero (not calculated).
+	  This option can be used for CTS test validation in case of not availability
+	  of Accelerometer Calibration Library.
+endchoice
+endif
+
 config ST_HAL_MAGN_ENABLED
 	bool "Magnetometer sensor"
 	default y
 	help
 	  Enable support for Magnetometer sensor.
+
+choice
+	prompt "Magnetometer Uncalibrated sensor"
+	default ST_HAL_MAGN_UNCALIB_DISABLED
+	depends on ST_HAL_MAGN_ENABLED
+	help
+	  Enable support for Magnetometer Uncalibrated sensor.
+
+config ST_HAL_MAGN_UNCALIB_DISABLED
+	bool "Disabled"
+	help
+	  Disable Magnetometer Uncalibrated sensor (by selecting this no more
+	  Magnetometer Uncalibrated sensor will be available on HAL).
+
+config ST_HAL_MAGN_UNCALIB_AP_ENABLED
+	depends on ST_HAL_MAGN_CALIB_ENABLED
+	bool "Software by AP Library"
+	help
+	  Enabling Magnetometer Calibration Library.
+
+config ST_HAL_MAGN_UNCALIB_AP_EMULATED
+	bool "Emulation"
+	help
+	  Enabling Emulation mode the offset will be set to zero (not calculated).
+	  This option can be used for CTS test validation in case of not availability
+	  of Magnetometer Calibration Library.
+endchoice
 
 if ST_HAL_MAGN_ENABLED && ST_HAL_HAS_MAGN_CALIB
 config ST_HAL_MAGN_CALIB_ENABLED
@@ -41,6 +97,33 @@ config ST_HAL_GYRO_ENABLED
 	help
 	  Enable support for Gyroscope sensor.
 
+choice
+	prompt "Gyroscope Uncalibrated sensor"
+	default ST_HAL_GYRO_UNCALIB_AP_EMULATED
+	depends on ST_HAL_GYRO_ENABLED
+	help
+	  Enable support for Gyroscope Uncalibrated sensor.
+
+config ST_HAL_GYRO_UNCALIB_DISABLED
+	bool "Disabled"
+	help
+	  Disable Gyroscope Uncalibrated sensor (by selecting this no more
+	  Gyroscope Uncalibrated sensor will be available on HAL).
+
+config ST_HAL_GYRO_UNCALIB_AP_ENABLED
+	depends on ST_HAL_GYRO_GBIAS_ESTIMATION_ENABLED
+	bool "Software by AP Library"
+	help
+	  Enabling Gyroscope Calibration Library.
+
+config ST_HAL_GYRO_UNCALIB_AP_EMULATED
+	bool "Emulation"
+	help
+	  Enabling Emulation mode the offset will be set to zero (not calculated).
+	  This option can be used for CTS test validation in case of not availability
+	  of Gyroscope Calibration Library.
+endchoice
+
 if ST_HAL_GYRO_ENABLED && ST_HAL_HAS_GYRO_GBIAS_ESTIMATION
 config ST_HAL_GYRO_GBIAS_ESTIMATION_ENABLED
 	bool "Enable Gyroscope gbias estimation Library"
@@ -59,47 +142,6 @@ config ST_HAL_VIRTUAL_GYRO_ENABLED
 	default n
 	help
 	  Enable Virtual Gyroscope sensors using Accel+Magn iNemoEngine library.
-endif
-
-choice
-	prompt "Magnetometer Uncalibrated sensor"
-	default ST_HAL_MAGN_UNCALIB_DISABLED
-	help
-	  Enable support for Magnetometer Uncalibrated sensor.
-
-config ST_HAL_MAGN_UNCALIB_DISABLED
-	bool "Disabled"
-config ST_HAL_MAGN_UNCALIB_AP_ENABLED
-	depends on ST_HAL_MAGN_CALIB_ENABLED
-	bool "Software by AP Library"
-endchoice
-
-choice
-	prompt "Gyroscope Uncalibrated sensor"
-	default ST_HAL_GYRO_UNCALIB_DISABLED
-	help
-	  Enable support for Gyroscope Uncalibrated sensor.
-
-config ST_HAL_GYRO_UNCALIB_DISABLED
-	bool "Disabled"
-config ST_HAL_GYRO_UNCALIB_AP_ENABLED
-	depends on ST_HAL_GYRO_GBIAS_ESTIMATION_ENABLED
-	bool "Software by AP Library"
-endchoice
-
-if (ST_HAL_ANDROID_VERSION != 1 && ST_HAL_ANDROID_VERSION != 2 && ST_HAL_ANDROID_VERSION != 3)
-choice
-	prompt "Accelerometer Uncalibrated sensor"
-	default ST_HAL_ACCEL_UNCALIB_DISABLED
-	help
-	  Enable support for Accelerometer Uncalibrated sensor.
-
-config ST_HAL_ACCEL_UNCALIB_DISABLED
-	bool "Disabled"
-config ST_HAL_ACCEL_UNCALIB_AP_ENABLED
-	depends on ST_HAL_ACCEL_CALIB_ENABLED
-	bool "Software by AP Library"
-endchoice
 endif
 
 config ST_HAL_SIGN_MOTION_ENABLED
