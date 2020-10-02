@@ -49,6 +49,12 @@ config ST_HAL_ANDROID_VERSION
 	default 6
 endif
 
+if (ENV_ANDROID_VERSION = 7)
+config ST_HAL_ANDROID_VERSION
+	int
+	default 7
+endif
+
 config ST_HAL_HAS_6AX_FUSION_CHECK
 	bool
 	option env="ST_HAL_HAS_9X_6X_LIB"

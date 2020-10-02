@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#/
+#
 
 .PHONY: sensors-defconfig sensors-menuconfig sensors-cleanconf
 
@@ -41,6 +41,7 @@ VERSION_N := $(shell test $(MAJOR_VERSION) -eq 7 && echo true)
 VERSION_O := $(shell test $(MAJOR_VERSION) -eq 8 && echo true)
 VERSION_P := $(shell test $(MAJOR_VERSION) -eq 9 && echo true)
 VERSION_Q := $(shell test $(MAJOR_VERSION) -eq 10 && echo true)
+VERSION_R := $(shell test $(MAJOR_VERSION) -eq 11 && echo true)
 
 ifeq ($(VERSION_KK),true)
 ST_HAL_ANDROID_VERSION=0
@@ -76,6 +77,11 @@ ifeq ($(VERSION_Q),true)
 ST_HAL_ANDROID_VERSION=6
 DEFCONFIG := android_Q_defconfig
 endif # VERSION_Q
+
+ifeq ($(VERSION_R),true)
+ST_HAL_ANDROID_VERSION=7
+DEFCONFIG := android_R_defconfig
+endif # VERSION_R
 
 ifeq ($(DEFCONFIG),)
 $(error ${\n}${\n}${\space}${\n}AOSP Version Unknown${\n})
