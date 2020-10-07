@@ -131,7 +131,7 @@ export KCONFIG_CONFIG_HAL=$(CURRENT_DIRECTORY)/hal_config
 export ST_HAL_PATH=$(CURRENT_DIRECTORY)
 
 configfile:
-	$(if $(wildcard $(KCONFIG_CONFIG_HAL)), , $(warning ${\n}${\n}${\space}${\n}defconfig file not found. Used default one: `$(DEFCONFIG)`.${\n}${\space}${\n}) @$(MAKE) sensors-defconfig > NULL)
+	$(if $(wildcard $(KCONFIG_CONFIG_HAL)), , $(warning ${\n}${\n}${\space}${\n}defconfig file not found. Used default one: `$(DEFCONFIG)`.${\n}${\space}${\n}) @$(MAKE) sensors-defconfig > /dev/null)
 
 sensors-defconfig:
 	cp $(CURRENT_DIRECTORY)/src/$(DEFCONFIG) $(KCONFIG_CONFIG_HAL)

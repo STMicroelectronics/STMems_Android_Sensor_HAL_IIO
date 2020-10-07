@@ -7,78 +7,35 @@ mainmenu "SensorHAL IIO Configuration"
 
 config ST_HAL_PATH
 	string
-	option env="ST_HAL_PATH"
+	default "$(ST_HAL_PATH)"
 
-config ENV_ANDROID_VERSION
-	int
-	option env="ST_HAL_ANDROID_VERSION"
-
-if (ENV_ANDROID_VERSION = 0)
 config ST_HAL_ANDROID_VERSION
 	int
-	default 0
-endif
-if (ENV_ANDROID_VERSION = 1)
-config ST_HAL_ANDROID_VERSION
-	int
-	default 1
-endif
-if (ENV_ANDROID_VERSION = 2)
-config ST_HAL_ANDROID_VERSION
-	int
-	default 2
-endif
-if (ENV_ANDROID_VERSION = 3)
-config ST_HAL_ANDROID_VERSION
-	int
-	default 3
-endif
-if (ENV_ANDROID_VERSION = 4)
-config ST_HAL_ANDROID_VERSION
-	int
-	default 4
-endif
-if (ENV_ANDROID_VERSION = 5)
-config ST_HAL_ANDROID_VERSION
-	int
-	default 5
-endif
-if (ENV_ANDROID_VERSION = 6)
-config ST_HAL_ANDROID_VERSION
-	int
-	default 6
-endif
-
-if (ENV_ANDROID_VERSION = 7)
-config ST_HAL_ANDROID_VERSION
-	int
-	default 7
-endif
+	default "$(ST_HAL_ANDROID_VERSION)"
 
 config ST_HAL_HAS_6AX_FUSION_CHECK
 	bool
-	option env="ST_HAL_HAS_9X_6X_LIB"
+	default "$(ST_HAL_HAS_9X_6X_LIB)"
 
 config ST_HAL_HAS_9AX_FUSION_CHECK
 	bool
-	option env="ST_HAL_HAS_9X_6X_LIB"
+	default "$(ST_HAL_HAS_9X_6X_LIB)"
 
 config ST_HAL_HAS_GEOMAG_FUSION_CHECK
 	bool
-	option env="ST_HAL_HAS_GEOMAG_LIB"
+	default "$(ST_HAL_HAS_GEOMAG_LIB)"
 
 config ST_HAL_HAS_MAGN_CALIB_CHECK
 	bool
-	option env="ST_HAL_HAS_MAGN_CALIB_LIB"
+	default "$(ST_HAL_HAS_MAGN_CALIB_LIB)"
 
 config ST_HAL_HAS_ACCEL_CALIB_CHECK
 	bool
-	option env="ST_HAL_HAS_ACCEL_CALIB_LIB"
+	default "$(ST_HAL_HAS_ACCEL_CALIB_LIB)"
 
 config ST_HAL_HAS_GYRO_GBIAS_ESTIMATION_CHECK
 	bool
-	option env="ST_HAL_HAS_GBIAS_LIB"
-
+	default "$(ST_HAL_HAS_GBIAS_LIB)"
 
 config ST_HAL_HAS_6AX_FUSION
 	bool
@@ -104,10 +61,9 @@ config ST_HAL_HAS_GYRO_GBIAS_ESTIMATION
 	bool
 	default ST_HAL_HAS_GYRO_GBIAS_ESTIMATION_CHECK
 
-
-source "$ST_HAL_PATH/Kconfig_menu/Kconfig_enable_sensors"
-source "$ST_HAL_PATH/Kconfig_menu/Kconfig_common"
-source "$ST_HAL_PATH/Kconfig_menu/Kconfig_fusion_config"
-source "$ST_HAL_PATH/Kconfig_menu/Kconfig_drivers"
-source "$ST_HAL_PATH/Kconfig_menu/Kconfig_calibration"
+source "$(ST_HAL_PATH)/Kconfig_menu/Kconfig_enable_sensors"
+source "$(ST_HAL_PATH)/Kconfig_menu/Kconfig_common"
+source "$(ST_HAL_PATH)/Kconfig_menu/Kconfig_fusion_config"
+source "$(ST_HAL_PATH)/Kconfig_menu/Kconfig_drivers"
+source "$(ST_HAL_PATH)/Kconfig_menu/Kconfig_calibration"
 

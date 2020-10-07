@@ -71,6 +71,7 @@ endif # VERSION_R
 ANDROID_VERSION_CONFIG_HAL=$(CURRENT_DIRECTORY)/android_data_config
 KCONFIG_CONFIG_HAL=$(CURRENT_DIRECTORY)/hal_config
 ST_HAL_PATH=$(CURRENT_DIRECTORY)
+KCONFIG_CONFIG=hal_config
 
 $(shell rm $(ANDROID_VERSION_CONFIG_HAL))
 
@@ -124,15 +125,15 @@ define \space
 endef
 
 configfile:
-	$(if $(wildcard $(KCONFIG_CONFIG_HAL)), , $(warning ${\n}${\n}${\space}${\n}defconfig file not found. Used default one: `$(DEFCONFIG)`.${\n}${\space}${\n}) @$(MAKE) sensors-defconfig > NULL)
+	$(if $(wildcard $(KCONFIG_CONFIG_HAL)), , $(warning ${\n}${\n}${\space}${\n}defconfig file not found. Used default one: `$(DEFCONFIG)`.${\n}${\space}${\n}) @$(MAKE) sensors-defconfig > /dev/null)
 
 sensors-defconfig:
 	$(shell cp $(CURRENT_DIRECTORY)/src/$(DEFCONFIG) $(KCONFIG_CONFIG_HAL))
-	$(CURRENT_DIRECTORY)/tools/mkconfig $(CURRENT_DIRECTORY)/ > $(CURRENT_DIRECTORY)/configuration.h
+	$(KCONFIG_CONFIG) $(CURRENT_DIRECTORY)/tools/mkconfig $(CURRENT_DIRECTORY)/ > $(CURRENT_DIRECTORY)/configuration.h
 
 sensors-menuconfig: configfile
-	$(CURRENT_DIRECTORY)/tools/kconfig-mconf $(CURRENT_DIRECTORY)/Kconfig
-	$(CURRENT_DIRECTORY)/tools/mkconfig $(CURRENT_DIRECTORY)/ > $(CURRENT_DIRECTORY)/configuration.h
+	$(KCONFIG_CONFIG) $(CURRENT_DIRECTORY)/tools/kconfig-mconf $(CURRENT_DIRECTORY)/Kconfig
+	$(KCONFIG_CONFIG) $(CURRENT_DIRECTORY)/tools/mkconfig $(CURRENT_DIRECTORY)/ > $(CURRENT_DIRECTORY)/configuration.h
 
 sensors-cleanconf:
 	$(if $(wildcard $(KCONFIG_CONFIG_HAL)), rm $(KCONFIG_CONFIG_HAL), )
@@ -146,7 +147,7 @@ endif
 ifeq ($(filter sensors-defconfig sensors-menuconfig sensors-cleanconf,$(MAKECMDGOALS)),)
 ifeq ("$(wildcard $(KCONFIG_CONFIG_HAL))","")
 $(warning ${\n}${\n}${\space}${\n})
-$(warning ${\n}Defconfig file not found. Using default one: `$(DEFCONFIG)` {\n})
+$(warning ${\n}Defconfig file not found. Using default one: `$(DEFCONFIG)`)
 $(warning ${\n}If you want to change HAL configuration please follow the steps below:${\n})
 $(warning ${\n}source build/envsetup.sh${\n})
 $(warning ${\n}cd <STMicroelectronics HAL PATH>${\n})
