@@ -101,7 +101,6 @@ public:
 
 	int ApplyFactoryCalibrationData(char *filename, time_t *last_modification);
 
-	virtual void ProcessData(SensorBaseData *data);
 	virtual void ProcessEvent(struct device_iio_events *event_data);
 	virtual int FlushData(int handle, bool lock_en_mute);
 	virtual void ProcessFlushData(int handle, int64_t timestamp);

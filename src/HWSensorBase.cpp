@@ -578,29 +578,6 @@ void HWSensorBase::ProcessEvent(struct device_iio_events *event_data)
 				 event_data->event_timestamp);
 }
 
-void HWSensorBase::ProcessData(SensorBaseData *data)
-{
-	SensorBase::ProcessData(data);
-
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
-#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-	additional_info_event_t *array_sensorAdditionalInfoPLFrames = nullptr;
-	int frames;
-
-	if (data->flush_event_handle == sensor_t_data.handle) {
-		if (supportsSensorAdditionalInfo) {
-			frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoPLFrames);
-			if (array_sensorAdditionalInfoPLFrames) {
-				ALOGD("%s %s: FLUSH: Sending Report.", GetName(), __func__);
-				if (frames > 0)
-					WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoPLFrames, frames);
-				free(array_sensorAdditionalInfoPLFrames);
-			}
-		}
-	}
-#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
-#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
-}
 
 int HWSensorBase::FlushData(int handle, bool lock_en_mutex)
 {
