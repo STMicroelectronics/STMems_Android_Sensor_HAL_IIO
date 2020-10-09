@@ -382,12 +382,6 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 	int err = 0;
 	bool old_status, old_status_no_handle;
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
-#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-	additional_info_event_t *array_sensorAdditionalInfoDataFrames = nullptr;
-	int frames;
-#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
-#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 	if (lock_en_mutex)
 		pthread_mutex_lock(&enable_mutex);
@@ -418,15 +412,8 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 			sensor_my_enable = android::elapsedRealtimeNano();
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-			if (supportsSensorAdditionalInfo) {
-				frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoDataFrames);
-				if (array_sensorAdditionalInfoDataFrames) {
-					ALOGD("%s : %s, ENABLE: Sending Report.", GetName(), __func__);
-					if (frames > 0)
-						WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoDataFrames, frames);
-					free(array_sensorAdditionalInfoDataFrames);
-				}
-			}
+			ALOGD("%s:SAINFO Report: ENABLE.", GetName());
+			WriteSAIReportToPipe();
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 		} else
@@ -642,18 +629,8 @@ void HWSensorBase::ProcessFlushData(int __attribute__((unused))handle,
 			WriteFlushEventToPipe();
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-			additional_info_event_t *array_sensorAdditionalInfoPLFrames = nullptr;
-			int frames;
-
-			if (supportsSensorAdditionalInfo) {
-				frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoPLFrames);
-				if (array_sensorAdditionalInfoPLFrames) {
-					ALOGD("%s %s: FLUSH: Sending Report.", GetName(), __func__);
-					if (frames > 0)
-						WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoPLFrames, frames);
-					free(array_sensorAdditionalInfoPLFrames);
-				}
-			}
+			ALOGD("%s:SAINFO Report: FLUSH.", GetName());
+			WriteSAIReportToPipe();
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 		} else {

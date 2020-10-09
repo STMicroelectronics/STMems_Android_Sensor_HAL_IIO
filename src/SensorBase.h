@@ -246,6 +246,7 @@ public:
 	void WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p_additional_info_event);
 	virtual int getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
 	void WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionalInfoDataFrames[], size_t frames);
+	void WriteSAIReportToPipe();
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 

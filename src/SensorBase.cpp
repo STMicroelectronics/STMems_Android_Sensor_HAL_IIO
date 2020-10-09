@@ -107,6 +107,12 @@ SensorBase::SensorBase(const char *name, int handle, int type)
 	direct_channel_rate_level = 0;
 #endif /* CONFIG_ST_HAL_DIRECT_REPORT_SENSOR */
 
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+	supportsSensorAdditionalInfo = false;
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_MARSHMALLOW_VERSION)
 	injection_mode = SENSOR_INJECTION_NONE;
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
@@ -622,7 +628,23 @@ int SensorBase::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_
 	}
 
 	*array_sensorAdditionalInfoPLFrames[0] = *SensorAdditionalInfoEvent::getDefaultSensorPlacementFrameEvent();
+	ALOGD("%s: Using default SAINFO-SensorPlacement (sensor type: %d).", GetName(), GetType());
 	return frames;
+}
+
+void SensorBase::WriteSAIReportToPipe()
+{
+	additional_info_event_t *array_sensorAdditionalInfoPLFrames = nullptr;
+	int frames;
+	if (supportsSensorAdditionalInfo) {
+		frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoPLFrames);
+		if (array_sensorAdditionalInfoPLFrames) {
+			ALOGD("%s:Sending SAINFO Report.", GetName());
+			if (frames > 0)
+				WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoPLFrames, frames);
+			free(array_sensorAdditionalInfoPLFrames);
+		}
+	}
 }
 
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
@@ -662,19 +684,9 @@ void SensorBase::ProcessData(SensorBaseData *data)
 
 #if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
-	additional_info_event_t *array_sensorAdditionalInfoPLFrames = nullptr;
-	int frames;
-
 	if (data->flush_event_handle == sensor_t_data.handle) {
-		if (supportsSensorAdditionalInfo) {
-			frames = getSensorAdditionalInfoPayLoadFramesArray(&array_sensorAdditionalInfoPLFrames);
-			if (array_sensorAdditionalInfoPLFrames) {
-				ALOGD("%s %s: FLUSH: Sending Report.", GetName(), __func__);
-				if (frames > 0)
-					WriteSensorAdditionalInfoReport(array_sensorAdditionalInfoPLFrames, frames);
-				free(array_sensorAdditionalInfoPLFrames);
-			}
-		}
+		ALOGD("%s:SAINFO Report: FLUSH.", GetName());
+		WriteSAIReportToPipe();
 	}
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
