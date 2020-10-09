@@ -414,6 +414,7 @@ int HWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 			ALOGD("%s:SAINFO Report: ENABLE.", GetName());
 			WriteSAIReportToPipe();
+			ALOGD("%s : SAI ENABLE Report.", GetName());
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 		} else
@@ -631,6 +632,7 @@ void HWSensorBase::ProcessFlushData(int __attribute__((unused))handle,
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 			ALOGD("%s:SAINFO Report: FLUSH.", GetName());
 			WriteSAIReportToPipe();
+			ALOGD("%s : SAI FLUSH Report.", GetName());
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 		} else {

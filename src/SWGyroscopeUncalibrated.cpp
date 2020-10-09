@@ -21,7 +21,12 @@ SWGyroscopeUncalibrated::SWGyroscopeUncalibrated(const char *name, int handle) :
 	sensor_t_data.stringType = SENSOR_STRING_TYPE_GYROSCOPE_UNCALIBRATED;
 	sensor_t_data.flags |= SENSOR_FLAG_CONTINUOUS_MODE;
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
-
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+	supportsSensorAdditionalInfo = true;
+	sensor_t_data.flags |= SENSOR_FLAG_ADDITIONAL_INFO;
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 	dependencies_type_list[SENSOR_DEPENDENCY_ID_0] = SENSOR_TYPE_GYROSCOPE;
 	id_sensor_trigger = SENSOR_DEPENDENCY_ID_0;
 }

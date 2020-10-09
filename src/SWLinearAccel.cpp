@@ -31,6 +31,13 @@ SWLinearAccel::SWLinearAccel(const char *name, int handle) :
 #endif /* CONFIG_ST_HAL_LINEAR_AP_ENABLED_6X */
 
 	id_sensor_trigger = SENSOR_DEPENDENCY_ID_0;
+
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+	supportsSensorAdditionalInfo = true;
+	sensor_t_data.flags |= SENSOR_FLAG_ADDITIONAL_INFO;
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 }
 
 SWLinearAccel::~SWLinearAccel()

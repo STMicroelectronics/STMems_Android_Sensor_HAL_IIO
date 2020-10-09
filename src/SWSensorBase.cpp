@@ -44,6 +44,12 @@ SWSensorBase::SWSensorBase(const char *name, int handle, int sensor_type,
 	android_pollfd.events = POLLIN;
 	android_pollfd.fd = trigger_read_pipe_fd;
 
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+	supportsSensorAdditionalInfo = false;
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
 	return;
 
 invalid_this_class:
@@ -81,10 +87,17 @@ int SWSensorBase::Enable(int handle, bool enable, bool lock_en_mutex)
 	}
 
 	if (sensor_t_data.handle == handle) {
-		if (enable)
+		if (enable) {
 			sensor_my_enable = android::elapsedRealtimeNano();
-		else
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+			WriteSAIReportToPipe();
+			ALOGD("%s : SAI ENABLE Report.", GetName());
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+		} else {
 			sensor_my_disable = android::elapsedRealtimeNano();
+		}
 	}
 
 	if (lock_en_mutex)
@@ -201,9 +214,15 @@ void SWSensorBase::ProcessFlushData(int handle, int64_t timestamp)
 				if (err < 0)
 					ALOGE("%s: Failed to write Flush event into stack.", GetName());
 			} else {
-				if (handle == sensor_t_data.handle)
+				if (handle == sensor_t_data.handle) {
 					WriteFlushEventToPipe();
-				else {
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+					WriteSAIReportToPipe();
+					ALOGD("%s : SAI FLUSH Report.", GetName());
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+				} else {
 					for (i = 0; i < push_data.num; i++)
 						push_data.sb[i]->ProcessFlushData(handle, timestamp);
 				}
@@ -436,8 +455,15 @@ void SWSensorBaseWithPollrate::WriteDataToPipe(int64_t hw_pollrate)
 			if (timestamp_flush <= sensor_event.timestamp) {
 				flush_stack.removeLastElement();
 
-				if (flush_handle == sensor_t_data.handle)
+				if (flush_handle == sensor_t_data.handle) {
 					WriteFlushEventToPipe();
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+					WriteSAIReportToPipe();
+					ALOGD("%s : SAI FLUSH Report.", GetName());
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+				}
 			} else
 				break;
 		}
