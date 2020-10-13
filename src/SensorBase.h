@@ -201,6 +201,19 @@ protected:
 	int CheckLatestNewPollrate(int64_t *timestamp, int64_t *pollrate);
 	void DeleteLatestNewPollrate();
 
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+
+	bool supportsSensorAdditionalInfo;
+
+	void WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p_additional_info_event);
+	virtual int getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
+	void WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionalInfoDataFrames[], size_t frames);
+	void WriteSAIReportToPipe();
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
+
+
 public:
 	SensorBase(const char *name, int handle, int type);
 	virtual ~SensorBase();
@@ -238,17 +251,7 @@ public:
 	void WriteFlushEventToPipe();
 	virtual void WriteDataToPipe(int64_t hw_pollrate);
 
-#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
-#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 
-	bool supportsSensorAdditionalInfo;
-
-	void WriteSensorAdditionalInfoFrameToPipe(additional_info_event_t *p_additional_info_event);
-	virtual int getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
-	void WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionalInfoDataFrames[], size_t frames);
-	void WriteSAIReportToPipe();
-#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
-#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 
 	virtual void ProcessData(SensorBaseData *data);
 	virtual void ReceiveDataFromDependency(int handle, SensorBaseData *data);
