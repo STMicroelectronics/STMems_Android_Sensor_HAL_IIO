@@ -210,6 +210,7 @@ protected:
 	virtual int getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames);
 	void WriteSensorAdditionalInfoReport(additional_info_event_t array_sensorAdditionalInfoDataFrames[], size_t frames);
 	void WriteSAIReportToPipe();
+	int UseCustomAINFOSensorPlacementPLFramesArray(additional_info_event_t** array_sensorAdditionalInfoPLFrames, additional_info_event_t* customAINFO_Placement_event = nullptr);
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 

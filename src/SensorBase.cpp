@@ -647,6 +647,31 @@ void SensorBase::WriteSAIReportToPipe()
 	}
 }
 
+int SensorBase::UseCustomAINFOSensorPlacementPLFramesArray(
+		additional_info_event_t** array_sensorAdditionalInfoPLFrames,
+		additional_info_event_t* customAINFO_Placement_event)
+{
+	const int frames = 1;
+	additional_info_event_t SensorAI_Placement_event;
+
+	if (!customAINFO_Placement_event) {
+		SensorAI_Placement_event = *SensorAdditionalInfoEvent::getDefaultSensorPlacementFrameEvent();
+		ALOGD("%s: using Sensor Additional Info Placement default", GetName());
+	} else {
+		SensorAI_Placement_event = *customAINFO_Placement_event;
+		ALOGD("%s: using Sensor Additional Info Placement custom", GetName());
+	}
+
+	*array_sensorAdditionalInfoPLFrames = (additional_info_event_t *)calloc((size_t)frames , sizeof(additional_info_event_t));
+	if (!array_sensorAdditionalInfoPLFrames) {
+		ALOGE("%s: Failed to allocate memory.", GetName());
+		return -ENOMEM;
+	}
+	for (int i = 0; i < frames; i++)
+		memcpy(&((*array_sensorAdditionalInfoPLFrames)[i]), &SensorAI_Placement_event, sizeof(additional_info_event_t));
+
+	return frames;
+}
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
 

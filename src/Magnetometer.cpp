@@ -160,31 +160,12 @@ void Magnetometer::ProcessData(SensorBaseData *data)
 #if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
 int Magnetometer::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
 {
+	additional_info_event_t* p_custom_SAI_Placement_event = nullptr;
 
-	additional_info_event_t Mag_SAI_Placement_event, *p;
-	additional_info_event_t *p_custom_Mag_SAI_Placement_event =  NULL;
+	// place for ODM/OEM to fill custom_SAI_Placement_event
+	// p_custom_SAI_Placement_event = &custom_SAI_Placement_event
 
-	// place for ODM/OEM to fill custom_Mag_SAI_Placement_event
-
-	if (!p_custom_Mag_SAI_Placement_event) {
-		Mag_SAI_Placement_event = *SensorAdditionalInfoEvent::getDefaultSensorPlacementFrameEvent();
-		ALOGD("%s: using Sensor Additional Info Placement default", GetName());
-	} else {
-		Mag_SAI_Placement_event = *p_custom_Mag_SAI_Placement_event;
-	}
-
-	int frames = 1;
-
-	p = (additional_info_event_t *)calloc(frames , sizeof(additional_info_event_t));
-	if (!p) {
-		ALOGE("%s: Failed to allocate memory.", GetName());
-		return -ENOMEM;
-	}
-	for (int i = 0; i < frames; i++)
-		memcpy(&p[i], &Mag_SAI_Placement_event, sizeof(additional_info_event_t));
-
-	*array_sensorAdditionalInfoPLFrames = p;
-	return frames;
+	return UseCustomAINFOSensorPlacementPLFramesArray(array_sensorAdditionalInfoPLFrames, p_custom_SAI_Placement_event);
 }
 #endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
 #endif /* CONFIG_ST_HAL_ANDROID_VERSION */
