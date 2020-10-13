@@ -65,3 +65,17 @@ void SWGameRotationVector::ProcessData(SensorBaseData *data)
 	SWSensorBaseWithPollrate::WriteDataToPipe(data->pollrate_ns);
 	SWSensorBaseWithPollrate::ProcessData(data);
 }
+
+#if (CONFIG_ST_HAL_ANDROID_VERSION >= ST_HAL_PIE_VERSION)
+#if (CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED)
+int SWGameRotationVector::getSensorAdditionalInfoPayLoadFramesArray(additional_info_event_t **array_sensorAdditionalInfoPLFrames)
+{
+	additional_info_event_t* p_custom_SAI_Placement_event = nullptr;
+
+	// place for ODM/OEM to fill custom_SAI_Placement_event
+	// p_custom_SAI_Placement_event = &custom_SAI_Placement_event
+
+	return UseCustomAINFOSensorPlacementPLFramesArray(array_sensorAdditionalInfoPLFrames, p_custom_SAI_Placement_event);
+}
+#endif /* CONFIG_ST_HAL_ADDITIONAL_INFO_ENABLED */
+#endif /* CONFIG_ST_HAL_ANDROID_VERSION */
