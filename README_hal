@@ -31,7 +31,6 @@ STMICROELECTRONICS LIBRARIES VERSION REQUIREMENTS:
    - iNemoEngine_gbias_Estimation:		v1.x
    - iNemoEnginePRO:				v1.x
    - iNemoEngine_GeoMag_Fusion:			v1.x
-   - STAccCalibration:				v1.x
 
 
 INSTALLING SOURCE CODE
