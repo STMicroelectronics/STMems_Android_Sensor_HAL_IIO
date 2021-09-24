@@ -160,7 +160,7 @@ class device_iio_utils {
 		static int get_selftest_available(const char *device_dir,
 					     char list[][20]);
 		static int execute_selftest(const char *device_dir, char *mode);
-
+		static int set_clock_type(const char *device_dir, char *type);
 };
 
 #endif /* __DEVICE_IIO_UTILS */

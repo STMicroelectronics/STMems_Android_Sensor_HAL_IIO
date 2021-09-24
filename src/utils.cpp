@@ -35,6 +35,7 @@ static const char *device_iio_buffer_length = "buffer/length";
 static const char *device_iio_device_name = "iio:device";
 static const char *device_iio_injection_mode_enable = "injection_mode";
 static const char *device_iio_injection_sensors_filename = "injection_sensors";
+static const char *device_iio_current_timestamp_clock = "current_timestamp_clock";
 static const char *device_iio_scan_elements_en = "_en";
 static const char *device_iio_selftest_available_filename = "selftest_available";
 static const char *device_iio_selftest_filename = "selftest";
@@ -1091,4 +1092,20 @@ int device_iio_utils::execute_selftest(const char *device_dir, char *mode)
 		return 0;
 
 	return -EINVAL;
+}
+
+int device_iio_utils::set_clock_type(const char *device_dir, char *type)
+{
+	char tmp_filename[DEVICE_IIO_MAX_FILENAME_LEN];
+	int ret = 0;
+	/* write "boottime" -> <iio:devicex>/current_timestamp_clock */
+	ret = snprintf(tmp_filename,
+					DEVICE_IIO_MAX_FILENAME_LEN,
+					"%s/%s",
+					device_dir,
+					device_iio_current_timestamp_clock);
+	if (ret < 0) {
+		return -ENOMEM;
+	}
+	return sysfs_write_str((char *)tmp_filename, (char *)type);
 }

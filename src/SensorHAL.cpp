@@ -1184,6 +1184,11 @@ static int st_hal_load_iio_devices_data(STSensorHAL_iio_devices_data *data)
 			goto st_hal_load_free_iio_channels;
 		}
 
+		err = device_iio_utils::set_clock_type(data[index].iio_sysfs_path, (char *) "boottime");
+		if (err < 0) {
+			ALOGE("\"%s\": failed to set boottime clock type. (errno: %d)", iio_devices[i].name, err);
+		}
+
 		if (ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_STEP_DETECTOR &&
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_STEP_COUNTER &&
 		    ST_sensors_supported[n].android_sensor_type != SENSOR_TYPE_SIGNIFICANT_MOTION &&
