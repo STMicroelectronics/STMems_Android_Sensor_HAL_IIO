@@ -504,4 +504,16 @@ config ST_HAL_LSM6DSO32_ENABLED
           - Pressure (optional: must be connected on i2c mater);
           - Gyroscope;
 
+config ST_HAL_LSM6DSOX_ENABLED
+        bool "LSM6DSOX sensor"
+        default y
+        help
+          Enable support for LSM6DSOX combo sensor.
+
+          Sensors supported:
+          - Accelerometer;
+          - Magnetometer (optional: must be connected on i2c mater);
+          - Pressure (optional: must be connected on i2c mater);
+          - Gyroscope;
+
 endmenu # IIO drivers configuration

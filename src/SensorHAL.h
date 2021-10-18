@@ -88,6 +88,7 @@
 #define ST_SENSORS_LIST_46				"lsm6dsr"
 #define ST_SENSORS_LIST_47				"lps27hhw"
 #define ST_SENSORS_LIST_48				"lsm6dso32"
+#define ST_SENSORS_LIST_49				"lsm6dsox"
 
 /*
  * IIO driver sensors suffix for sensors
