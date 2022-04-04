@@ -540,4 +540,13 @@ config ST_HAL_LSM6DSO32X_ENABLED
           - Pressure (optional: must be connected on i2c mater);
           - Gyroscope;
 
+config ST_HAL_AIS2IH_ENABLED
+        bool "AIS2IH sensor"
+        default n
+        help
+          Enable support for AIS2IH sensor.
+
+          Sensors supported:
+          - Accelerometer;
+
 endmenu # IIO drivers configuration
