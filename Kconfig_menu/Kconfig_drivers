@@ -549,4 +549,16 @@ config ST_HAL_AIS2IH_ENABLED
           Sensors supported:
           - Accelerometer;
 
+config ST_HAL_ISM330DHCX_ENABLED
+        bool "ISM330DHCX sensor"
+        default y
+        help
+          Enable support for ISM330DHCX combo sensor.
+
+          Sensors supported:
+          - Accelerometer;
+          - Magnetometer (optional: must be connected on i2c mater);
+          - Pressure (optional: must be connected on i2c mater);
+          - Gyroscope;
+
 endmenu # IIO drivers configuration
