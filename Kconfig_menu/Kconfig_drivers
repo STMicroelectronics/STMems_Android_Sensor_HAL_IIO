@@ -561,4 +561,16 @@ config ST_HAL_ISM330DHCX_ENABLED
           - Pressure (optional: must be connected on i2c mater);
           - Gyroscope;
 
+config ST_HAL_ASM330LHHX_ENABLED
+        bool "ASM330LHHX sensor"
+        default y
+        help
+          Enable support for ASM330LHHX combo sensor.
+
+          Sensors supported:
+          - Accelerometer;
+          - Magnetometer (optional: must be connected on i2c mater);
+          - Pressure (optional: must be connected on i2c mater);
+          - Gyroscope;
+
 endmenu # IIO drivers configuration
