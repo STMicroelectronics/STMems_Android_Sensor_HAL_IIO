@@ -1,3 +1,14 @@
+Important Notice
+==================
+
+DISCONTINUED (October 2022): the maintenance for this repository has been discontinued.
+
+Please refer to:
+
+https://github.com/STMicroelectronics/st-mems-android-linux-sensors-hal
+
+for the up-to-date HAL repository.
+
 Index
 =====
 	* Introduction
